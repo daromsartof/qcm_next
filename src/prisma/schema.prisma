@@ -9,48 +9,62 @@ generator client {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  name     String
-  email    String @unique
+  id        Int    @id @default(autoincrement())
+  name      String
+  email     String @unique
   firstname String
-  roles    String @default("user")
-  password String
+  roles     String @default("user")
+  password  String
 }
 
 model Question {
-  id          Int      @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   title       String
   description String?
-  createdAt   DateTime @default(now())
+  createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
-  matiereId   Int 
-  source  Int
+  matiereId   Int
+  categoryId  Int
+  isDeleted   Boolean   @default(false)
+  source      Int
   answers     Answer[]
-  Matiere     Matiere @relation(fields: [matiereId], references: [id])
-  Source      Source   @relation(fields: [source], references: [id])
+  Matiere     Matiere   @relation(fields: [matiereId], references: [id])
+  Source      Source    @relation(fields: [source], references: [id])
+  Category    Category  @relation(fields: [categoryId], references: [id])
 }
 
 model Answer {
-  id          Int      @id @default(autoincrement())
-  questionId  Int      @unique
+  id          Int       @id @default(autoincrement())
+  questionId  Int       @unique
   title       String
   description String?
-  createdAt   DateTime @default(now())
+  createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
-  isCorrect   Boolean  @default(false)
-  Question    Question @relation(fields: [questionId], references: [id])
+  isCorrect   Boolean   @default(false)
+  isDeleted   Boolean   @default(false)
+  Question    Question  @relation(fields: [questionId], references: [id])
 }
 
 model Matiere {
-  id          Int      @id @default(autoincrement())
-  title       String
-  createdAt   DateTime @default(now())
-  questions   Question[]
+  id        Int        @id @default(autoincrement())
+  title     String
+  createdAt DateTime   @default(now())
+  isDeleted Boolean    @default(false)
+  questions Question[]
 }
 
 model Source {
-  id           Int      @id @default(autoincrement())
-  title        String
-  createdAt    DateTime @default(now())
-  questions    Question[]
+  id        Int        @id @default(autoincrement())
+  title     String
+  createdAt DateTime   @default(now())
+  isDeleted Boolean    @default(false)
+  questions Question[]
+}
+
+model Category {
+  id        Int        @id @default(autoincrement())
+  title     String
+  createdAt DateTime   @default(now())
+  isDeleted Boolean    @default(false)
+  questions Question[]
 }
