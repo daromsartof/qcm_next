@@ -1,0 +1,56 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x", "linux-arm64-openssl-1.1.x", "rhel-openssl-3.0.x"]
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String @unique
+  fistname String
+  roles    String @default("user")
+  password String
+}
+
+model Question {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime? @updatedAt
+  matiereId   Int 
+  source  Int
+  answers     Answer[]
+  Matiere     Matiere @relation(fields: [matiereId], references: [id])
+  Source      Source   @relation(fields: [source], references: [id])
+}
+
+model Answer {
+  id          Int      @id @default(autoincrement())
+  questionId  Int      @unique
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime? @updatedAt
+  isCorrect   Boolean  @default(false)
+  Question    Question @relation(fields: [questionId], references: [id])
+}
+
+model Matiere {
+  id          Int      @id @default(autoincrement())
+  title       String
+  createdAt   DateTime @default(now())
+  questions   Question[]
+}
+
+model Source {
+  id           Int      @id @default(autoincrement())
+  title        String
+  createdAt    DateTime @default(now())
+  questions    Question[]
+}
