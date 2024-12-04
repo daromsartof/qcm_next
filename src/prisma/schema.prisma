@@ -26,6 +26,7 @@ model Question {
   matiereId   Int
   categoryId  Int
   isDeleted   Boolean   @default(false)
+  isMultiChoice Boolean @default(false)
   source      Int
   answers     Answer[]
   Matiere     Matiere   @relation(fields: [matiereId], references: [id])

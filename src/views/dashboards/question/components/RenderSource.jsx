@@ -1,6 +1,7 @@
 "use client"
 import CustomTextField from '@/@core/components/mui/TextField'
 import { createOneMatiere, getAllMatieres } from '@/services/matiereService'
+import { createOneSource, getAllSources } from '@/services/sourceService'
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab, MenuItem } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { Plus } from 'react-feather'
@@ -10,15 +11,15 @@ const RenderSource = ({
     onChange
 }) => {
     const [open, setOpen] = useState(false)
-    const [matiers, setMatiers] = useState([])
+    const [sources, setSources] = useState([])
     const [name, setName] = useState("")
     const handleClickOpen = () => setOpen(true)
 
     const handleClose = () => setOpen(false)
-    const handleFetchMatiers = async () => {
+    const handleFetchSources = async () => {
         try {
-            const matiere = await getAllMatieres() 
-            setMatiers(matiere)
+            const matiere = await getAllSources()
+            setSources(matiere)
         } catch (error) {
             console.error('Error fetching matieres:', error)
         }
@@ -26,19 +27,19 @@ const RenderSource = ({
 
     const handleSave = async () => {
         try {
-            await createOneMatiere({ name })
+            await createOneSource({ name })
             handleClose()
             setName("")
-            handleFetchMatiers()
+            handleFetchSources()
         } catch (error) {
             console.error('Error creating matiere:', error)
         }
     }
     useEffect(() => {
-        handleFetchMatiers()
+        handleFetchSources()
 
         return () => {
-            setMatiers([])
+            setSources([])
         }
     }, [])
 
@@ -53,8 +54,8 @@ const RenderSource = ({
                     onChange={onChange}
                 >
                     {
-                        matiers.map((matiere, index) => (
-                            <MenuItem key={index} value={matiere.id}>{matiere.title}</MenuItem>
+                        sources.map((source, index) => (
+                            <MenuItem key={index} value={source.id}>{source.title}</MenuItem>
                         ))
                     }
                 </CustomTextField>

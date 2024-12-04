@@ -1,9 +1,8 @@
+import Question from "@/views/dashboards/question/Question"
+
 const QuestionPage = async () => {
 
-    return <div>
-        <h1>Question Page</h1>
-        <p>This is a question page.</p>
-    </div>
+    return <Question />
 }
 
 export default QuestionPage

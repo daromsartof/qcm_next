@@ -31,9 +31,11 @@ import { Checkbox, Fab, FormControlLabel } from '@mui/material'
 import RenderCategorie from './components/RenderCategorie'
 import RenderSource from './components/RenderSource'
 import RenderMatiere from './components/RenderMatiere'
+import RenderImageInput from './components/RenderImageInput'
+import { useRouter } from 'next/navigation'
 
 const AddQuestion = () => {
-  // States
+  const router = useRouter()
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -71,28 +73,11 @@ const AddQuestion = () => {
     })
   }
 
-  const [files, setFiles] = useState([])
-
-  // Hooks
-  const { getRootProps, getInputProps } = useDropzone({
-    multiple: false,
-    accept: {
-      'image/*': ['.png', '.jpg', '.jpeg', '.gif']
-    },
-    onDrop: (acceptedFiles) => {
-      setFiles(acceptedFiles.map((file) => Object.assign(file)))
-    }
-  })
-
-  const img = files.map((file) => (
-    <img key={file.name} alt={file.name} className='single-file-image' src={URL.createObjectURL(file)} />
-  ))
-
   return (
     <div>
       <div className='flex justify-between py-2'>
         <h1>Ajouter un question</h1>
-        <Button variant="contained">Retoure</Button>
+        <Button variant="contained" onClick={() => window.history.back()}>Retoure</Button>
       </div>
       <Card>
         <Divider />
@@ -145,31 +130,7 @@ const AddQuestion = () => {
                 />
               </Grid>
               <Grid xs={12}>
-                <div className='m-2 flex justify-center border-2 border-inherit border-dotted m-7 p-3'>
-                  <Box {...getRootProps({ className: 'dropzone' })} {...(files.length && { sx: { height: 450 } })}>
-                    <input {...getInputProps()} />
-                    {files.length ? (
-                      img
-                    ) : (
-                      <div className='flex items-center flex-col'>
-                        <Avatar variant='rounded' className='bs-12 is-12 mbe-9'>
-                          <i className='tabler-upload' />
-                        </Avatar>
-                        <Typography variant='h4' className='mbe-2.5'>
-                          Drop files here or click to upload.
-                        </Typography>
-                        <Typography>
-                          Drop files here or click{' '}
-                          <a href='/' onClick={e => e.preventDefault()} className='text-textPrimary no-underline'>
-                            browse
-                          </a>{' '}
-                          thorough your machine
-                        </Typography>
-                      </div>
-                    )}
-                  </Box>
-                </div>
-
+                <RenderImageInput />
               </Grid>
               <Grid item xs={12}>
                 <Divider />
