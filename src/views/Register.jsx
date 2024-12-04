@@ -5,7 +5,7 @@ import { useState } from 'react'
 
 // Next Imports
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useFormik } from "formik"
 import * as Yup from "yup"
 // MUI Imports
@@ -60,7 +60,7 @@ const MaskImg = styled('img')({
 const Register = ({ mode }) => {
   // States
   const [isPasswordShown, setIsPasswordShown] = useState(false)
-
+  const router = useRouter()
   // Vars
   const darkImg = '/images/pages/auth-mask-dark.png'
   const lightImg = '/images/pages/auth-mask-light.png'
@@ -107,9 +107,11 @@ const Register = ({ mode }) => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(values),
         });
-
+        console.log("response.ok ", response.ok)
         const data = await response.json();
+       
         if (response.ok) {
+          router.push(getLocalizedUrl('/login', locale));
           setMessage("User registered successfully!");
         } else {
           setMessage(data.error || "Something went wrong");
@@ -191,21 +193,6 @@ const Register = ({ mode }) => {
               <Typography component={Link} href={getLocalizedUrl('/login', locale)} color='primary'>
                 Sign in instead
               </Typography>
-            </div>
-            <Divider className='gap-2'>or</Divider>
-            <div className='flex justify-center items-center gap-1.5'>
-              <IconButton className='text-facebook' size='small'>
-                <i className='tabler-brand-facebook-filled' />
-              </IconButton>
-              <IconButton className='text-twitter' size='small'>
-                <i className='tabler-brand-twitter-filled' />
-              </IconButton>
-              <IconButton className='text-textPrimary' size='small'>
-                <i className='tabler-brand-github-filled' />
-              </IconButton>
-              <IconButton className='text-error' size='small'>
-                <i className='tabler-brand-google-filled' />
-              </IconButton>
             </div>
           </form>
         </div>

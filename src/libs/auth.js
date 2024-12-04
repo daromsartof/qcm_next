@@ -30,17 +30,17 @@ export const authOptions = {
          * You can also use the `req` object to obtain additional parameters (i.e., the request IP address)
          */
         const { email, password } = credentials
-
+        
         try {
           // ** Login API Call to match the user credentials and receive user data in response along with his role
-          const res = await fetch(`http://127.0.0.1:3300/api/v1/users`, {
+          const res = await fetch(`${process.env.API_URL}/login`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({ email, password })
           })
-
+          console.log(" herre ", res.status);
           const data = await res.json()
           //console.log(" data ", data, res.status)
           if (res.status === 401) {
@@ -58,6 +58,7 @@ export const authOptions = {
 
           return null
         } catch (e) {
+          console.log("Error ", e)
           throw new Error(e.message)
         }
       }
