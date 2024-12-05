@@ -8,7 +8,8 @@ import { Plus } from 'react-feather'
 
 const RenderSource = ({
     value,
-    onChange
+    onChange,
+    required
 }) => {
     const [open, setOpen] = useState(false)
     const [sources, setSources] = useState([])
@@ -48,6 +49,7 @@ const RenderSource = ({
             <div className='flex items-end'>
                 <CustomTextField
                     select
+                    required
                     fullWidth
                     label='Sources'
                     value={value}

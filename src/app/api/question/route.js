@@ -9,8 +9,10 @@ export async function POST(req) {
             sourceId,
             categorieId,
             isMultichoise,
+            reponses,
             explaination 
-        } = await req.json();
+        } = await req.json()
+        
         if (!name || !matiereId || !sourceId || !categorieId) {
             return NextResponse.json({ error: "field missing" }, { status: 400 })
         }
@@ -18,6 +20,7 @@ export async function POST(req) {
             title: name,
             matiereId,
             sourceId,
+            reponses,
             categoryId: categorieId,
             isMultichoise,
             description: explaination
@@ -34,6 +37,7 @@ export async function GET(req) {
         const questions = await QuestionRepositorie.getAllQuestions()
         return NextResponse.json(questions)
     } catch (error) {
+        console.log(error)
         return NextResponse.json({ error: "unexpected error"}, { status: 500 })
     }
 }

@@ -7,7 +7,8 @@ import { Plus } from 'react-feather'
 
 const RenderCategorie = ({
     value,
-    onChange
+    onChange,
+    required
 }) => {
     const [open, setOpen] = useState(false)
     const [categories, setCategories] = useState([])
@@ -48,6 +49,7 @@ const RenderCategorie = ({
                 <CustomTextField
                     select
                     fullWidth
+                    required
                     label='Catégories'
                     value={value}
                     onChange={onChange}

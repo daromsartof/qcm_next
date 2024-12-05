@@ -37,7 +37,7 @@ const COLUMN = [
     columHelper.accessor('', {
         header: "Action",
         id: "action",
-        size: 80,
+        size: 100,
         Cell: ({ row }) => <RenderAction data={row.original} />
     })
 ]

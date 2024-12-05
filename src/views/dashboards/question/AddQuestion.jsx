@@ -8,71 +8,59 @@ import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
-import MenuItem from '@mui/material/MenuItem'
 import Typography from '@mui/material/Typography'
-import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 import CardActions from '@mui/material/CardActions'
-import InputAdornment from '@mui/material/InputAdornment'
-import IconButton from '@mui/material/IconButton'
-import Box from '@mui/material/Box'
-import Avatar from '@mui/material/Avatar'
-
-// Third-party Imports
-import { useDropzone } from 'react-dropzone'
 // Components Imports
 import CustomTextField from '@core/components/mui/TextField'
 
 // Styled Component Imports
-import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
-import { Plus } from 'react-feather'
-import CustomIconButton from '@/@core/components/mui/IconButton'
-import { Checkbox, Fab, FormControlLabel } from '@mui/material'
+import { Checkbox, FormControlLabel } from '@mui/material'
 import RenderCategorie from './components/RenderCategorie'
 import RenderSource from './components/RenderSource'
 import RenderMatiere from './components/RenderMatiere'
 import RenderImageInput from './components/RenderImageInput'
 import { useRouter } from 'next/navigation'
-
+import { createQuestion } from '@/services/quesrionService'
+import RenderResponsePicker from './components/RenderResponsePicker'
+import RenderResponseForm from './components/RenderResponseForm'
+const DEFAULT_CHECK = true
+const REPONSE_DEFAULT_CHECKED = false
 const AddQuestion = () => {
   const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+  const [responses, setResponses] = useState({
+    0: {
+      title: "",
+      isCorrect: REPONSE_DEFAULT_CHECKED,
+      explaination: ""
+    }
+  })
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    isPasswordShown: false,
-    confirmPassword: '',
-    isConfirmPasswordShown: false,
-    firstName: '',
-    lastName: '',
-    country: '',
-    language: [],
-    date: null,
-    phoneNumber: ''
+    name: "",
+    isMultichoise: DEFAULT_CHECK,
+    categorieId: null,
+    sourceId: null,
+    matiereId: null,
+    image: null,
   })
 
-  const handleClickShowPassword = () => setFormData(show => ({ ...show, isPasswordShown: !show.isPasswordShown }))
-
-  const handleClickShowConfirmPassword = () =>
-    setFormData(show => ({ ...show, isConfirmPasswordShown: !show.isConfirmPasswordShown }))
-
-  const handleReset = () => {
-    setFormData({
-      username: '',
-      email: '',
-      password: '',
-      isPasswordShown: false,
-      confirmPassword: '',
-      isConfirmPasswordShown: false,
-      firstName: '',
-      lastName: '',
-      country: '',
-      language: [],
-      date: null,
-      phoneNumber: ''
-    })
+  const handleInputChange = (name, value) => {
+    setFormData({ ...formData, [name]: value })
   }
 
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    console.log(responses)
+    try {
+      setIsLoading(true)
+      //await createQuestion(formData)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
   return (
     <div>
       <div className='flex justify-between py-2'>
@@ -81,7 +69,7 @@ const AddQuestion = () => {
       </div>
       <Card>
         <Divider />
-        <form onSubmit={e => e.preventDefault()}>
+        <form onSubmit={handleSubmit}>
           <CardContent>
             <Grid container spacing={6}>
               <Grid item xs={12}>
@@ -92,19 +80,30 @@ const AddQuestion = () => {
               <Grid item xs={12} sm={6}>
                 <CustomTextField
                   fullWidth
+                  required
                   label='Titre'
                   placeholder='Quelle est ... '
-                  value={formData.username}
-                  onChange={e => setFormData({ ...formData, username: e.target.value })}
+                  onChange={(e) => handleInputChange("name", e.target.value)}
                 />
                 <div className='mt-2'>
-                  <FormControlLabel label='Choix multiple' control={<Checkbox defaultChecked name='basic-checked' />} />
+                  <FormControlLabel
+                    label='Choix multiple'
+                    control={<Checkbox
+                      defaultChecked={DEFAULT_CHECK}
+                      name='basic-checked'
+                      onChange={(e) => setFormData((formData) => ({
+                        ...formData,
+                        isMultichoise: !formData.isMultichoise
+                      }))}
+                    />}
+                  />
                 </div>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <RenderMatiere
-                  value={""}
-                  onChange={() => console.log}
+                  value={formData.matiereId}
+                  required
+                  onChange={(e) => handleInputChange("matiereId", e.target.value)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -115,18 +114,20 @@ const AddQuestion = () => {
                   multiline
                   type="textarea"
                   placeholder='Quelle est ... '
-                  value={formData.username}
-                  onChange={e => setFormData({ ...formData, username: e.target.value })}
+                  value={formData.explaination}
+                  onChange={(e) => handleInputChange("explaination", e.target.value)}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <RenderSource
-                  value={""}
-                  onChange={() => console.log}
+                  value={formData.sourceId}
+                  required
+                  onChange={(e) => handleInputChange("sourceId", e.target.value)}
                 />
                 <RenderCategorie
-                  value={""}
-                  onChange={() => console.log}
+                  value={formData.categorieId}
+                  required
+                  onChange={(e) => handleInputChange("categorieId", e.target.value)}
                 />
               </Grid>
               <Grid xs={12}>
@@ -141,14 +142,26 @@ const AddQuestion = () => {
                     Réponse
                   </Typography>
                 </div>
+              </Grid>
+
+              <Grid item xs={12} sm={12}>
+                <RenderResponseForm 
+                  responses={responses}
+                  defaultChecked={REPONSE_DEFAULT_CHECKED}
+                  setResponses={setResponses}
+                />
+              </Grid>
+              <Grid item xs={12}>
 
               </Grid>
             </Grid>
           </CardContent>
           <Divider />
           <CardActions>
-            <Button type='submit' variant='contained' className='mie-2'>
-              Submit
+            <Button disabled={isLoading} type='submit' variant='contained' className='mie-2'>
+              {
+                isLoading ? "En cours..." : "Sauvegarder"
+              }
             </Button>
           </CardActions>
         </form>

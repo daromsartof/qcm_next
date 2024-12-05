@@ -7,7 +7,8 @@ import { Plus } from 'react-feather'
 
 const RenderMatiere = ({
     value,
-    onChange
+    onChange,
+    required
 }) => {
     const [open, setOpen] = useState(false)
     const [matiers, setMatiers] = useState([])
@@ -48,6 +49,7 @@ const RenderMatiere = ({
                 <CustomTextField
                     select
                     fullWidth
+                    required
                     label='Matières'
                     value={value}
                     onChange={onChange}

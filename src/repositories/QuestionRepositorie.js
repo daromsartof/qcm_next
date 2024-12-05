@@ -1,4 +1,5 @@
 import prisma from "@/services/Utils/prisma"
+import ReponseRepositorie from "./ReponseRepositorie"
 
 class QuestionRepositorie {
     async createQuestion({
@@ -7,9 +8,10 @@ class QuestionRepositorie {
         categoryId,
         matiereId,
         sourceId,
-        isMultichoise
+        isMultichoise,
+        reponses = []
     }){
-        return prisma.question.create({
+        const question = await prisma.question.create({
             data:{
                 title,
                 description,
@@ -24,6 +26,22 @@ class QuestionRepositorie {
                 Matiere: true
             }
         })
+
+        const reponseData = await Promise.all(reponses.map(async reponse => {
+            return await ReponseRepositorie.createReponse({
+                question: question.id,
+                title: reponse.name,
+                description: reponse.explaination,
+                isCorrect: reponse.isCorrect
+            })
+        }))
+
+        console.log(reponseData)
+
+        return {
+            ...question,
+            reponses: reponseData
+        }
     }
 
     async getAllQuestions(){

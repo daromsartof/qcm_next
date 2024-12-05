@@ -18,32 +18,34 @@ model User {
 }
 
 model Question {
-  id          Int       @id @default(autoincrement())
-  title       String
-  description String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime? @updatedAt
-  matiereId   Int
-  categoryId  Int
-  isDeleted   Boolean   @default(false)
-  isMultiChoice Boolean @default(false)
-  source      Int
-  answers     Answer[]
-  Matiere     Matiere   @relation(fields: [matiereId], references: [id])
-  Source      Source    @relation(fields: [source], references: [id])
-  Category    Category  @relation(fields: [categoryId], references: [id])
+  id            Int       @id @default(autoincrement())
+  title         String
+  description   String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
+  matiereId     Int
+  categoryId    Int
+  isDeleted     Boolean   @default(false)
+  isMultiChoice Boolean   @default(false)
+  fileUrl       String?
+  source        Int
+  answers       Answer[]
+  Matiere       Matiere   @relation(fields: [matiereId], references: [id])
+  Source        Source    @relation(fields: [source], references: [id])
+  Category      Category  @relation(fields: [categoryId], references: [id])
 }
 
 model Answer {
-  id          Int       @id @default(autoincrement())
-  questionId  Int       @unique
-  title       String
-  description String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime? @updatedAt
-  isCorrect   Boolean   @default(false)
-  isDeleted   Boolean   @default(false)
-  Question    Question  @relation(fields: [questionId], references: [id])
+  id            Int       @id @default(autoincrement())
+  question    Int
+  title         String
+  answerFileUrl String?
+  description   String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime? @updatedAt
+  isCorrect     Boolean   @default(false)
+  isDeleted     Boolean   @default(false)
+  Question      Question  @relation(fields: [question], references: [id])
 }
 
 model Matiere {
