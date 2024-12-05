@@ -6,13 +6,7 @@ class ReponseRepositorie {
         description,
         title,
         isCorrect
-    }) {
-        console.log({
-            question,
-            title,
-            description,
-            isCorrect: isCorrect === 1
-        })
+    }, include = {}) {
         return prisma.answer.create({
             data: {
                 question,
@@ -21,7 +15,7 @@ class ReponseRepositorie {
                 isCorrect: isCorrect === 1
             },
             include: {
-                Question: true
+                ...include
             }
         })
     }

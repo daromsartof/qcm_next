@@ -24,11 +24,13 @@ import { useRouter } from 'next/navigation'
 import { createQuestion } from '@/services/quesrionService'
 import RenderResponsePicker from './components/RenderResponsePicker'
 import RenderResponseForm from './components/RenderResponseForm'
+import { Check } from 'react-feather'
 const DEFAULT_CHECK = true
 const REPONSE_DEFAULT_CHECKED = false
 const AddQuestion = () => {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
   const [responses, setResponses] = useState({
     0: {
       title: "",
@@ -51,13 +53,19 @@ const AddQuestion = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log(responses)
     try {
       setIsLoading(true)
-      //await createQuestion(formData)
+      await createQuestion({
+        ...formData,
+        reponses: Object.values(responses).map((response) => response)
+      })
+      setIsSuccess(true)
     } catch (error) {
       console.log(error)
     } finally {
+      setTimeout(() => {
+        setIsSuccess(false)
+      }, 3000)
       setIsLoading(false)
     }
   }
@@ -145,22 +153,24 @@ const AddQuestion = () => {
               </Grid>
 
               <Grid item xs={12} sm={12}>
-                <RenderResponseForm 
+                <RenderResponseForm
                   responses={responses}
                   defaultChecked={REPONSE_DEFAULT_CHECKED}
                   setResponses={setResponses}
                 />
               </Grid>
-              <Grid item xs={12}>
-
-              </Grid>
             </Grid>
           </CardContent>
           <Divider />
           <CardActions>
-            <Button disabled={isLoading} type='submit' variant='contained' className='mie-2'>
+            <Button disabled={isLoading} type='submit' variant='contained' color={(!isLoading && isSuccess) ? "success" : "primary"} className='mie-2'>
               {
-                isLoading ? "En cours..." : "Sauvegarder"
+                isLoading ? "En cours..." : (isSuccess ? (
+                  <span>
+                    <Check size={18} /> Enregistrement avec Success
+                  </span>
+
+                ) : "Sauvegarder")
               }
             </Button>
           </CardActions>

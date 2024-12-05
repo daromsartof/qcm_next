@@ -32,14 +32,14 @@ const COLUMN = [
     columHelper.accessor('', {
         header: "Reponse",
         id: "response",
-        Cell: ({ row }) => <RenderResponse data={row.original} />
-    }),
-    columHelper.accessor('', {
+        Cell: ({ row }) => <RenderResponse data={row.original.answers} />
+    })
+    /*columHelper.accessor('', {
         header: "Action",
         id: "action",
         size: 100,
         Cell: ({ row }) => <RenderAction data={row.original} />
-    })
+    })*/
 ]
 
 export {

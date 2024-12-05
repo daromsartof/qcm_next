@@ -34,6 +34,7 @@ const Question = () => {
             <Card>
                 <RenderTable 
                     data={questions}
+                    setData={setQuestions}
                 />
             </Card>
         </div>

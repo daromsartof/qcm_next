@@ -17,14 +17,29 @@ const createQuestion = async (data) => {
             "sourceId": data.sourceId,
             "categorieId": data.categorieId,
             "isMultichoise": data.isMultichoise,
-            "explaination": data.explaination
+            "explaination": data.explaination,
+            "reponses": data.reponses.map(r => ({
+                "name": r.title,
+                "explaination": r.explaination,
+                "isCorrect": r.isCorrect ? 1 : 0,
+            }))
         })
         return response.data
     } catch (error) {
         throw new Error(error)
     }
 }
+
+const deleteQuestion = async (id) => {
+    try {
+        const res = await axios.delete(`/api/question?id=${id}`)
+        return res.data
+    } catch (error) {
+        throw new Error(error)
+    }
+}
 export {
     getAllQuestions,
+    deleteQuestion,
     createQuestion
 }

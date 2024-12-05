@@ -6,22 +6,24 @@ const Table = ({
     columns,
     data,
     progressPending,
+    renderRowActions = () => { },
     options = {},
     muiTableBodyCellProps = {},
     muiTableHeadCellProps = {},
     muiTableContainerProps = {},
     muiTablePaperProps = {},
-    onClickCell = () => {},
-    renderTopToolbarCustomActions = () => {},
-    displayColumnDefOptions = null,   
-    onClickRow = () => {},
-    onHoverRow = () => {},
-    onRowSelectionChange = () => {},
+    onClickCell = () => { },
+    renderTopToolbarCustomActions = () => { },
+    displayColumnDefOptions = null,
+    onClickRow = () => { },
+    onHoverRow = () => { },
+    onRowSelectionChange = () => { },
     enableRowIsSelectionFunction = false,
     selectedRowIds = [],
     renderDetailPanel = null,
     cellStyles = {}
 }) => {
+    console.log(renderRowActions)
     const defaultOptions = {
         enableRowSelection: false,
         enableColumnOrdering: false,
@@ -39,7 +41,7 @@ const Table = ({
         enableColumnResizing: false,
         enableGlobalFilter: true,
         enableColumnFilters: true,
-        enableSorting: true,        
+        enableSorting: true,
         enableGrouping: false,
         enableHiding: true,
         groupedColumnMode: 'remove',
@@ -50,7 +52,7 @@ const Table = ({
         enableExpanding: false,
         enableSubRowExpand: false,
         enableRowExpansion: false,
-        enableExpandAll: false,         
+        enableExpandAll: false,
         ...options
     }
 
@@ -63,13 +65,16 @@ const Table = ({
         enableColumnOrdering: defaultOptions.enableColumnOrdering,
         enableGrouping: defaultOptions.enableGrouping,
         groupedColumnMode: defaultOptions.groupedColumnMode,
-        enableHiding: defaultOptions.enableHiding,        
-        enableExpandAll: defaultOptions.enableExpandAll, 
+        enableHiding: defaultOptions.enableHiding,
+        enableExpandAll: defaultOptions.enableExpandAll,
         enableExpanding: defaultOptions.enableExpanding,
         enableSubRowExpand: defaultOptions.enableSubRowExpand,
         enableRowExpansion: defaultOptions.enableRowExpansion,
         initialState: {
             density: 'compact',
+            columnPinning: {
+                right: ['mrt-row-actions'],
+            },
             pagination: {
                 pageSize: 50
             },
@@ -117,12 +122,12 @@ const Table = ({
         muiTableBodyCellProps: ({ cell }) => ({
             sx: {
                 borderLeft: '1px solid rgba(81, 81, 81, .3)!important',
-         
+
                 ...cellStyles
             },
             onClick: (event) => { onClickCell(event, cell) },
-            ...muiTableBodyCellProps 
-        }),  
+            ...muiTableBodyCellProps
+        }),
         muiTableHeadCellProps: {
             sx: {
                 '& .MuiTableSortLabel-icon': {
@@ -136,8 +141,10 @@ const Table = ({
         },
         enableStickyHeader: true,
         enableCellActions: defaultOptions.enableCellActions,
-        enableEditing: defaultOptions.enableEditing,
-        editDisplayMode: 'cell',
+        enableEditing: true,
+       // editingMode: "custom",
+        //createDisplayMode: 'custom',
+        //editDisplayMode: 'custom',
         enableRowNumbers: defaultOptions.enableRowNumbers,
         enableMultiSort: defaultOptions.enableMultiSort,
         enableColumnResizing: defaultOptions.enableColumnResizing,
@@ -156,14 +163,15 @@ const Table = ({
         },
         muiTablePaperProps: ({ table }) => ({
             style: {
-              left: table.getState().isFullScreen ? muiTablePaperProps?.style?.left : undefined,
-              width: table.getState().isFullScreen ? muiTablePaperProps?.style?.width : undefined
+                left: table.getState().isFullScreen ? muiTablePaperProps?.style?.left : undefined,
+                width: table.getState().isFullScreen ? muiTablePaperProps?.style?.width : undefined
             },
             sx: muiTablePaperProps.sx
         }),
-        ...(displayColumnDefOptions && {displayColumnDefOptions}),
+        ...(displayColumnDefOptions && { displayColumnDefOptions }),
         getRowId: (row) => row.id,
-        ...(renderDetailPanel && {renderDetailPanel})
+        ...(renderDetailPanel && { renderDetailPanel }),
+        renderRowActions
     })
 
     return (

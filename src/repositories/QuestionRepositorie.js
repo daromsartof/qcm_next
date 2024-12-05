@@ -36,11 +36,9 @@ class QuestionRepositorie {
             })
         }))
 
-        console.log(reponseData)
-
         return {
             ...question,
-            reponses: reponseData
+            answers: reponseData
         }
     }
 
@@ -52,8 +50,16 @@ class QuestionRepositorie {
             include: {
                 Category: true,
                 Source: true,
+                answers: true,
                 Matiere: true
             }
+        })
+    }
+
+    async deleteQuestion(id){
+        return prisma.question.update({
+            where: { id },
+            data: { isDeleted: true }
         })
     }
 }

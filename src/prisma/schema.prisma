@@ -20,7 +20,7 @@ model User {
 model Question {
   id            Int       @id @default(autoincrement())
   title         String
-  description   String?
+  description   String?   @db.LongText
   createdAt     DateTime  @default(now())
   updatedAt     DateTime? @updatedAt
   matiereId     Int
@@ -40,7 +40,7 @@ model Answer {
   question    Int
   title         String
   answerFileUrl String?
-  description   String?
+  description   String?   @db.LongText
   createdAt     DateTime  @default(now())
   updatedAt     DateTime? @updatedAt
   isCorrect     Boolean   @default(false)
