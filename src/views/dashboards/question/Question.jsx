@@ -1,5 +1,5 @@
 "use client"
-import { Button, Card } from '@mui/material'
+import { Button, Card, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import RenderTable from './components/RenderTable'
 import { getAllQuestions } from '@/services/quesrionService'
@@ -24,7 +24,7 @@ const Question = () => {
     return (
         <div>
             <div className='flex justify-between py-2'>
-                <h1>Questions</h1>
+                <Typography variant='h3'>Questions</Typography>
                 <Button variant="contained" onClick={() => router.push('questions/add')}>Ajouter</Button>
             </div>
             <div className='mb-5'>

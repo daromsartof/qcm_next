@@ -23,6 +23,11 @@ const verticalMenuData = dictionary => [
         label: "Response",
         icon: 'tabler-school',
         href: '/dashboards/responses'
+      },
+      {
+        label: "Quiz",
+        icon: 'tabler-school',
+        href: '/dashboards/quiz'
       }
     ]
   },

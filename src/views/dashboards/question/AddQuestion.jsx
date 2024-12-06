@@ -72,7 +72,7 @@ const AddQuestion = () => {
   return (
     <div>
       <div className='flex justify-between py-2'>
-        <h1>Ajouter un question</h1>
+        <Typography variant='h3'>Ajouter un question</Typography>
         <Button variant="contained" onClick={() => window.history.back()}>Retoure</Button>
       </div>
       <Card>
