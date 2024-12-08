@@ -6,8 +6,10 @@ import { useState } from 'react'
 // Next Imports
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
+
 import { useFormik } from "formik"
 import * as Yup from "yup"
+
 // MUI Imports
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { styled, useTheme } from '@mui/material/styles'
@@ -61,6 +63,7 @@ const Register = ({ mode }) => {
   // States
   const [isPasswordShown, setIsPasswordShown] = useState(false)
   const router = useRouter()
+
   // Vars
   const darkImg = '/images/pages/auth-mask-dark.png'
   const lightImg = '/images/pages/auth-mask-light.png'
@@ -107,6 +110,7 @@ const Register = ({ mode }) => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(values),
         });
+
         console.log("response.ok ", response.ok)
         const data = await response.json();
        
@@ -121,7 +125,9 @@ const Register = ({ mode }) => {
       }
     },
   });
-  return (
+
+  
+return (
     <div className='flex bs-full justify-center'>
       <div
         className={classnames(

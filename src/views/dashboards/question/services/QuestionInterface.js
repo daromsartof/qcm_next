@@ -34,6 +34,7 @@ const COLUMN = [
         id: "response",
         Cell: ({ row }) => <RenderResponse data={row.original.answers} />
     })
+
     /*columHelper.accessor('', {
         header: "Action",
         id: "action",

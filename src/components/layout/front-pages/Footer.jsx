@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton'
 // Third-party Imports
 import classnames from 'classnames'
 
-// Component Imports
+
 import Link from '@components/Link'
 import Logo from '@components/layout/shared/Logo'
 import CustomTextField from '@core/components/mui/TextField'
@@ -23,7 +23,6 @@ import { frontLayoutClasses } from '@layouts/utils/layoutClasses'
 
 // Styles Imports
 import styles from './styles.module.css'
-import frontCommonStyles from '@views/front-pages/styles.module.css'
 
 const Footer = ({ mode }) => {
   // Vars
@@ -37,7 +36,7 @@ const Footer = ({ mode }) => {
     <footer className={frontLayoutClasses.footer}>
       <div className='relative'>
         <img src={dashboardImage} alt='footer bg' className='absolute inset-0 is-full bs-full object-cover -z-[1]' />
-        <div className={classnames('plb-12 text-white', frontCommonStyles.layoutSpacing)}>
+        <div className={classnames('plb-12 text-white')}>
           <Grid container rowSpacing={10} columnSpacing={12}>
             <Grid item xs={12} lg={5}>
               <div className='flex flex-col items-start gap-6'>
@@ -165,8 +164,7 @@ const Footer = ({ mode }) => {
       <div className='bg-[#211B2C]'>
         <div
           className={classnames(
-            'flex flex-wrap items-center justify-center sm:justify-between gap-4 plb-[15px]',
-            frontCommonStyles.layoutSpacing
+            'flex flex-wrap items-center justify-center sm:justify-between gap-4 plb-[15px]'
           )}
         >
           <Typography className='text-white' variant='body2'>

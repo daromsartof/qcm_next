@@ -1,5 +1,6 @@
-import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import React from 'react'
+
+import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import { MRT_Localization_FR } from 'material-react-table/locales/fr'
 
 const Table = ({
@@ -24,6 +25,7 @@ const Table = ({
     cellStyles = {}
 }) => {
     console.log(renderRowActions)
+
     const defaultOptions = {
         enableRowSelection: false,
         enableColumnOrdering: false,
@@ -142,6 +144,7 @@ const Table = ({
         enableStickyHeader: true,
         enableCellActions: defaultOptions.enableCellActions,
         enableEditing: true,
+
        // editingMode: "custom",
         //createDisplayMode: 'custom',
         //editDisplayMode: 'custom',

@@ -20,4 +20,6 @@ class CategorieRepositorie {
     }
 }
 
-export default new CategorieRepositorie()
+const category = new CategorieRepositorie()
+
+export default category

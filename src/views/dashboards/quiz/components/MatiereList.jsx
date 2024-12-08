@@ -5,8 +5,10 @@ import { useState } from 'react'
 import Chip from '@mui/material/Chip'
 import Avatar from '@mui/material/Avatar'
 import { Plus } from 'react-feather'
-import MatierCard from './MatierCard'
+
 import { Grid } from '@mui/material'
+
+import MatierCard from './MatierCard'
 
 const data = [
     { key: 0, avatar: '/images/avatars/1.png', avatarAlt: 'User Avatar', label: 'Norman Santiago' },
@@ -35,14 +37,17 @@ const MatiereList = () => {
     // States
     const [chipData, setChipData] = useState(data)
     const [activeMatiere, setActiveMatiere] = useState([])
+
     const handleDelete = chipToDelete => () => {
         setChipData(chips => {
             return chips.filter(chip => chip.key !== chipToDelete.key)
         })
         setActiveMatiere((activeMatiere) => {
             const active = [...activeMatiere]
+
             active.push(chipToDelete)
-            return active
+            
+return active
         })
     }
 

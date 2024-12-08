@@ -1,9 +1,13 @@
 "use client"
+import React, { useEffect, useState } from 'react'
+
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab, MenuItem } from '@mui/material'
+
+import { Plus } from 'react-feather'
+
 import CustomTextField from '@/@core/components/mui/TextField'
 import { createOneCategorie, getAllCategories } from '@/services/categorieService'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab, MenuItem } from '@mui/material'
-import React, { useEffect, useState } from 'react'
-import { Plus } from 'react-feather'
+
 
 const RenderCategorie = ({
     value,
@@ -16,9 +20,11 @@ const RenderCategorie = ({
     const handleClickOpen = () => setOpen(true)
 
     const handleClose = () => setOpen(false)
+
     const handleFetchCategories = async () => {
         try {
             const categories = await getAllCategories()
+
             setCategories(categories)
         } catch (error) {
             console.error('Error fetching categoriess:', error)
@@ -35,6 +41,7 @@ const RenderCategorie = ({
             console.error('Error creating categorie:', error)
         }
     }
+
     useEffect(() => {
         handleFetchCategories()
 

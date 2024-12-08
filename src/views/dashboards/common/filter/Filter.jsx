@@ -1,7 +1,9 @@
 "use client"
-import { Card, CardContent, MenuItem } from '@mui/material'
 import React, { useEffect, useState } from 'react'
+
+import { Card, CardContent, MenuItem } from '@mui/material'
 import Grid from '@mui/material/Grid'
+
 import CustomTextField from '@/@core/components/mui/TextField'
 import { getAllSources } from '@/services/sourceService'
 import { getAllMatieres } from '@/services/matiereService'
@@ -11,9 +13,11 @@ const Filter = () => {
   const [categories, setCategories] = useState([])
   const [sources, setSources] = useState([])
   const [matiers, setMatiers] = useState([])
+
   const handleFetchCategories = async () => {
     try {
       const categories = await getAllCategories()
+
       setCategories(categories)
     } catch (error) {
       console.error('Error fetching categoriess:', error)
@@ -23,25 +27,30 @@ const Filter = () => {
   const handleFetchMatiers = async () => {
     try {
       const matiere = await getAllMatieres()
+
       setMatiers(matiere)
     } catch (error) {
       console.error('Error fetching matieres:', error)
     }
   }
+
   const handleFetchSources = async () => {
     try {
       const sources = await getAllSources()
+
       setSources(sources)
     } catch (error) {
       console.error('Error fetching matieres:', error)
     }
   }
+
   useEffect(() => {
     handleFetchCategories()
     handleFetchMatiers()
     handleFetchSources()
   }, [])
-  return (
+  
+return (
     <Card>
       <CardContent>
         <Grid container spacing={6}>

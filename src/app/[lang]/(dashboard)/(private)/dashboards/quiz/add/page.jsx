@@ -1,5 +1,6 @@
-import AddQuiz from '@/views/dashboards/quiz/AddQuiz'
 import React from 'react'
+
+import AddQuiz from '@/views/dashboards/quiz/AddQuiz'
 
 const QuizAddPage = () => {
   return (

@@ -1,6 +1,9 @@
-import prisma from "@/services/Utils/prisma"
 import { NextResponse } from "next/server";
+
 import bcrypt from "bcrypt";
+
+import prisma from "@/services/Utils/prisma"
+
 export async function POST(req) {
 
 

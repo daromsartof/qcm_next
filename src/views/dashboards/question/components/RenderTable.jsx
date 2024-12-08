@@ -1,5 +1,6 @@
-import Table from '@/components/materialTable/Table'
 import React from 'react'
+
+import Table from '@/components/materialTable/Table'
 import { COLUMN } from '../services/QuestionInterface'
 import RenderAction from './RenderAction'
 

@@ -4,6 +4,8 @@
 import { useState } from 'react'
 
 // MUI Imports
+import { useRouter } from 'next/navigation'
+
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
@@ -11,26 +13,33 @@ import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import CardActions from '@mui/material/CardActions'
+
+
 // Components Imports
+import { Checkbox, FormControlLabel } from '@mui/material'
+
+import { Check } from 'react-feather'
+
 import CustomTextField from '@core/components/mui/TextField'
 
 // Styled Component Imports
-import { Checkbox, FormControlLabel } from '@mui/material'
 import RenderCategorie from './components/RenderCategorie'
 import RenderSource from './components/RenderSource'
 import RenderMatiere from './components/RenderMatiere'
 import RenderImageInput from './components/RenderImageInput'
-import { useRouter } from 'next/navigation'
 import { createQuestion } from '@/services/quesrionService'
 import RenderResponsePicker from './components/RenderResponsePicker'
 import RenderResponseForm from './components/RenderResponseForm'
-import { Check } from 'react-feather'
+
+
 const DEFAULT_CHECK = true
 const REPONSE_DEFAULT_CHECKED = false
+
 const AddQuestion = () => {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
+
   const [responses, setResponses] = useState({
     0: {
       title: "",
@@ -38,6 +47,7 @@ const AddQuestion = () => {
       explaination: ""
     }
   })
+
   const [formData, setFormData] = useState({
     name: "",
     isMultichoise: DEFAULT_CHECK,
@@ -53,6 +63,7 @@ const AddQuestion = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
     try {
       setIsLoading(true)
       await createQuestion({
@@ -69,7 +80,9 @@ const AddQuestion = () => {
       setIsLoading(false)
     }
   }
-  return (
+
+  
+return (
     <div>
       <div className='flex justify-between py-2'>
         <Typography variant='h3'>Ajouter un question</Typography>
@@ -179,4 +192,5 @@ const AddQuestion = () => {
     </div>
   )
 }
+
 export default AddQuestion

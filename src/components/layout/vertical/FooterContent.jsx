@@ -19,7 +19,7 @@ const FooterContent = () => {
         <span>{`❤️`}</span>
         <span className='text-textSecondary'>{` by `}</span>
         <Link href='#' target='_blank' className='text-primary uppercase'>
-          Daroms'art
+          Daromsart
         </Link>
       </p>
     </div>

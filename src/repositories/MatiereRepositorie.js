@@ -20,4 +20,6 @@ class MatiereRepositorie {
     }
 }
 
-export default new MatiereRepositorie()
+const matiere = new MatiereRepositorie()
+
+export default matiere

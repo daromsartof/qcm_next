@@ -1,5 +1,6 @@
-import { Avatar, Box, Typography } from '@mui/material'
 import React, { useState } from 'react'
+
+import { Avatar, Box, Typography } from '@mui/material'
 import { useDropzone } from 'react-dropzone'
 
 const RenderImageInput = () => {
@@ -21,7 +22,9 @@ const RenderImageInput = () => {
     const img = files.map((file) => (
         <img key={file.name} alt={file.name} className='single-file-image max-h-60' src={URL.createObjectURL(file)} />
     ))
-    return (
+
+    
+return (
         <div className='m-2 flex justify-center border-2 border-inherit border-dotted m-7 p-3 max-h-60 overflow-hidden'>
             <Box {...getRootProps({ className: 'dropzone' })} {...(files.length && { sx: { height: 450 } })}>
                 <input {...getInputProps()} />

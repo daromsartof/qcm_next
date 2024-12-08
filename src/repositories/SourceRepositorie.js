@@ -20,4 +20,6 @@ class SourceRepositorie {
     }
 }
 
-export default new SourceRepositorie()
+const source = new SourceRepositorie()
+
+export default source

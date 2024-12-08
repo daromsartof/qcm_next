@@ -1,13 +1,16 @@
 "use client"
-import { Button, Card, CardContent, CardHeader, Divider } from '@mui/material'
 import React from 'react'
+
+import { Button, Card, CardContent, CardHeader, Divider } from '@mui/material'
 
 const QuizCard = () => {
 
     const handleClickSetting = () => {
         console.log("handleClickSetting")
     }
-    return (
+
+    
+return (
         <Card>
             <CardHeader title="Quiz Title" />
             <CardContent>

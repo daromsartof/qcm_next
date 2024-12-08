@@ -3,7 +3,9 @@ import axios from "axios"
 const getAllQuestions = async () =>{
     try {
         const response = await axios.get('/api/question')
-        return response.data
+
+        
+return response.data
     } catch (error) {
         throw new Error(error)
     }
@@ -24,7 +26,9 @@ const createQuestion = async (data) => {
                 "isCorrect": r.isCorrect ? 1 : 0,
             }))
         })
-        return response.data
+
+        
+return response.data
     } catch (error) {
         throw new Error(error)
     }
@@ -33,11 +37,14 @@ const createQuestion = async (data) => {
 const deleteQuestion = async (id) => {
     try {
         const res = await axios.delete(`/api/question?id=${id}`)
-        return res.data
+
+        
+return res.data
     } catch (error) {
         throw new Error(error)
     }
 }
+
 export {
     getAllQuestions,
     deleteQuestion,

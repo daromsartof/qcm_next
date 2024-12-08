@@ -21,4 +21,6 @@ class ReponseRepositorie {
     }
 }
 
-export default new ReponseRepositorie()
+const response =  new ReponseRepositorie()
+
+export default response

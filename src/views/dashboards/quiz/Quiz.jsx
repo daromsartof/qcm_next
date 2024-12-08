@@ -1,13 +1,19 @@
 "use client"
-import { Button, Card, CardContent, CardHeader, Grid, Typography } from '@mui/material'
 import React from 'react'
+
+import { useRouter } from 'next/navigation'
+
+import { Button, Card, CardContent, CardHeader, Grid, Typography } from '@mui/material'
+
 import QuizCard from './components/QuizCard'
 import QuizFilter from './components/QuizFilter'
-import { useRouter } from 'next/navigation'
+
 
 const Quiz = () => {
     const router = useRouter()
-    return (
+
+    
+return (
         <div>
             <div className='mb-2 flex justify-between'>
                 <Typography variant="h3">

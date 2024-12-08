@@ -1,10 +1,14 @@
 "use client"
+import React, { useEffect, useState } from 'react'
+
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab, MenuItem } from '@mui/material'
+
+import { Plus } from 'react-feather'
+
 import CustomTextField from '@/@core/components/mui/TextField'
 import { createOneMatiere, getAllMatieres } from '@/services/matiereService'
 import { createOneSource, getAllSources } from '@/services/sourceService'
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Fab, MenuItem } from '@mui/material'
-import React, { useEffect, useState } from 'react'
-import { Plus } from 'react-feather'
+
 
 const RenderSource = ({
     value,
@@ -17,9 +21,11 @@ const RenderSource = ({
     const handleClickOpen = () => setOpen(true)
 
     const handleClose = () => setOpen(false)
+
     const handleFetchSources = async () => {
         try {
             const matiere = await getAllSources()
+
             setSources(matiere)
         } catch (error) {
             console.error('Error fetching matieres:', error)
@@ -36,6 +42,7 @@ const RenderSource = ({
             console.error('Error creating matiere:', error)
         }
     }
+
     useEffect(() => {
         handleFetchSources()
 

@@ -1,8 +1,13 @@
-import CustomTextField from '@/@core/components/mui/TextField'
-import { Button, Checkbox, Divider, FormControlLabel, Grid } from '@mui/material'
 import React, { useState } from 'react'
+
+import { Button, Checkbox, Divider, FormControlLabel, Grid } from '@mui/material'
+
+import CustomTextField from '@/@core/components/mui/TextField'
+
 import RenderResponsePicker from './RenderResponsePicker'
+
 const DEFAULT_CHECK = false
+
 const RenderResponseForm = ({
     defaultChecked,
     responses,
@@ -11,23 +16,29 @@ const RenderResponseForm = ({
     const handleClickAdd = () => {
         setResponses((response) => {
             const newResponses = { ...response }
+
             newResponses[Object.keys(response).length + 1] = {
                 title: "",
                 isCorrect: DEFAULT_CHECK,
                 explaination: ""
             }
-            return newResponses
+            
+return newResponses
         })
     }
 
     const handleChange = (key, name, value) => {
         setResponses((response) => {
             const newResponses = {...response }
+
             newResponses[key][name] = value
-            return newResponses
+            
+return newResponses
         })
     }
-    return (
+
+    
+return (
         <div>
             {
                 Object.keys(responses).map((key) => (

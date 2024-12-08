@@ -1,10 +1,11 @@
-import CustomIconButton from '@/@core/components/mui/IconButton'
-import { deleteQuestion } from '@/services/quesrionService'
-import { Button } from '@mui/material'
 import React from 'react'
-import { Eye, Trash } from 'react-feather'
-import { Edit } from 'react-feather'
+
+import { Button } from '@mui/material'
+import { Eye, Trash , Edit } from 'react-feather'
 import { toast } from 'react-toastify'
+
+import { deleteQuestion } from '@/services/quesrionService'
+import CustomIconButton from '@/@core/components/mui/IconButton'
 
 const RenderAction = ({
     data,
@@ -13,6 +14,7 @@ const RenderAction = ({
     const handleDelete = async () => {
         try {
             const response = await deleteQuestion(data.id)
+
             onClickDelete(response.id)
             toast.success('Question supprimée avec succès!')
         } catch (error) {
@@ -20,7 +22,9 @@ const RenderAction = ({
             toast.error('Erreur lors de la suppression de la question!')
         }
     }
-    return (
+
+    
+return (
         <div>
             <CustomIconButton aria-label='capture screenshot' color='success' variant='contained' className='mr-2'>
                 <Edit size={12} />

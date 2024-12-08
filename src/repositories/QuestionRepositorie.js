@@ -64,4 +64,6 @@ class QuestionRepositorie {
     }
 }
 
-export default new QuestionRepositorie()
+const question =  new QuestionRepositorie()
+
+export default question

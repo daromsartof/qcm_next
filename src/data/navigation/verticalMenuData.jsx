@@ -9,6 +9,7 @@ const verticalMenuData = dictionary => [
     href: '/dashboards/crm',
     icon: 'tabler-smart-home'
   },
+
   // This is how you will normally render menu section
   {
     label: "Question & Reponse",

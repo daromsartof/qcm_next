@@ -3,7 +3,9 @@ import axios from "axios"
 const getAllCategories = async () => {
     try {
         const response = await axios.get('/api/categorie')
-        return response.data
+
+        
+return response.data
     } catch (error) {
         throw new Error(error)
     }
@@ -16,7 +18,9 @@ const createOneCategorie = async ({
         const response = await axios.post('/api/categorie', {
             name
         })
-        return response.data
+
+        
+return response.data
     } catch (error) {
         throw new Error(error)
     }
