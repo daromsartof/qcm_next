@@ -4,9 +4,9 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { Button, Card, Typography } from '@mui/material'
-
+import { FilterProvider } from '@/contexts/FilterContext'
 import RenderTable from './components/RenderTable'
-import { getAllQuestions } from '@/services/quesrionService'
+import { getAllQuestions } from '@/services/questionService'
 
 
 import Filter from '../common/filter/Filter'
@@ -25,29 +25,33 @@ const Question = () => {
     useEffect(() => {
         handleFetchQuestion()
 
-      
-return () => {
-        setQuestions([])
-      }
+
+        return () => {
+            setQuestions([])
+        }
     }, [])
-    
+
     return (
-        <div>
-            <div className='flex justify-between py-2'>
-                <Typography variant='h3'>Questions</Typography>
-                <Button variant="contained" onClick={() => router.push('questions/add')}>Ajouter</Button>
+        <FilterProvider>
+
+
+            <div>
+                <div className='flex justify-between py-2'>
+                    <Typography variant='h3'>Questions</Typography>
+                    <Button variant="contained" onClick={() => router.push('questions/add')}>Ajouter</Button>
+                </div>
+                <div className='mb-5'>
+                    <Filter />
+                </div>
+
+                <Card>
+                    <RenderTable
+                        data={questions}
+                        setData={setQuestions}
+                    />
+                </Card>
             </div>
-            <div className='mb-5'>
-            <Filter />
-            </div>
-       
-            <Card>
-                <RenderTable 
-                    data={questions}
-                    setData={setQuestions}
-                />
-            </Card>
-        </div>
+        </FilterProvider>
     )
 }
 

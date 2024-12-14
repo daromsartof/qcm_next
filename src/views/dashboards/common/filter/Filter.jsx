@@ -1,34 +1,29 @@
-"use client"
-import React, { useEffect, useState } from 'react'
-
-import { Card, CardContent, MenuItem } from '@mui/material'
-import Grid from '@mui/material/Grid'
-
-import CustomTextField from '@/@core/components/mui/TextField'
-import { getAllSources } from '@/services/sourceService'
-import { getAllMatieres } from '@/services/matiereService'
+import { useEffect, useState } from 'react'
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 import { getAllCategories } from '@/services/categorieService'
+import { getAllMatieres } from '@/services/matiereService'
+import { getAllSources } from '@/services/sourceService'
+import { useFilter } from '@/contexts/FilterContext'
 
 const Filter = () => {
   const [categories, setCategories] = useState([])
+  const [matieres, setMatieres] = useState([])
   const [sources, setSources] = useState([])
-  const [matiers, setMatiers] = useState([])
+  const { filters, updateFilter } = useFilter()
 
   const handleFetchCategories = async () => {
     try {
-      const categories = await getAllCategories()
-
-      setCategories(categories)
+      const data = await getAllCategories()
+      setCategories(data)
     } catch (error) {
-      console.error('Error fetching categoriess:', error)
+      console.error('Error fetching categories:', error)
     }
   }
 
-  const handleFetchMatiers = async () => {
+  const handleFetchMatieres = async () => {
     try {
-      const matiere = await getAllMatieres()
-
-      setMatiers(matiere)
+      const data = await getAllMatieres()
+      setMatieres(data)
     } catch (error) {
       console.error('Error fetching matieres:', error)
     }
@@ -36,63 +31,81 @@ const Filter = () => {
 
   const handleFetchSources = async () => {
     try {
-      const sources = await getAllSources()
-
-      setSources(sources)
+      const data = await getAllSources()
+      setSources(data)
     } catch (error) {
-      console.error('Error fetching matieres:', error)
+      console.error('Error fetching sources:', error)
     }
   }
 
   useEffect(() => {
     handleFetchCategories()
-    handleFetchMatiers()
+    handleFetchMatieres()
     handleFetchSources()
   }, [])
-  
-return (
-    <Card>
-      <CardContent>
-        <Grid container spacing={6}>
-          <Grid item xs={12} sm={3}>
-            <CustomTextField select fullWidth defaultValue={0} label='Catégorie' id='select-category'>
-              <MenuItem value={0} selected>
-                <em>Tous</em>
-              </MenuItem>
-              {
-                categories.map((categorie, index) => (
-                  <MenuItem key={index} value={categorie.id}>{categorie.title}</MenuItem>
-                ))
-              }
-            </CustomTextField>
-          </Grid>
-          <Grid item xs={12} sm={3}>
-            <CustomTextField select fullWidth defaultValue={0} label='Source' id='select-source'>
-              <MenuItem value={0} selected>
-                <em>Tous</em>
-              </MenuItem>
-              {
-                sources.map((source, index) => (
-                  <MenuItem key={index} value={source.id}>{source.title}</MenuItem>
-                ))
-              }
-            </CustomTextField>
-          </Grid>
-          <Grid item xs={12} sm={3}>
-            <CustomTextField select fullWidth defaultValue={0} label='Matière' id='select-matière'>
-              <MenuItem value={0} selected>
-                <em>Tous</em>
-              </MenuItem>
-              {
-                matiers.map((matiere, index) => (
-                  <MenuItem key={index} value={matiere.id}>{matiere.title}</MenuItem>
-                ))
-              }
-            </CustomTextField>
-          </Grid>
-        </Grid>
-      </CardContent>
-    </Card>
+
+  return (
+    <div className='flex gap-4'>
+      <FormControl sx={{ minWidth: 200 }}>
+        <InputLabel id='category-select-label'>Catégorie</InputLabel>
+        <Select
+          labelId='category-select-label'
+          id='category-select'
+          value={filters.categoryId || 'Tous'}
+          label='Catégorie'
+          onChange={(e) => updateFilter('categoryId', e.target.value)}
+        >
+          <MenuItem value=''>
+            <em>Tous</em>
+          </MenuItem>
+          {categories.map((category) => (
+            <MenuItem key={category.id} value={category.id}>
+              {category.title}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+      <FormControl sx={{ minWidth: 200 }}>
+        <InputLabel id='matiere-select-label'>Matière</InputLabel>
+        <Select
+          labelId='matiere-select-label'
+          id='matiere-select'
+          value={filters.matiereId || 'Tous'}
+          label='Matière'
+          onChange={(e) => updateFilter('matiereId', e.target.value)}
+        >
+          <MenuItem value=''>
+            <em>Tous</em>
+          </MenuItem>
+          {matieres.map((matiere) => (
+            <MenuItem key={matiere.id} value={matiere.id}>
+              {matiere.title}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+      <FormControl sx={{ minWidth: 200 }}>
+        <InputLabel id='source-select-label'>Source</InputLabel>
+        <Select
+          labelId='source-select-label'
+          id='source-select'
+          value={filters.sourceId || 'Tous'}
+          label='Source'
+          onChange={(e) => updateFilter('sourceId', e.target.value)}
+        >
+          <MenuItem value=''>
+            <em>Tous</em>
+          </MenuItem>
+          {sources.map((source) => (
+            <MenuItem key={source.id} value={source.id}>
+              {source.title}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </div>
   )
 }
 

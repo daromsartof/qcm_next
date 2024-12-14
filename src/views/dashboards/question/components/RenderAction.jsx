@@ -4,7 +4,7 @@ import { Button } from '@mui/material'
 import { Eye, Trash , Edit } from 'react-feather'
 import { toast } from 'react-toastify'
 
-import { deleteQuestion } from '@/services/quesrionService'
+import { deleteQuestion } from '@/services/questionService'
 import CustomIconButton from '@/@core/components/mui/IconButton'
 
 const RenderAction = ({

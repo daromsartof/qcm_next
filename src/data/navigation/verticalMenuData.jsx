@@ -49,18 +49,18 @@ const verticalMenuData = dictionary => [
     children: [
       {
         label: "Catégorie",
-        icon: 'tabler-layout',
-        href: '/forms/form-layouts'
+        icon: 'tabler-category',
+        href: '/dashboards/categories'
       },
       {
         label: "Matière",
-        icon: 'tabler-layout',
-        href: '/forms/form-layouts'
+        icon: 'tabler-book',
+        href: '/dashboards/matieres'
       },
       {
         label: "Source Document",
-        icon: 'tabler-layout',
-        href: '/forms/form-layouts'
+        icon: 'tabler-database',
+        href: '/dashboards/sources'
       }
     ]
   }

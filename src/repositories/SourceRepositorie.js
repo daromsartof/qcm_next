@@ -18,6 +18,22 @@ class SourceRepositorie {
             }
         })
     }
+
+    async deleteSource(id){
+        return prisma.source.update({
+            where: { id },
+            data: { isDeleted: true }
+        })
+    }
+
+    async updateSource({ id, name }) {
+        return prisma.source.update({
+            where: { id },
+            data: {
+                title: name
+            }
+        })
+    }
 }
 
 const source = new SourceRepositorie()

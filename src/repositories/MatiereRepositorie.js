@@ -18,6 +18,22 @@ class MatiereRepositorie {
             }
         })
     }
+
+    async deleOneMatiere(id){
+        return prisma.matiere.update({
+            where: { id },
+            data: { isDeleted: true }
+        })
+    }
+
+    async updateMatiere({ id, name }) {
+        return prisma.matiere.update({
+            where: { id },
+            data: {
+                title: name
+            }
+        })
+    }
 }
 
 const matiere = new MatiereRepositorie()

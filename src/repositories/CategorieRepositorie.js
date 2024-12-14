@@ -18,6 +18,22 @@ class CategorieRepositorie {
             }
         })
     }
+
+    async deleteCategorie(id){
+        return prisma.category.update({
+            where: { id },
+            data: { isDeleted: true }
+        })
+    }
+
+    async updateCategorie({ id, name }) {
+        return prisma.category.update({
+            where: { id },
+            data: {
+                title: name
+            }
+        })
+    }
 }
 
 const category = new CategorieRepositorie()

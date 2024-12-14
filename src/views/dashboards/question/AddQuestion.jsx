@@ -27,7 +27,7 @@ import RenderCategorie from './components/RenderCategorie'
 import RenderSource from './components/RenderSource'
 import RenderMatiere from './components/RenderMatiere'
 import RenderImageInput from './components/RenderImageInput'
-import { createQuestion } from '@/services/quesrionService'
+import { createQuestion } from '@/services/questionService'
 import RenderResponsePicker from './components/RenderResponsePicker'
 import RenderResponseForm from './components/RenderResponseForm'
 

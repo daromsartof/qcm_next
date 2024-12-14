@@ -6,8 +6,11 @@ import { Button, Card, CardActions, CardContent, Divider, FormControlLabel, Grid
 import CustomTextField from '@/@core/components/mui/TextField'
 
 import MatiereList from './components/MatiereList'
+import RenderCategorie from './components/RenderCategorie'
+import RenderMode from './components/RenderMode'
 
 const AddQuiz = () => {
+
     return (
         <div>
             <div className='mb-2 flex justify-between'>
@@ -33,32 +36,12 @@ const AddQuiz = () => {
                             </Grid>
                            
                             <Grid item sm={3}>
-                                <CustomTextField
-                                    select
-                                    fullWidth
-                                    required
-                                    label='Catégorie'
-                                >
-                                    {
-                                        [1, 2, 4].map((matiere, index) => (
-                                            <MenuItem key={index} value={matiere}>{matiere}</MenuItem>
-                                        ))
-                                    }
-                                </CustomTextField>
+                                <RenderCategorie 
+
+                                />
                             </Grid>
                             <Grid item sm={3}>
-                                <CustomTextField
-                                    select
-                                    fullWidth
-                                    required
-                                    label='Mode'
-                                >
-                                    {
-                                        [1, 2, 4].map((matiere, index) => (
-                                            <MenuItem key={index} value={matiere}>{matiere}</MenuItem>
-                                        ))
-                                    }
-                                </CustomTextField>
+                                <RenderMode />
                             </Grid>
                             <Grid item sm={3} className='flex justify-end items-end'>
                                 <FormControlLabel control={<Switch defaultChecked />} label='Activer' />

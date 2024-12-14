@@ -1,16 +1,17 @@
 'use client'
 
-import Question from '@/views/dashboards/question/Question'
+
+import SourceList from '@/views/dashboards/sources'
 import Grid from '@mui/material/Grid'
 
-const QuestionsPage = () => {
+const SourcePage = () => {
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
-        <Question />
+        <SourceList />
       </Grid>
     </Grid>
   )
 }
 
-export default QuestionsPage
+export default SourcePage

@@ -1,23 +1,24 @@
 import prisma from "@/services/Utils/prisma"
+
 import ReponseRepositorie from "./ReponseRepositorie"
 
 class QuestionRepositorie {
     async createQuestion({
         title,
-        description,
+        content,
         categoryId,
-        matiereId,
         sourceId,
+        matiereId,
         isMultichoise,
         reponses = []
     }){
         const question = await prisma.question.create({
             data:{
                 title,
-                description,
+                content,
                 categoryId,
+                sourceId,
                 matiereId,
-                source: sourceId,
                 isMultiChoice: isMultichoise === 1
             },
             include: {
@@ -42,11 +43,28 @@ class QuestionRepositorie {
         }
     }
 
-    async getAllQuestions(){
-        return prisma.question.findMany({
-            where: {
+    async getAllQuestions(filters = {}) {
+        const { categoryId, sourceId, matiereId } = filters
+        
+        const where = {
+            isDeleted: false,
+            Category: {
                 isDeleted: false
             },
+            Source: {
+                isDeleted: false
+            },
+            Matiere: {
+                isDeleted: false
+            }
+        }
+
+        if (categoryId) where.categoryId = parseInt(categoryId)
+        if (sourceId) where.sourceId = parseInt(sourceId)
+        if (matiereId) where.matiereId = parseInt(matiereId)
+
+        return prisma.question.findMany({
+            where,
             include: {
                 Category: true,
                 Source: true,
@@ -56,7 +74,27 @@ class QuestionRepositorie {
         })
     }
 
-    async deleteQuestion(id){
+    async updateQuestion({
+        id,
+        title,
+        content,
+        categoryId,
+        sourceId,
+        matiereId
+    }) {
+        return prisma.question.update({
+            where: { id },
+            data: {
+                title,
+                content,
+                categoryId,
+                sourceId,
+                matiereId
+            }
+        })
+    }
+
+    async deleteQuestion(id) {
         return prisma.question.update({
             where: { id },
             data: { isDeleted: true }
@@ -64,6 +102,6 @@ class QuestionRepositorie {
     }
 }
 
-const question =  new QuestionRepositorie()
+const question = new QuestionRepositorie()
 
 export default question

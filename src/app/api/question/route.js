@@ -4,66 +4,56 @@ import QuestionRepositorie from "@/repositories/QuestionRepositorie";
 
 export async function POST(req) {
     try {
-        const {
-            name,
-            matiereId,
-            sourceId,
-            categorieId,
-            isMultichoise,
-            reponses,
-            explaination
-        } = await req.json()
-
-        if (!name || !matiereId || !sourceId || !categorieId) {
-            return NextResponse.json({ error: "field missing" }, { status: 400 })
-        }
-
-        const question = await QuestionRepositorie.createQuestion({
-            title: name,
-            matiereId,
-            sourceId,
-            reponses,
-            categoryId: categorieId,
-            isMultichoise,
-            description: explaination
-        })
-
-        
-return NextResponse.json(question)
+        const body = await req.json();
+        const question = await QuestionRepositorie.createQuestion(body);
+        return NextResponse.json(question);
     } catch (error) {
-        return NextResponse.json({ error: "unexpected error" }, { status: 500 })
+        console.error(error);
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
 
 export async function GET(req) {
     try {
-        const questions = await QuestionRepositorie.getAllQuestions()
+        const { searchParams } = new URL(req.url);
+        const filters = {
+            categoryId: searchParams.get("categoryId"),
+            sourceId: searchParams.get("sourceId"),
+            matiereId: searchParams.get("matiereId"),
+        };
 
-        
-return NextResponse.json(questions)
+        const questions = await QuestionRepositorie.getAllQuestions(filters);
+        return NextResponse.json(questions);
     } catch (error) {
-        return NextResponse.json({ error: "unexpected error" }, { status: 500 })
+        console.error(error);
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    }
+}
+
+export async function PUT(req) {
+    try {
+        const body = await req.json();
+        const question = await QuestionRepositorie.updateQuestion(body);
+        return NextResponse.json(question);
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
 
 export async function DELETE(req) {
     try {
-        const url = new URL(req.url)
-        const id = url.searchParams.get('id')
+        const { searchParams } = new URL(req.url);
+        const id = searchParams.get("id");
 
         if (!id) {
-            return NextResponse.json({ error: "id missing" }, { status: 400 })
+            return NextResponse.json({ error: "ID is required" }, { status: 400 });
         }
 
-        const question = await QuestionRepositorie.deleteQuestion(
-            parseInt(id)
-        )
-
-        
-return NextResponse.json(question)
+        await QuestionRepositorie.deleteQuestion(parseInt(id));
+        return NextResponse.json({ success: true });
     } catch (error) {
-        console.log(error)
-        
-return NextResponse.json({ error: "unexpected error" }, { status: 500 })
+        console.error(error);
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
