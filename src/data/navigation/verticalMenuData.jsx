@@ -17,32 +17,28 @@ const verticalMenuData = dictionary => [
     children: [
       {
         label: "Question",
-        icon: 'tabler-shopping-cart',
+        icon: 'tabler-question-mark',
         href: '/dashboards/questions'
       },
       {
         label: "Response",
-        icon: 'tabler-school',
+        icon: 'tabler-receipt',
         href: '/dashboards/responses'
       },
       {
         label: "Quiz",
-        icon: 'tabler-school',
+        icon: 'tabler-clipboard-check',
         href: '/dashboards/quiz'
       }
     ]
   },
-  {
+ /* {
     label: "Utilisateur",
     isSection: true,
     children: [
-      {
-        label: dictionary['navigation'].formLayouts,
-        icon: 'tabler-layout',
-        href: '/forms/form-layouts'
-      }
+    
     ]
-  },
+  },*/
   {
     label: "Utilité",
     isSection: true,

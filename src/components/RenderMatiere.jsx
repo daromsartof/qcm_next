@@ -6,26 +6,27 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import { Plus } from 'react-feather'
 
 import CustomTextField from '@/@core/components/mui/TextField'
-import { createOneSource, getAllSources } from '@/services/sourceService'
+import { createOneMatiere, getAllMatieres } from '@/services/matiereService'
 
 
-const RenderSource = ({
+const RenderMatiere = ({
     value,
     onChange,
-    required
+    required,
+    withAdd = true 
 }) => {
     const [open, setOpen] = useState(false)
-    const [sources, setSources] = useState([])
+    const [matiers, setMatiers] = useState([])
     const [name, setName] = useState("")
     const handleClickOpen = () => setOpen(true)
 
     const handleClose = () => setOpen(false)
 
-    const handleFetchSources = async () => {
+    const handleFetchMatiers = async () => {
         try {
-            const matiere = await getAllSources()
-
-            setSources(matiere)
+            const matiere = await getAllMatieres()
+ 
+            setMatiers(matiere)
         } catch (error) {
             console.error('Error fetching matieres:', error)
         }
@@ -33,20 +34,20 @@ const RenderSource = ({
 
     const handleSave = async () => {
         try {
-            await createOneSource({ name })
+            await createOneMatiere({ name })
             handleClose()
             setName("")
-            handleFetchSources()
+            handleFetchMatiers()
         } catch (error) {
             console.error('Error creating matiere:', error)
         }
     }
 
     useEffect(() => {
-        handleFetchSources()
+        handleFetchMatiers()
 
         return () => {
-            setSources([])
+            setMatiers([])
         }
     }, [])
 
@@ -55,28 +56,32 @@ const RenderSource = ({
             <div className='flex items-end'>
                 <CustomTextField
                     select
-                    required
                     fullWidth
-                    label='Sources'
+                    required
+                    label='Matières'
                     value={value}
                     onChange={onChange}
                 >
                     {
-                        sources.map((source, index) => (
-                            <MenuItem key={index} value={source.id}>{source.title}</MenuItem>
+                        matiers.map((matiere, index) => (
+                            <MenuItem key={index} value={matiere.id}>{matiere.title}</MenuItem>
                         ))
                     }
                 </CustomTextField>
-                <div className='ms-3'>
-                    <Fab aria-label='edit' color='primary' size='small' onClick={handleClickOpen}>
-                        <Plus size={18} />
-                    </Fab>
-                </div>
+                {
+                    withAdd && (
+                        <div className='ms-3'>
+                            <Fab aria-label='edit' color='primary' size='small' onClick={handleClickOpen}>
+                                <Plus size={18} />
+                            </Fab>
+                        </div>
+                    )
+                }
             </div>
             <Dialog open={open} maxWidth={"sm"} fullWidth={true} onClose={handleClose} aria-labelledby='form-dialog-title'>
-                <DialogTitle id='form-dialog-title'>Source</DialogTitle>
+                <DialogTitle id='form-dialog-title'>Matières</DialogTitle>
                 <DialogContent>
-                    <CustomTextField id='name' autoFocus fullWidth value={name} type='text' label='Nom du source' onChange={(e) => setName(e.target.value)} />
+                    <CustomTextField id='name' autoFocus fullWidth value={name} type='text' label='Nom du matière' onChange={(e) => setName(e.target.value)} />
                 </DialogContent>
                 <DialogActions className='dialog-actions-dense'>
                     <Button onClick={handleClose}>Annuler</Button>
@@ -87,4 +92,4 @@ const RenderSource = ({
     )
 }
 
-export default RenderSource
+export default RenderMatiere

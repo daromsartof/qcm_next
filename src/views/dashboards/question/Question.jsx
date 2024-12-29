@@ -1,4 +1,3 @@
-"use client"
 import React, { useEffect, useState } from 'react'
 
 import { useRouter } from 'next/navigation'
@@ -10,11 +9,19 @@ import { getAllQuestions } from '@/services/questionService'
 
 
 import Filter from '../common/filter/Filter'
+import AddQuestion from './AddQuestion'
+import RenderShow from './components/RenderShow'
 
 const Question = () => {
     const router = useRouter()
     const [questions, setQuestions] = useState([])
 
+    const [open, setOpen] = useState(false)
+   
+
+    const toggle = () => {
+        setOpen(!open)
+    }
     const handleFetchQuestion = async () => {
         const questions = await getAllQuestions()
 
@@ -38,7 +45,7 @@ const Question = () => {
             <div>
                 <div className='flex justify-between py-2'>
                     <Typography variant='h3'>Questions</Typography>
-                    <Button variant="contained" onClick={() => router.push('questions/add')}>Ajouter</Button>
+                    <Button variant="contained" onClick={toggle}>Ajouter</Button>
                 </div>
                 <div className='mb-5'>
                     <Filter />
@@ -51,6 +58,11 @@ const Question = () => {
                     />
                 </Card>
             </div>
+            <AddQuestion   
+                open={open}
+                toggle={toggle}
+            />
+            
         </FilterProvider>
     )
 }

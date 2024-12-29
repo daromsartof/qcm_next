@@ -9,7 +9,7 @@ export const getAllSources = async () => {
   }
 }
 
-export const createSource = async (data) => {
+export const createOneSource = async (data) => {
   try {
     const response = await axios.post('/api/source', data)
     return response.data

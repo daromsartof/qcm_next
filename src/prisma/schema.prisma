@@ -19,33 +19,33 @@ model User {
 
 model Question {
   id            Int       @id @default(autoincrement())
-  title         String
+  title         String    @db.LongText
   description   String?   @db.LongText
   createdAt     DateTime  @default(now())
   updatedAt     DateTime? @updatedAt
-  matiereId     Int
-  categoryId    Int
+  matiereId     Int?
+  categoryId    Int?
   isDeleted     Boolean   @default(false)
   isMultiChoice Boolean   @default(false)
   fileUrl       String?
-  source        Int
+  sourceId      Int?
   answers       Answer[]
-  Matiere       Matiere   @relation(fields: [matiereId], references: [id])
-  Source        Source    @relation(fields: [source], references: [id])
-  Category      Category  @relation(fields: [categoryId], references: [id])
+  Matiere       Matiere?   @relation(fields: [matiereId], references: [id])
+  Source        Source?    @relation(fields: [sourceId], references: [id])
+  Category      Category?  @relation(fields: [categoryId], references: [id])
 }
 
 model Answer {
   id            Int       @id @default(autoincrement())
-  question    Int
-  title         String
+  questionId    Int
+  title         String    @db.LongText
   answerFileUrl String?
   description   String?   @db.LongText
   createdAt     DateTime  @default(now())
   updatedAt     DateTime? @updatedAt
   isCorrect     Boolean   @default(false)
   isDeleted     Boolean   @default(false)
-  Question      Question  @relation(fields: [question], references: [id])
+  Question      Question  @relation(fields: [questionId], references: [id])
 }
 
 model Matiere {

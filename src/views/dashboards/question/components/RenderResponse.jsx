@@ -20,7 +20,10 @@ const RenderResponse = ({
         data.map((answer, i) => (
           <ListItem disablePadding key={i}>
             <ListItemButton>
+              <div>
               <ListItemText id={`checkbox-list-label-${answer.id}`} primary={answer.title} />
+              </div>
+              <div>
               <ListItemSecondaryAction>
                 <Checkbox
                   edge='end'
@@ -30,6 +33,8 @@ const RenderResponse = ({
                   inputProps={{ 'aria-labelledby': `checkbox-list-label-${answer.id}` }}
                 />
               </ListItemSecondaryAction>
+              </div>
+              
             </ListItemButton>
           </ListItem>
         ))

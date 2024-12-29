@@ -9,7 +9,7 @@ const getAllCategories = async () => {
     }
 }
 
-const createCategorie = async ({ name }) => {
+const createOneCategorie = async ({ name }) => {
     try {
         const response = await axios.post('/api/categorie', {
             name
@@ -43,7 +43,7 @@ const deleteCategorie = async (id) => {
 
 export {
     getAllCategories,
-    createCategorie,
+    createOneCategorie,
     updateCategorie,
     deleteCategorie
 }

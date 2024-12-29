@@ -15,11 +15,11 @@ class QuestionRepositorie {
         const question = await prisma.question.create({
             data:{
                 title,
-                content,
+                description: content,
                 categoryId,
-                sourceId,
+                source: sourceId,
                 matiereId,
-                isMultiChoice: isMultichoise === 1
+                isMultiChoice: isMultichoise
             },
             include: {
                 Category: true,
@@ -31,9 +31,9 @@ class QuestionRepositorie {
         const reponseData = await Promise.all(reponses.map(async reponse => {
             return await ReponseRepositorie.createReponse({
                 question: question.id,
-                title: reponse.name,
+                title: reponse.title,
                 description: reponse.explaination,
-                isCorrect: reponse.isCorrect
+                isCorrect: reponse.isCorrect === 1
             })
         }))
 

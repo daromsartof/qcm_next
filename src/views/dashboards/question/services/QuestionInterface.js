@@ -7,6 +7,7 @@ const COLUMN = [
     columHelper.accessor('title', {
         header: "Titre",
         id: "titre",
+        size: 120,
     }),
     columHelper.accessor('Category.title', {
         header: "Categorie",
@@ -24,13 +25,14 @@ const COLUMN = [
         size: 100
     }),
     columHelper.accessor('isMultiChoice', {
-        header: "Multiple",
+        header: "choix multiple",
         id: "ismultiple",
-        size: 60,
+        size: 20,
         Cell: ({ cell }) => <RenderIsMulti checked={cell.getValue()} />
     }),
     columHelper.accessor('', {
         header: "Reponse",
+        size: 250,
         id: "response",
         Cell: ({ row }) => <RenderResponse data={row.original.answers} />
     })

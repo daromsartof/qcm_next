@@ -25,14 +25,14 @@ export const getAllQuestions = async (filters = {}) => {
 export const createQuestion = async (data) => {
   try {
       const response = await axios.post('/api/question', {
-          "name": data.name,
+          "title": data.title,
           "matiereId": data.matiereId,
           "sourceId": data.sourceId,
-          "categorieId": data.categorieId,
+          "categoryId": data.categorieId,
           "isMultichoise": data.isMultichoise,
-          "explaination": data.explaination,
+          "content": data.explaination,
           "reponses": data.reponses.map(r => ({
-              "name": r.title,
+              "title": r.title,
               "explaination": r.explaination,
               "isCorrect": r.isCorrect ? 1 : 0,
           }))

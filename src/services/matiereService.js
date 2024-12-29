@@ -9,7 +9,7 @@ const getAllMatieres = async () => {
   }
 }
 
-const createMatiere = async ({ name }) => {
+const createOneMatiere = async ({ name }) => {
   try {
     const response = await axios.post('/api/matiere', {
       name
@@ -43,7 +43,7 @@ const deleteMatiere = async (id) => {
 
 export {
   getAllMatieres,
-  createMatiere,
+  createOneMatiere,
   updateMatiere,
   deleteMatiere
 }

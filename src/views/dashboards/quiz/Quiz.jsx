@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useState } from 'react'
 
 import { useRouter } from 'next/navigation'
 
@@ -7,19 +7,20 @@ import { Button, Card, CardContent, CardHeader, Grid, Typography } from '@mui/ma
 
 import QuizCard from './components/QuizCard'
 import QuizFilter from './components/QuizFilter'
+import AddQuizDrawer from './components/AddQuizDrawer'
 
 
 const Quiz = () => {
-    const router = useRouter()
+    const [open, setOpen] = useState(false)
 
-    
-return (
+
+    return (
         <div>
             <div className='mb-2 flex justify-between'>
                 <Typography variant="h3">
                     Quiz
                 </Typography>
-                <Button variant="contained" color='primary' onClick={() => router.push('quiz/add')}>
+                <Button variant="contained" color='primary' onClick={() => setOpen(true)}>
                     Ajouter
                 </Button>
             </div>
@@ -37,6 +38,10 @@ return (
                     </Grid>
                 </Grid>
             </CardContent>
+            <AddQuizDrawer 
+                open={open}
+                toggle={() => setOpen(!open)}
+            />
         </div>
     )
 }

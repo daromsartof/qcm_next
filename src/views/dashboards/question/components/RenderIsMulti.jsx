@@ -1,13 +1,13 @@
-import React from 'react'
+import { Tooltip } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
+import NotInterestedIcon from '@mui/icons-material/NotInterested';
 
-import { Checkbox } from '@mui/material'
+const RenderIsMulti = ({ checked }) => {
+    return (
+        <Tooltip title={checked ? 'Multiple Answers Allowed' : 'Single Answer Only'}>
+            {checked ? <CheckIcon /> : ''}
+        </Tooltip>
+    );
+};
 
-const RenderIsMulti = ({
-    checked
-}) => {
-  return (
-    <Checkbox defaultChecked={checked} name='basic-checked' />
-  )
-}
-
-export default RenderIsMulti
+export default RenderIsMulti;

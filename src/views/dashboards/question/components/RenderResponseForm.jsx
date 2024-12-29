@@ -22,23 +22,23 @@ const RenderResponseForm = ({
                 isCorrect: DEFAULT_CHECK,
                 explaination: ""
             }
-            
-return newResponses
+
+            return newResponses
         })
     }
 
     const handleChange = (key, name, value) => {
         setResponses((response) => {
-            const newResponses = {...response }
+            const newResponses = { ...response }
 
             newResponses[key][name] = value
-            
-return newResponses
+
+            return newResponses
         })
     }
 
-    
-return (
+
+    return (
         <div>
             {
                 Object.keys(responses).map((key) => (
@@ -55,7 +55,10 @@ return (
                                 />
                             </Grid>
                             <Grid item xs={6} className='items-end flex'>
-                                <RenderResponsePicker />
+                                <RenderResponsePicker 
+                                    value={responses[key].explaination}
+                                    onChange={(value) => handleChange(key, "explaination", value)}
+                                />
                             </Grid>
                         </Grid>
 
@@ -81,13 +84,17 @@ return (
                                 onChange={(e) => handleChange(key, "explaination", e.target.value)}
                             />
                         </div>
-                        <Divider />
+                        <Divider className='my-4' />
                     </div>
                 ))
             }
-            <div className='my-2 flex justify-center items-center'>
-                <Button size='small' onClick={handleClickAdd}>+</Button>
-            </div>
+            <Button
+                variant='contained'
+                onClick={handleClickAdd}
+                className='mt-4'
+            >
+                Ajouter une réponse
+            </Button>
         </div>
     )
 }
