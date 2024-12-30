@@ -9,12 +9,15 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import FormControl from '@mui/material/FormControl'
+import Accordion from '@mui/material/Accordion'
+import AccordionSummary from '@mui/material/AccordionSummary'
+import AccordionDetails from '@mui/material/AccordionDetails'
 
 // ** Third Party Imports
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm, Controller } from 'react-hook-form'
-import { Dialog, DialogActions, DialogContent, DialogTitle, Grid } from '@mui/material'
+import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid } from '@mui/material'
 import RenderCategorie from './RenderCategorie'
 import RenderMatiere from '@/components/RenderMatiere'
 import CustomTextField from '@/@core/components/mui/TextField'
@@ -37,7 +40,7 @@ const defaultValues = {
     name: ''
 }
 
-const AddQuizDrawer = ({ open, toggle, onSuccess, selectedMatiere }) => {
+const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
     // ** Hooks
     const {
         reset,
@@ -62,11 +65,6 @@ const AddQuizDrawer = ({ open, toggle, onSuccess, selectedMatiere }) => {
         setOpenModalQuestion(false)
     }
 
-    useEffect(() => {
-        if (selectedMatiere) {
-            setValue('name', selectedMatiere.title)
-        }
-    }, [selectedMatiere, setValue])
 
     const onSubmit = async (data) => {
         try {
@@ -107,10 +105,10 @@ const AddQuizDrawer = ({ open, toggle, onSuccess, selectedMatiere }) => {
             variant='temporary'
             onClose={handleClose}
             ModalProps={{ keepMounted: true }}
-            sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 1000 } } }}
+          //  sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 1000 } } }}
         >
             <Header>
-                <Typography variant='h6'>{selectedMatiere ? 'Modifier' : 'Ajouter'} une Matière</Typography>
+                <Typography variant='h6'>{'Ajouter'}</Typography>
                 <Button size='small' variant='outlined' color='secondary' onClick={handleClose}>
                     Fermer
                 </Button>
@@ -177,6 +175,43 @@ const AddQuizDrawer = ({ open, toggle, onSuccess, selectedMatiere }) => {
                             </FormControl>
                         </Grid>
                     </Grid>
+                    <div className='py-4'>
+                    <Accordion>
+                        <AccordionSummary id='panel-header-1' aria-controls='panel-content-1'>
+                        <Typography>Accordion 1</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                        <Typography>
+                            Wafer sesame snaps chocolate bar candy canes halvah. Cupcake sesame snaps sweet tart dessert biscuit.
+                            Topping soufflé tart sweet croissant.
+                        </Typography>
+                        </AccordionDetails>
+                    </Accordion>
+
+                    <Accordion>
+                        <AccordionSummary id='panel-header-2' aria-controls='panel-content-2'>
+                        <Typography>Accordion 2</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                        <Typography>
+                            Sugar plum sesame snaps caramels. Cake pie tart fruitcake sesame snaps donut cupcake macaroon. Gingerbread
+                            pudding cheesecake pie ice cream.
+                        </Typography>
+                        </AccordionDetails>
+                    </Accordion>
+
+                    <Accordion>
+                        <AccordionSummary id='panel-header-3' aria-controls='panel-content-3'>
+                        <Typography>Accordion 3</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                        <Typography>
+                            Gingerbread lemon drops bear claw gummi bears bonbon wafer jujubes tiramisu. Jelly pie cake. Sweet roll
+                            dessert sweet pastry powder.
+                        </Typography>
+                        </AccordionDetails>
+                    </Accordion>
+                    </div>
                     <AddQuestionMatier
                         questions={questions}
                         open={openModalQuestion}
@@ -185,7 +220,7 @@ const AddQuizDrawer = ({ open, toggle, onSuccess, selectedMatiere }) => {
                     />
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Button size='large' variant='contained' onClick={handleSubmit(onSubmit)}>
-                            {selectedMatiere ? 'Modifier' : 'Enregistrer'}
+                            {'Enregistrer'}
                         </Button>
                         <Button size='large' variant='outlined' color='secondary' onClick={handleClose}>
                             Annuler
