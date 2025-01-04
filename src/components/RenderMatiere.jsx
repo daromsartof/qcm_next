@@ -64,7 +64,7 @@ const RenderMatiere = ({
                 >
                     {
                         matiers.map((matiere, index) => (
-                            <MenuItem key={index} value={matiere.id}>{matiere.title}</MenuItem>
+                            <MenuItem key={index} value={matiere}>{matiere.title}</MenuItem>
                         ))
                     }
                 </CustomTextField>

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { useRouter } from 'next/navigation'
 
@@ -8,12 +8,23 @@ import { Button, Card, CardContent, CardHeader, Grid, Typography } from '@mui/ma
 import QuizCard from './components/QuizCard'
 import QuizFilter from './components/QuizFilter'
 import AddQuizDrawer from './components/AddQuizDrawer'
+import { getAllQuizzes } from '@/services/quizService'
 
 
 const Quiz = () => {
     const [open, setOpen] = useState(false)
-
-
+    const [quizzes, setQuizzes] = useState([])
+    const handleFetchQuizzes = async () => {
+        try {
+            const quizzes = await getAllQuizzes()
+            setQuizzes(quizzes)
+        } catch (error) {
+            console.error('Error fetching matieres:', error)
+        }
+    }
+    useEffect(() => {
+        handleFetchQuizzes()
+    }, [])
     return (
         <div>
             <div className='mb-2 flex justify-between'>
@@ -25,17 +36,15 @@ const Quiz = () => {
                 </Button>
             </div>
             <QuizFilter />
-            <CardContent>
-                <Grid container spacing={5}>
-                    <Grid item sm={4}>
-                        <QuizCard />
-                    </Grid>
-                    <Grid item sm={4}>
-                        <QuizCard />
-                    </Grid>
-                    <Grid item sm={4}>
-                        <QuizCard />
-                    </Grid>
+            <CardContent className='px-0'>
+                <Grid container spacing={6}>
+                    {
+                        quizzes.map((quiz) => (
+                            <Grid item sm={4} key={quiz.id}>
+                                <QuizCard quiz={quiz} />
+                            </Grid>
+                        ))
+                    }
                 </Grid>
             </CardContent>
             <AddQuizDrawer 

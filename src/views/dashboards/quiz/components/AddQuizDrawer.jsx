@@ -17,12 +17,14 @@ import AccordionDetails from '@mui/material/AccordionDetails'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm, Controller } from 'react-hook-form'
-import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid } from '@mui/material'
+import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, List, ListItem, ListItemText } from '@mui/material'
 import RenderCategorie from './RenderCategorie'
 import RenderMatiere from '@/components/RenderMatiere'
 import CustomTextField from '@/@core/components/mui/TextField'
 import { getAllQuestions } from '@/services/questionService'
 import AddQuestionMatier from './AddQuestionMatier'
+import RenderMode from './RenderMode'
+import { MODES } from '../services/QuizInterface'
 
 const Header = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -56,7 +58,8 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
     const [openModalQuestion, setOpenModalQuestion] = useState(false)
     const [categorie, setCategorie] = useState()
     const [questions, setQuestions] = useState([])
-    const [matiere, setMatiere] = useState([])
+    const [quizQuestions, setQuizQuestions] = useState([])
+    const [matiere, setMatiere] = useState({})
     const handleOpenModalQuestion = () => {
         setOpenModalQuestion(true)
     }
@@ -68,29 +71,37 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
 
     const onSubmit = async (data) => {
         try {
-
-            toggle()
+            console.log(" data ", data)
+            console.log(" questions ", quizQuestions)
+            console.log(" categorie ", categorie)
+            console.log(" matiere ", matiere)
+            
+            /*toggle()
             reset()
-            if (onSuccess) onSuccess()
+            if (onSuccess) onSuccess()*/
         } catch (error) {
             console.error('Error saving matiere:', error)
         }
     }
 
-    const handleChangeMatiere = async (value) => {
+    const handleChangeMatiere = async (matiere) => {
        // console.log(value, categorie)
         const questions = await getAllQuestions({
             categoryId: categorie, 
-            matiereId: value
+            matiereId: matiere.id
         })
        // console.log(questions)
         setQuestions(questions)
-        setValue('subject', value)
+        setValue('subject', matiere.id)
+        setMatiere(matiere)
         handleOpenModalQuestion()
     }
 
-    const handleSaveQuestion = async () => {
-        console.log('save')
+    const handleSaveQuestion = async (questions, matiere) => {
+        setQuizQuestions((quizQuestions) => [...quizQuestions, {
+            ...matiere,
+            questions
+        }])
 
     }
     const handleClose = () => {
@@ -105,7 +116,7 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
             variant='temporary'
             onClose={handleClose}
             ModalProps={{ keepMounted: true }}
-          //  sx={{ '& .MuiDrawer-paper': { width: { xs: 300, sm: 1000 } } }}
+            sx={{ '& .MuiDrawer-paper': { minWidth: { xs: 300, sm: 1000 } } }}
         >
             <Header>
                 <Typography variant='h6'>{'Ajouter'}</Typography>
@@ -174,47 +185,47 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
                                 />
                             </FormControl>
                         </Grid>
+                        <Grid item sm={6}>
+                            <FormControl fullWidth sx={{ mb: 6 }}>
+                                <Controller
+                                    name='mode'
+                                    control={control}
+                                    rules={{ required: true }}
+                                    render={({ field: { value, onChange } }) => (
+                                        <RenderMode value={value} onChange={onChange} defaultValue={MODES.at(0)} />
+                                    )}
+                                />
+                            </FormControl>
+                        </Grid>
                     </Grid>
                     <div className='py-4'>
-                    <Accordion>
-                        <AccordionSummary id='panel-header-1' aria-controls='panel-content-1'>
-                        <Typography>Accordion 1</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                        <Typography>
-                            Wafer sesame snaps chocolate bar candy canes halvah. Cupcake sesame snaps sweet tart dessert biscuit.
-                            Topping soufflé tart sweet croissant.
-                        </Typography>
-                        </AccordionDetails>
-                    </Accordion>
-
-                    <Accordion>
-                        <AccordionSummary id='panel-header-2' aria-controls='panel-content-2'>
-                        <Typography>Accordion 2</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                        <Typography>
-                            Sugar plum sesame snaps caramels. Cake pie tart fruitcake sesame snaps donut cupcake macaroon. Gingerbread
-                            pudding cheesecake pie ice cream.
-                        </Typography>
-                        </AccordionDetails>
-                    </Accordion>
-
-                    <Accordion>
-                        <AccordionSummary id='panel-header-3' aria-controls='panel-content-3'>
-                        <Typography>Accordion 3</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                        <Typography>
-                            Gingerbread lemon drops bear claw gummi bears bonbon wafer jujubes tiramisu. Jelly pie cake. Sweet roll
-                            dessert sweet pastry powder.
-                        </Typography>
-                        </AccordionDetails>
-                    </Accordion>
+                        {
+                            quizQuestions.map((quizQuestion, index) => (
+                                <Accordion key={index}>
+                                <AccordionSummary id='panel-header-1' aria-controls='panel-content-1'>
+                                <Typography>{quizQuestion.title}</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                <Typography>
+                                <List>
+                                    {
+                                        quizQuestion.questions.map((question, index) => (
+                                            <ListItem key={index}>
+                                                <ListItemText primary={`${'Q' + (index + 1) + ' : '} ${question.title}`} />
+                                            </ListItem>
+                                        ))
+                                    }
+                                </List>
+                                </Typography>
+                                </AccordionDetails>
+                            </Accordion>
+                            ))
+                        }
                     </div>
                     <AddQuestionMatier
                         questions={questions}
                         open={openModalQuestion}
+                        matiere={matiere}
                         toggle={handleCloseModalQuestion}
                         handleSaveQuestion={handleSaveQuestion}
                     />

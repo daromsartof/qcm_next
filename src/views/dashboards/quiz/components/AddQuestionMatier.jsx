@@ -58,15 +58,20 @@ const SortableItem = ({ question, id, index, onDelete }) => {
     )
 }
 
-const AddQuestionMatier = ({ open, toggle, questions, handleSaveQuestion }) => {
+const AddQuestionMatier = ({ open, matiere, toggle, questions, handleSaveQuestion }) => {
     const [data, setData] = useState([])
     const [source, setSources] = useState([])
     const [filtredQuestions, setFiltredQuestions] = useState([])
     //  const [items] = useState([1, 2, 3])
     const handleChangeSource = (value) => {
         setSources(value)
-        console.log(data, value);
-
+        if (value === 0) {
+            setData(questions)
+            return
+        }
+        const filtered = questions.filter((question) => question.Source?.id === value)
+        //setFiltredQuestions(filtered)
+        setData([...filtered])
     }
 
     // const [items, setItems] = useState(["Item 1", "Item 2", "Item 3", "Item 4"]);
@@ -83,15 +88,35 @@ const AddQuestionMatier = ({ open, toggle, questions, handleSaveQuestion }) => {
         }
     };
 
-    const handleDelete = (id) => {
-        console.log("here ",    id)
+    const onChangeQuestion = (event) => {
+        const value = event.target.value
+        if (value === 0) {
+            setFiltredQuestions(data)
+            return
+        }
+        const filtered = data.find((question) => question.id === value)
+        setFiltredQuestions((prevItems) => ([
+            ...prevItems,
+            filtered
+        ]));
+    }
+
+    const onSave = () => {
+        handleSaveQuestion(filtredQuestions, matiere)
+        setFiltredQuestions([])
         
-      //  setFiltredQuestions((prevItems) => prevItems.filter((item) => item.id !== id));
+        toggle()
+    }
+
+    const handleDelete = (id) => {
+        console.log("here ", id)
+
+        //  setFiltredQuestions((prevItems) => prevItems.filter((item) => item.id !== id));
     };
 
     useEffect(() => {
-        setData(questions)
-        setFiltredQuestions(questions)
+        setData([...questions])
+        // setFiltredQuestions(questions)
         return () => {
             setData([])
         }
@@ -102,7 +127,7 @@ const AddQuestionMatier = ({ open, toggle, questions, handleSaveQuestion }) => {
                 <DialogTitle id='form-dialog-title'>
                     <Grid container spacing={2} className="d-flex items-center">
                         <Grid item sm={3} className="d-flex items-center">
-                            <div>Matières</div>
+                            <div>{matiere.title}</div>
                         </Grid>
                         <Grid item sm={9}>
                             <Grid container spacing={6} className="d-flex items-end justify-end">
@@ -115,11 +140,11 @@ const AddQuestionMatier = ({ open, toggle, questions, handleSaveQuestion }) => {
                                 <Grid item sm={5}>
                                     <CustomTextField
                                         select
-                                        defaultValue={0}
                                         fullWidth
                                         label='Questions'
+                                        onChange={onChangeQuestion}
                                     >
-                                        <MenuItem selected value={0}>Tous</MenuItem>
+                                        <MenuItem value={0}>Tous</MenuItem>
                                         {
                                             data.map((question, index) => (
                                                 <MenuItem key={index} value={question.id}>{question.title}</MenuItem>
@@ -155,7 +180,7 @@ const AddQuestionMatier = ({ open, toggle, questions, handleSaveQuestion }) => {
                 </DialogContent>
                 <DialogActions className='dialog-actions-dense'>
                     <Button onClick={toggle}>Annuler</Button>
-                    <Button onClick={handleSaveQuestion}>Enregistrer</Button>
+                    <Button onClick={onSave}>Enregistrer</Button>
                 </DialogActions>
             </Dialog>
         </div>
