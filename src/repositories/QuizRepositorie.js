@@ -19,6 +19,33 @@ class QuizRepositorie {
             }
         })
     }
+
+    async createQuiz({ title, categoryId, matieresIds, questionIds }) {
+        const quiz = await prisma.quiz.create({
+            data: {
+                title,
+                categoryId,
+                QuizMatieres: {
+                    createMany: {
+                        data: matieresIds.map((matiereId) => ({
+                            matiereOrder: matiereId.order,
+                            matiereId: matiereId.matierId
+                        }))
+                    }
+                },
+                QuizQuestions: {
+                    createMany: {
+                        data: questionIds.map((questionId) => ({
+                            questionOrder: questionId.order,
+                            questionId: questionId.questionId
+                        }))
+                    }
+                }
+            }
+        })
+
+        return quiz
+    }
 }
 
 const quiz = new QuizRepositorie()

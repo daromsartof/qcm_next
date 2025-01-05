@@ -14,17 +14,25 @@ import { getAllQuizzes } from '@/services/quizService'
 const Quiz = () => {
     const [open, setOpen] = useState(false)
     const [quizzes, setQuizzes] = useState([])
+
     const handleFetchQuizzes = async () => {
         try {
             const quizzes = await getAllQuizzes()
+
             setQuizzes(quizzes)
         } catch (error) {
             console.error('Error fetching matieres:', error)
         }
     }
+
+    const onSuccessAddQuiz = (quiz) => {
+         handleFetchQuizzes()
+    }
+
     useEffect(() => {
         handleFetchQuizzes()
     }, [])
+    
     return (
         <div>
             <div className='mb-2 flex justify-between'>
@@ -49,6 +57,7 @@ const Quiz = () => {
             </CardContent>
             <AddQuizDrawer 
                 open={open}
+                onSuccess={onSuccessAddQuiz}
                 toggle={() => setOpen(!open)}
             />
         </div>

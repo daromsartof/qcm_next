@@ -90,7 +90,7 @@ model QuizQuestion {
   id          Int       @id @default(autoincrement())
   quizId      Int
   questionId  Int
-  questionOrder Int      // Specifies the order of the question in the quiz
+  questionOrder Int ?      // Specifies the order of the question in the quiz
   Quiz        Quiz      @relation(fields: [quizId], references: [id])
   Question    Question  @relation(fields: [questionId], references: [id])
   @@unique([quizId, questionId]) // Ensures no duplicate questions in a quiz
@@ -100,6 +100,7 @@ model QuizMatiere {
   id        Int      @id @default(autoincrement())
   quizId    Int
   matiereId Int
+  matiereOrder Int ?
   Quiz      Quiz      @relation(fields: [quizId], references: [id])
   Matiere   Matiere   @relation(fields: [matiereId], references: [id])
   @@unique([quizId, matiereId]) // Ensures no duplicate matieres in a quiz

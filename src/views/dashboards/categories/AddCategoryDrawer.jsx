@@ -61,6 +61,7 @@ const SidebarAddCategory = ({ open, toggle, onSuccess, selectedCategory }) => {
       } else {
         await createCategorie(data)
       }
+
       toggle()
       reset()
       if (onSuccess) onSuccess()

@@ -18,6 +18,7 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm, Controller } from 'react-hook-form'
 import { Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, List, ListItem, ListItemText } from '@mui/material'
+
 import RenderCategorie from './RenderCategorie'
 import RenderMatiere from '@/components/RenderMatiere'
 import CustomTextField from '@/@core/components/mui/TextField'
@@ -25,6 +26,7 @@ import { getAllQuestions } from '@/services/questionService'
 import AddQuestionMatier from './AddQuestionMatier'
 import RenderMode from './RenderMode'
 import { MODES } from '../services/QuizInterface'
+import { createQuiz } from '@/services/quizService'
 
 const Header = styled(Box)(({ theme }) => ({
     display: 'flex',
@@ -55,11 +57,13 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
         mode: 'onChange',
         resolver: yupResolver(schema)
     })
+
     const [openModalQuestion, setOpenModalQuestion] = useState(false)
-    const [categorie, setCategorie] = useState()
+    const [categorie, setCategorie] = useState(null)
     const [questions, setQuestions] = useState([])
     const [quizQuestions, setQuizQuestions] = useState([])
     const [matiere, setMatiere] = useState({})
+
     const handleOpenModalQuestion = () => {
         setOpenModalQuestion(true)
     }
@@ -71,14 +75,38 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
 
     const onSubmit = async (data) => {
         try {
-            console.log(" data ", data)
-            console.log(" questions ", quizQuestions)
-            console.log(" categorie ", categorie)
-            console.log(" matiere ", matiere)
+            const quizQuestionsData = []
+            const quizMatieres = []
+
+            quizQuestions.forEach((matiere, i) => {    
+                quizMatieres.push({
+                    "order": i,
+                    "matierId": matiere.id
+                })
+                matiere.questions.forEach((question, i) => {
+                    quizQuestionsData.push({
+                        "order": i,
+                        "questionId": question.id
+                    })
+                })
+            })
+            console.log(data)
             
-            /*toggle()
+            console.log()
+            
+            const quiz = await createQuiz({
+                    title: data.name,
+                    categoryId: data.categorie,
+                    quizQuestions: quizQuestionsData,
+                   quizMatieres
+            })
+           
+            toggle()
             reset()
-            if (onSuccess) onSuccess()*/
+
+             if (quiz)  {
+                onSuccess(quiz)
+             }
         } catch (error) {
             console.error('Error saving matiere:', error)
         }
@@ -90,6 +118,8 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
             categoryId: categorie, 
             matiereId: matiere.id
         })
+
+
        // console.log(questions)
         setQuestions(questions)
         setValue('subject', matiere.id)
@@ -104,6 +134,7 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
         }])
 
     }
+
     const handleClose = () => {
         toggle()
         reset()
@@ -155,12 +186,12 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
                                     name='categorie'
                                     control={control}
                                     rules={{ required: true }}
-                                    render={({ field: { value, onChange } }) => (
+                                    render={({ field: { value } }) => (
                                         <RenderCategorie
                                             value={value}
                                             label='Categorie'
                                             onChange={(element) => {
-                                                onChange(element)
+                                                setValue('categorie', element.target.value)
                                                 setCategorie(element.target.value)
                                             }}
                                             placeholder='Entrez le nom de la matière'
@@ -191,8 +222,10 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
                                     name='mode'
                                     control={control}
                                     rules={{ required: true }}
-                                    render={({ field: { value, onChange } }) => (
-                                        <RenderMode value={value} onChange={onChange} defaultValue={MODES.at(0)} />
+                                    render={({ field: { value } }) => (
+                                        <RenderMode value={value} onChange={(element) => {
+                                                setValue('mode', element.target.value)
+                                            }} defaultValue={MODES.at(0)} />
                                     )}
                                 />
                             </FormControl>
