@@ -15,6 +15,9 @@ class MatiereRepositorie {
         return prisma.matiere.findMany({
             where: {
                 isDeleted: false
+            },
+            orderBy: {
+                title: 'asc'
             }
         })
     }

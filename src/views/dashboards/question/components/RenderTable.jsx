@@ -22,7 +22,8 @@ return (
       <Table
         data={data}
         options={{
-          enableEditing: true
+          enableEditing: true,
+          enablePagination: true
         }}
         renderRowActions={({ row }) => (
           <RenderAction

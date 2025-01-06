@@ -1,15 +1,8 @@
-// React Imports
-import { useState } from 'react'
-
 // MUI Imports
 import List from '@mui/material/List'
-import Avatar from '@mui/material/Avatar'
 import ListItem from '@mui/material/ListItem'
 import Checkbox from '@mui/material/Checkbox'
-import ListItemText from '@mui/material/ListItemText'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemAvatar from '@mui/material/ListItemAvatar'
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction'
+import { Grid } from '@mui/material'
 
 const RenderResponse = ({
   data = []
@@ -19,23 +12,20 @@ const RenderResponse = ({
       {
         data.map((answer, i) => (
           <ListItem disablePadding key={i}>
-            <ListItemButton>
-              <div>
-              <ListItemText id={`checkbox-list-label-${answer.id}`} primary={answer.title} />
-              </div>
-              <div>
-              <ListItemSecondaryAction>
-                <Checkbox
-                  edge='end'
-                  disabled
-                  disableRipple
-                  checked={answer.isCorrect}
-                  inputProps={{ 'aria-labelledby': `checkbox-list-label-${answer.id}` }}
-                />
-              </ListItemSecondaryAction>
-              </div>
-              
-            </ListItemButton>
+            <Grid container>
+              <Grid item xs={11}>
+                <span>{answer.title}</span>
+              </Grid>
+              <Grid item xs={1}>
+                  <Checkbox
+                    edge='end'
+                    disabled
+                    disableRipple
+                    checked={answer.isCorrect}
+                    inputProps={{ 'aria-labelledby': `checkbox-list-label-${answer.id}` }}
+                  />
+              </Grid>
+            </Grid>
           </ListItem>
         ))
       }

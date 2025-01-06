@@ -15,6 +15,9 @@ class CategorieRepositorie {
         return prisma.category.findMany({
             where: {
                 isDeleted: false
+            },
+            orderBy: {
+                title: 'asc'
             }
         })
     }

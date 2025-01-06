@@ -110,7 +110,7 @@ const SidebarAddSource = ({ open, toggle, onSuccess, selectedSource }) => {
             />
           </FormControl>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Button size='large' variant='contained' onClick={handleSubmit(onSubmit)}>
+            <Button size='large' variant='contained' type='submit'>
               {selectedSource ? 'Modifier' : 'Enregistrer'}
             </Button>
             <Button size='large' variant='outlined' color='secondary' onClick={handleClose}>

@@ -15,6 +15,9 @@ class SourceRepositorie {
         return prisma.source.findMany({
             where: {
                 isDeleted: false
+            },
+            orderBy: {
+                createdAt : 'desc'
             }
         })
     }

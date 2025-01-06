@@ -6,7 +6,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import { Plus } from 'react-feather'
 
 import CustomTextField from '@/@core/components/mui/TextField'
-import { createOneMatiere, getAllMatieres } from '@/services/matiereService'
+import { createMatiere, getAllMatieres } from '@/services/matiereService'
 
 
 const RenderMatiere = ({
@@ -34,7 +34,7 @@ const RenderMatiere = ({
 
     const handleSave = async () => {
         try {
-            await createOneMatiere({ name })
+            await createMatiere({ name })
             handleClose()
             setName("")
             handleFetchMatiers()

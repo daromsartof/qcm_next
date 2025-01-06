@@ -6,7 +6,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import { Plus } from 'react-feather'
 
 import CustomTextField from '@/@core/components/mui/TextField'
-import { createOneSource, getAllSources } from '@/services/sourceService'
+import { createSource, getAllSources } from '@/services/sourceService'
 
 
 const RenderSource = ({
@@ -16,6 +16,7 @@ const RenderSource = ({
 }) => {
     const [open, setOpen] = useState(false)
     const [sources, setSources] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
     const [name, setName] = useState("")
     const handleClickOpen = () => setOpen(true)
 
@@ -23,17 +24,20 @@ const RenderSource = ({
 
     const handleFetchSources = async () => {
         try {
+            setIsLoading(true)
             const matiere = await getAllSources()
 
             setSources(matiere)
         } catch (error) {
             console.error('Error fetching matieres:', error)
+        } finally {
+            setIsLoading(false)
         }
     }
 
     const handleSave = async () => {
         try {
-            await createOneSource({ name })
+            await createSource({ title: name })
             handleClose()
             setName("")
             handleFetchSources()
@@ -57,6 +61,7 @@ const RenderSource = ({
                     select
                     required
                     fullWidth
+                    disabled={isLoading}
                     label='Sources'
                     value={value}
                     onChange={onChange}

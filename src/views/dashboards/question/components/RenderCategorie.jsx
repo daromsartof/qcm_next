@@ -17,17 +17,21 @@ const RenderCategorie = ({
     const [open, setOpen] = useState(false)
     const [categories, setCategories] = useState([])
     const [name, setName] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
     const handleClickOpen = () => setOpen(true)
 
     const handleClose = () => setOpen(false)
 
     const handleFetchCategories = async () => {
         try {
+            setIsLoading(true)
             const categories = await getAllCategories()
 
             setCategories(categories)
         } catch (error) {
             console.error('Error fetching categoriess:', error)
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -57,6 +61,7 @@ const RenderCategorie = ({
                     select
                     fullWidth
                     required
+                    disabled={isLoading}
                     label='Catégories'
                     value={value}
                     onChange={onChange}

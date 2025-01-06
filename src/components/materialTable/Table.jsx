@@ -24,8 +24,6 @@ const Table = ({
     renderDetailPanel = null,
     cellStyles = {}
 }) => {
-    console.log(renderRowActions)
-
     const defaultOptions = {
         enableRowSelection: false,
         enableColumnOrdering: false,
@@ -78,7 +76,7 @@ const Table = ({
                 right: ['mrt-row-actions'],
             },
             pagination: {
-                pageSize: 50
+                pageSize: 10
             },
             expanded: defaultOptions.expanded,
             grouping: defaultOptions.grouping,
@@ -158,7 +156,7 @@ const Table = ({
         enableGlobalFilter: defaultOptions.enableGlobalFilter,
         enableColumnFilters: defaultOptions.enableColumnFilters,
         muiPaginationProps: {
-            rowsPerPageOptions: [50, 100, 500, 1000]
+            rowsPerPageOptions: [10, 20, 50, 100]
         },
         localization: MRT_Localization_FR,
         muiTableContainerProps: {

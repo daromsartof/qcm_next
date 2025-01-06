@@ -8,16 +8,19 @@ const COLUMN = [
         header: "Titre",
         id: "titre",
         size: 120,
+        Cell: ({ cell }) => <span className="whitespace-normal">{cell.getValue()}</span>
     }),
     columHelper.accessor('Category.title', {
         header: "Categorie",
         id: "categorie",
-        size: 100,
+        size: 80,
+        Cell: ({ cell }) => <span className="whitespace-normal">{cell.getValue()}</span>
     }),
     columHelper.accessor('Source.title', {
         header: "Source",
         id: "source",
-        size: 100,
+        size: 80,
+        Cell: ({ cell }) => <span className="whitespace-normal">{cell.getValue()}</span>
     }),
     columHelper.accessor('Matiere.title', {
         header: "Matière",

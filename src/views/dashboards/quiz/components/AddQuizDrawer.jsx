@@ -74,6 +74,8 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
 
 
     const onSubmit = async (data) => {
+        console.log(data)
+        
         try {
             const quizQuestionsData = []
             const quizMatieres = []
@@ -90,10 +92,7 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
                     })
                 })
             })
-            console.log(data)
-            
-            console.log()
-            
+
             const quiz = await createQuiz({
                     title: data.name,
                     categoryId: data.categorie,
@@ -156,7 +155,7 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
                 </Button>
             </Header>
             <Box sx={{ p: 5 }}>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={onSubmit}>
                     <Grid container spacing={6}>
                         <Grid item sm={6}>
                             <FormControl fullWidth sx={{ mb: 6 }}>
@@ -263,7 +262,7 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
                         handleSaveQuestion={handleSaveQuestion}
                     />
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Button size='large' variant='contained' onClick={handleSubmit(onSubmit)}>
+                        <Button size='large' variant='contained' type='submit'>
                             {'Enregistrer'}
                         </Button>
                         <Button size='large' variant='outlined' color='secondary' onClick={handleClose}>

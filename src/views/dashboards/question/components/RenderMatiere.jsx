@@ -6,7 +6,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import { Plus } from 'react-feather'
 
 import CustomTextField from '@/@core/components/mui/TextField'
-import { createOneMatiere, getAllMatieres } from '@/services/matiereService'
+import { createMatiere, getAllMatieres } from '@/services/matiereService'
 
 
 const RenderMatiere = ({
@@ -15,6 +15,7 @@ const RenderMatiere = ({
     required
 }) => {
     const [open, setOpen] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     const [matiers, setMatiers] = useState([])
     const [name, setName] = useState("")
     const handleClickOpen = () => setOpen(true)
@@ -23,17 +24,20 @@ const RenderMatiere = ({
 
     const handleFetchMatiers = async () => {
         try {
+            setIsLoading(true)
             const matiere = await getAllMatieres()
  
             setMatiers(matiere)
         } catch (error) {
             console.error('Error fetching matieres:', error)
+        } finally {
+            setIsLoading(false)
         }
     }
 
     const handleSave = async () => {
         try {
-            await createOneMatiere({ name })
+            await createMatiere({ name })
             handleClose()
             setName("")
             handleFetchMatiers()
@@ -56,6 +60,7 @@ const RenderMatiere = ({
                 <CustomTextField
                     select
                     fullWidth
+                    disabled={isLoading}
                     required
                     label='Matières'
                     value={value}
