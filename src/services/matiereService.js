@@ -3,18 +3,22 @@ import axios from 'axios'
 const getAllMatieres = async () => {
   try {
     const response = await axios.get('/api/matiere')
-    return response.data
+
+    
+return response.data
   } catch (error) {
     throw new Error(error)
   }
 }
 
-const createOneMatiere = async ({ name }) => {
+const createMatiere = async ({ name }) => {
   try {
     const response = await axios.post('/api/matiere', {
       name
     })
-    return response.data
+
+    
+return response.data
   } catch (error) {
     throw new Error(error)
   }
@@ -26,7 +30,9 @@ const updateMatiere = async ({ id, name }) => {
       id,
       name
     })
-    return response.data
+
+    
+return response.data
   } catch (error) {
     throw new Error(error)
   }
@@ -35,7 +41,9 @@ const updateMatiere = async ({ id, name }) => {
 const deleteMatiere = async (id) => {
   try {
     const response = await axios.delete(`/api/matiere?id=${id}`)
-    return response.data
+
+    
+return response.data
   } catch (error) {
     throw new Error(error)
   }
@@ -43,7 +51,7 @@ const deleteMatiere = async (id) => {
 
 export {
   getAllMatieres,
-  createOneMatiere,
+  createMatiere,
   updateMatiere,
   deleteMatiere
 }

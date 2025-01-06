@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { Button, Card, Typography } from '@mui/material'
+
 import { FilterProvider } from '@/contexts/FilterContext'
 import RenderTable from './components/RenderTable'
 import { getAllQuestions } from '@/services/questionService'
@@ -22,6 +23,7 @@ const Question = () => {
     const toggle = () => {
         setOpen(!open)
     }
+
     const handleFetchQuestion = async () => {
         const questions = await getAllQuestions()
 

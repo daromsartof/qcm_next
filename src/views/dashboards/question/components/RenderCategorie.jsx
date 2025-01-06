@@ -6,7 +6,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab, MenuIte
 import { Plus } from 'react-feather'
 
 import CustomTextField from '@/@core/components/mui/TextField'
-import { createOneCategorie, getAllCategories } from '@/services/categorieService'
+import { createCategorie, getAllCategories } from '@/services/categorieService'
 
 
 const RenderCategorie = ({
@@ -33,7 +33,7 @@ const RenderCategorie = ({
 
     const handleSave = async () => {
         try {
-            await createOneCategorie({ name })
+            await createCategorie({ name })
             handleClose()
             setName("")
             handleFetchCategories()

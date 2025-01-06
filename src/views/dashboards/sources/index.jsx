@@ -41,6 +41,7 @@ const SourceList = () => {
   const fetchSources = async () => {
     try {
       const data = await getAllSources()
+
       setSources(data)
     } catch (error) {
       console.error('Error fetching sources:', error)
@@ -62,6 +63,7 @@ const SourceList = () => {
     if (!addSourceOpen) {
       setSelectedSource(null)
     }
+
     setAddSourceOpen(!addSourceOpen)
   }
 

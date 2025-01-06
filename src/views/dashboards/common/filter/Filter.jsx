@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
+
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+
 import { getAllCategories } from '@/services/categorieService'
 import { getAllMatieres } from '@/services/matiereService'
 import { getAllSources } from '@/services/sourceService'
@@ -14,6 +16,7 @@ const Filter = () => {
   const handleFetchCategories = async () => {
     try {
       const data = await getAllCategories()
+
       setCategories(data)
     } catch (error) {
       console.error('Error fetching categories:', error)
@@ -23,6 +26,7 @@ const Filter = () => {
   const handleFetchMatieres = async () => {
     try {
       const data = await getAllMatieres()
+
       setMatieres(data)
     } catch (error) {
       console.error('Error fetching matieres:', error)
@@ -32,6 +36,7 @@ const Filter = () => {
   const handleFetchSources = async () => {
     try {
       const data = await getAllSources()
+
       setSources(data)
     } catch (error) {
       console.error('Error fetching sources:', error)

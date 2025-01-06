@@ -11,10 +11,13 @@ const RenderTable = ({
 }) => {
   const [openModalShow, setOpenModalShow] = useState(false)
   const [dataShow, setDataShow] = useState({})
+
   const toggleModalShow = () => {
       setOpenModalShow(!openModalShow)
   }
-  return (
+
+  
+return (
     <>
       <Table
         data={data}

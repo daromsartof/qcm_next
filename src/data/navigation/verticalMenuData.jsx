@@ -32,6 +32,7 @@ const verticalMenuData = dictionary => [
       }
     ]
   },
+
  /* {
     label: "Utilisateur",
     isSection: true,

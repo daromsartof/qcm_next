@@ -1,8 +1,10 @@
 'use client'
 
-import CategoryList from '@/views/dashboards/categories'
-// ** MUI Imports
 import Grid from '@mui/material/Grid'
+
+import CategoryList from '@/views/dashboards/categories'
+
+// ** MUI Imports
 
 const CategoriesPage = () => {
   return (

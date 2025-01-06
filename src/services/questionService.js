@@ -11,12 +11,15 @@ export const getAllQuestions = async (filters = {}) => {
     if (matiereId) params.append('matiereId', matiereId)
 
     const queryString = params.toString()
+
     if (queryString) {
       url += `?${queryString}`
     }
 
     const response = await axios.get(url)
-    return response.data
+
+    
+return response.data
   } catch (error) {
     throw error
   }
@@ -48,7 +51,9 @@ export const createQuestion = async (data) => {
 export const updateQuestion = async (data) => {
   try {
     const response = await axios.put('/api/question', data)
-    return response.data
+
+    
+return response.data
   } catch (error) {
     throw error
   }
@@ -57,7 +62,9 @@ export const updateQuestion = async (data) => {
 export const deleteQuestion = async (id) => {
   try {
     const response = await axios.delete(`/api/question?id=${id}`)
-    return response.data
+
+    
+return response.data
   } catch (error) {
     throw error
   }

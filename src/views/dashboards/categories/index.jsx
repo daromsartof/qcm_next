@@ -41,6 +41,7 @@ const CategoryList = () => {
   const fetchCategories = async () => {
     try {
       const data = await getAllCategories()
+
       setCategories(data)
     } catch (error) {
       console.error('Error fetching categories:', error)
@@ -62,6 +63,7 @@ const CategoryList = () => {
     if (!addCategoryOpen) {
       setSelectedCategory(null)
     }
+
     setAddCategoryOpen(!addCategoryOpen)
   }
 

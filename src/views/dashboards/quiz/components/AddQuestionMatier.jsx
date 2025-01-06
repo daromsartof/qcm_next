@@ -1,8 +1,7 @@
 "use client"
-import CustomTextField from "@/@core/components/mui/TextField"
-import RenderSource from "@/components/RenderSource"
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, MenuItem } from "@mui/material"
 import { useEffect, useState } from "react"
+
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, MenuItem } from "@mui/material"
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
@@ -19,6 +18,9 @@ import {
     verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities"
+
+import RenderSource from "@/components/RenderSource"
+import CustomTextField from "@/@core/components/mui/TextField"
 
 const SortableItem = ({ question, id, index, onDelete }) => {
     const { attributes, listeners, setNodeRef, transform, transition } =
@@ -62,14 +64,21 @@ const AddQuestionMatier = ({ open, matiere, toggle, questions, handleSaveQuestio
     const [data, setData] = useState([])
     const [source, setSources] = useState([])
     const [filtredQuestions, setFiltredQuestions] = useState([])
+
+
     //  const [items] = useState([1, 2, 3])
     const handleChangeSource = (value) => {
         setSources(value)
+
         if (value === 0) {
             setData(questions)
-            return
+            
+return
         }
+
         const filtered = questions.filter((question) => question.Source?.id === value)
+
+
         //setFiltredQuestions(filtered)
         setData([...filtered])
     }
@@ -83,18 +92,24 @@ const AddQuestionMatier = ({ open, matiere, toggle, questions, handleSaveQuestio
             setFiltredQuestions((prevItems) => {
                 const oldIndex = prevItems.findIndex((item) => item.id === active.id);
                 const newIndex = prevItems.findIndex((item) => item.id === over.id);
-                return arrayMove(prevItems, oldIndex, newIndex);
+
+                
+return arrayMove(prevItems, oldIndex, newIndex);
             });
         }
     };
 
     const onChangeQuestion = (event) => {
         const value = event.target.value
+
         if (value === 0) {
             setFiltredQuestions(data)
-            return
+            
+return
         }
+
         const filtered = data.find((question) => question.id === value)
+
         setFiltredQuestions((prevItems) => ([
             ...prevItems,
             filtered
@@ -116,12 +131,15 @@ const AddQuestionMatier = ({ open, matiere, toggle, questions, handleSaveQuestio
 
     useEffect(() => {
         setData([...questions])
+
+
         // setFiltredQuestions(questions)
         return () => {
             setData([])
         }
     }, [questions])
-    return (
+    
+return (
         <div>
             <Dialog open={open} maxWidth={"lg"} fullWidth={true} onClose={toggle} aria-labelledby='form-dialog-title'>
                 <DialogTitle id='form-dialog-title'>

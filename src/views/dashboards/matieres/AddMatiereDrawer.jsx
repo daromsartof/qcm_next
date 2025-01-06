@@ -61,6 +61,7 @@ const SidebarAddMatiere = ({ open, toggle, onSuccess, selectedMatiere }) => {
       } else {
         await createMatiere(data)
       }
+
       toggle()
       reset()
       if (onSuccess) onSuccess()

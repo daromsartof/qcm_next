@@ -61,6 +61,7 @@ const SidebarAddSource = ({ open, toggle, onSuccess, selectedSource }) => {
       } else {
         await createSource(data)
       }
+
       toggle()
       reset()
       if (onSuccess) onSuccess()

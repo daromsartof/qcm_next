@@ -1,6 +1,8 @@
 import React from 'react';
-import RenderResponse from './RenderResponse';
+
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
+
+import RenderResponse from './RenderResponse';
 
 const RenderShow = ({ 
     questionTitle, 

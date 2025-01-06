@@ -2,10 +2,14 @@
 
 // React Imports
 import { useState } from 'react'
+
 import { useForm, Controller } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Button, Card, CardActions, CardContent, Checkbox, Divider, Drawer, FormControlLabel, Grid, Typography } from '@mui/material'
+
+import { Check } from 'react-feather'
+
 import CustomTextField from '@/@core/components/mui/TextField'
 import RenderMatiere from './components/RenderMatiere'
 import RenderCategorie from './components/RenderCategorie'
@@ -22,12 +26,15 @@ const validationSchema = yup.object().shape({
   categorieId: yup.string().required('La catégorie est requise'),
   explaination: yup.string(),
   isMultichoise: yup.boolean(),
+
  /* responses: yup.object().test('responses', 'Au moins une réponse est requise', (value) => {
     return Object.keys(value).length > 0
   })*/
 })
+
 const DEFAULT_CHECK = false
 const REPONSE_DEFAULT_CHECKED = false
+
 const AddQuestion = ({ open, toggle }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
@@ -59,7 +66,9 @@ const AddQuestion = ({ open, toggle }) => {
 
   const onSubmit = async (data) => {
     console.log(data)
-    return 0
+    
+return 0
+
     try {
       setIsLoading(true)
       await createQuestion({

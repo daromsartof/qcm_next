@@ -41,6 +41,7 @@ const MatiereList = () => {
   const fetchMatieres = async () => {
     try {
       const data = await getAllMatieres()
+
       setMatieres(data)
     } catch (error) {
       console.error('Error fetching matieres:', error)
@@ -64,6 +65,7 @@ const MatiereList = () => {
     if (!addMatiereOpen) {
       setSelectedMatiere(null)
     }
+
     setAddMatiereOpen(!addMatiereOpen)
   }
 

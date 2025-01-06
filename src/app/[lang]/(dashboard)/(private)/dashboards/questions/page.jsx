@@ -1,7 +1,8 @@
 'use client'
 
-import Question from '@/views/dashboards/question/Question'
 import Grid from '@mui/material/Grid'
+
+import Question from '@/views/dashboards/question/Question'
 
 const QuestionsPage = () => {
   return (

@@ -45,7 +45,8 @@ export async function PUT(req) {
         return NextResponse.json(source)
     } catch (error) {
         console.error(error)
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+        
+return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
     }
 }
 
@@ -63,6 +64,7 @@ export async function DELETE(req) {
         return NextResponse.json({ success: true })
     } catch (error) {
         console.error(error)
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+        
+return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
     }
 }

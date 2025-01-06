@@ -6,16 +6,20 @@ export async function POST(req) {
     try {
         const body = await req.json();
         const question = await QuestionRepositorie.createQuestion(body);
-        return NextResponse.json(question);
+
+        
+return NextResponse.json(question);
     } catch (error) {
         console.error(error);
-        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+        
+return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
 
 export async function GET(req) {
     try {
         const { searchParams } = new URL(req.url);
+
         const filters = {
             categoryId: searchParams.get("categoryId"),
             sourceId: searchParams.get("sourceId"),
@@ -23,10 +27,13 @@ export async function GET(req) {
         };
 
         const questions = await QuestionRepositorie.getAllQuestions(filters);
-        return NextResponse.json(questions);
+
+        
+return NextResponse.json(questions);
     } catch (error) {
         console.error(error);
-        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+        
+return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
 
@@ -34,10 +41,13 @@ export async function PUT(req) {
     try {
         const body = await req.json();
         const question = await QuestionRepositorie.updateQuestion(body);
-        return NextResponse.json(question);
+
+        
+return NextResponse.json(question);
     } catch (error) {
         console.error(error);
-        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+        
+return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
 
@@ -51,9 +61,11 @@ export async function DELETE(req) {
         }
 
         await QuestionRepositorie.deleteQuestion(parseInt(id));
-        return NextResponse.json({ success: true });
+        
+return NextResponse.json({ success: true });
     } catch (error) {
         console.error(error);
-        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+        
+return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
