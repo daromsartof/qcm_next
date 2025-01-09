@@ -19,7 +19,7 @@ export async function POST(req) {
         });
 
         if (existingUser) {
-            return NextResponse.json({ error: "User already exists" }, { status: 400 })
+            return NextResponse.json({ error: "User already exists" }, { status: 403 })
         }
 
         // Hash the password

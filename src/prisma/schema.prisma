@@ -9,30 +9,33 @@ generator client {
 }
 
 model User {
-  id        Int    @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   name      String
-  email     String @unique
+  email     String  @unique
   firstname String
-  roles     String @default("user")
+  codeStep  String?
+  roles     String  @default("user")
   password  String
+
+  VerificationCode VerificationCode[]
 }
 
 model Question {
-  id            Int       @id @default(autoincrement())
-  title         String    @db.LongText
-  description   String?   @db.LongText
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime? @updatedAt
+  id            Int            @id @default(autoincrement())
+  title         String         @db.LongText
+  description   String?        @db.LongText
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime?      @updatedAt
   matiereId     Int?
   categoryId    Int?
-  isDeleted     Boolean   @default(false)
-  isMultiChoice Boolean   @default(false)
+  isDeleted     Boolean        @default(false)
+  isMultiChoice Boolean        @default(false)
   fileUrl       String?
   sourceId      Int?
   answers       Answer[]
-  Matiere       Matiere?   @relation(fields: [matiereId], references: [id])
-  Source        Source?    @relation(fields: [sourceId], references: [id])
-  Category      Category?  @relation(fields: [categoryId], references: [id])
+  Matiere       Matiere?       @relation(fields: [matiereId], references: [id])
+  Source        Source?        @relation(fields: [sourceId], references: [id])
+  Category      Category?      @relation(fields: [categoryId], references: [id])
   QuizQuestions QuizQuestion[]
 }
 
@@ -50,11 +53,11 @@ model Answer {
 }
 
 model Matiere {
-  id        Int        @id @default(autoincrement())
+  id        Int           @id @default(autoincrement())
   title     String
-  createdAt DateTime   @default(now())
-  isDeleted Boolean    @default(false)
-    questions Question[]
+  createdAt DateTime      @default(now())
+  isDeleted Boolean       @default(false)
+  questions Question[]
   quizzes   QuizMatiere[]
 }
 
@@ -76,10 +79,10 @@ model Category {
 }
 
 model Quiz {
-  id            Int           @id @default(autoincrement())
+  id            Int            @id @default(autoincrement())
   title         String
-  createdAt     DateTime      @default(now())
-  mode          Int           @default(1) @db.SmallInt
+  createdAt     DateTime       @default(now())
+  mode          Int            @default(1) @db.SmallInt
   categoryId    Int
   Category      Category       @relation(fields: [categoryId], references: [id])
   QuizQuestions QuizQuestion[]
@@ -87,21 +90,32 @@ model Quiz {
 }
 
 model QuizQuestion {
-  id          Int       @id @default(autoincrement())
-  quizId      Int
-  questionId  Int
-  questionOrder Int ?      // Specifies the order of the question in the quiz
-  Quiz        Quiz      @relation(fields: [quizId], references: [id])
-  Question    Question  @relation(fields: [questionId], references: [id])
+  id            Int      @id @default(autoincrement())
+  quizId        Int
+  questionId    Int
+  questionOrder Int? // Specifies the order of the question in the quiz
+  Quiz          Quiz     @relation(fields: [quizId], references: [id])
+  Question      Question @relation(fields: [questionId], references: [id])
+
   @@unique([quizId, questionId]) // Ensures no duplicate questions in a quiz
 }
 
 model QuizMatiere {
-  id        Int      @id @default(autoincrement())
-  quizId    Int
-  matiereId Int
-  matiereOrder Int ?
-  Quiz      Quiz      @relation(fields: [quizId], references: [id])
-  Matiere   Matiere   @relation(fields: [matiereId], references: [id])
+  id           Int     @id @default(autoincrement())
+  quizId       Int
+  matiereId    Int
+  matiereOrder Int?
+  Quiz         Quiz    @relation(fields: [quizId], references: [id])
+  Matiere      Matiere @relation(fields: [matiereId], references: [id])
+
   @@unique([quizId, matiereId]) // Ensures no duplicate matieres in a quiz
+}
+
+model VerificationCode {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  code      String
+  expiresAt DateTime
+  isUsed    Boolean  @default(false)
+  User      User     @relation(fields: [userId], references: [id])
 }
