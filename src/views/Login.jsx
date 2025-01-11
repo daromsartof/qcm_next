@@ -102,8 +102,8 @@ const Login = ({ mode }) => {
   } = useForm({
     resolver: valibotResolver(schema),
     defaultValues: {
-      email: 'admin@vuexy.com',
-      password: 'admin'
+      email: 'admin@cap-qcm.com',
+      password: 'admin4321'
     }
   })
 
@@ -222,7 +222,6 @@ const Login = ({ mode }) => {
               Login
             </Button>
             <div className='flex justify-center items-center flex-wrap gap-2'>
-              <Typography>New on our platform?</Typography>
               <Typography component={Link} href={getLocalizedUrl('/register', locale)} color='primary'>
                 Create an account
               </Typography>

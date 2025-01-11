@@ -68,7 +68,7 @@ const Logo = ({ color }) => {
         transitionDuration={transitionDuration}
         isBreakpointReached={isBreakpointReached}
       >
-        {themeConfig.templateName}
+        QAP QCM
       </LogoText>
     </div>
   )

@@ -39,6 +39,14 @@ const AddQuestion = ({ open, toggle }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
 
+  const [reponse, setReponse] = useState({
+        0: {
+          title: '',
+          isCorrect: REPONSE_DEFAULT_CHECKED,
+          explaination: ''
+        }
+  })
+      
   const {
     control,
     handleSubmit,
@@ -52,14 +60,7 @@ const AddQuestion = ({ open, toggle }) => {
       sourceId: null,
       matiereId: null,
       image: null,
-      explaination: '',
-      responses: {
-        0: {
-          title: '',
-          isCorrect: REPONSE_DEFAULT_CHECKED,
-          explaination: ''
-        }
-      }
+      explaination: ''
     },
     resolver: yupResolver(validationSchema)
   })

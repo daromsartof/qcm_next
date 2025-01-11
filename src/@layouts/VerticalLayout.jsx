@@ -13,7 +13,7 @@ import StyledContentWrapper from './styles/vertical/StyledContentWrapper'
 const VerticalLayout = props => {
   // Props
   const { navbar, footer, navigation, children } = props
-
+  
   return (
     <div className={classnames(verticalLayoutClasses.root, 'flex flex-auto')}>
       {navigation || null}
