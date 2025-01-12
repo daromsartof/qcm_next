@@ -16,10 +16,10 @@ class QuestionRepositorie {
             data:{
                 title,
                 description: content,
-                categoryId,
-                source: sourceId,
-                matiereId,
-                isMultiChoice: isMultichoise
+                categoryId: parseInt(categoryId),
+                sourceId: parseInt(sourceId),
+                matiereId: parseInt(matiereId),
+                isMultiChoice: isMultichoise === 1
             },
             include: {
                 Category: true,
@@ -30,7 +30,7 @@ class QuestionRepositorie {
 
         const reponseData = await Promise.all(reponses.map(async reponse => {
             return await ReponseRepositorie.createReponse({
-                question: question.id,
+                questionId: question.id,
                 title: reponse.title,
                 description: reponse.explaination,
                 isCorrect: reponse.isCorrect === 1
@@ -70,6 +70,9 @@ class QuestionRepositorie {
                 Source: true,
                 answers: true,
                 Matiere: true
+            },
+            orderBy: {
+                createdAt: 'desc'
             }
         })
     }

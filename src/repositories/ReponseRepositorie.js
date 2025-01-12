@@ -2,17 +2,17 @@ import prisma from "@/services/Utils/prisma"
 
 class ReponseRepositorie {
     async createReponse({
-        question,
+        questionId,
         description,
         title,
         isCorrect
     }, include = {}) {
         return prisma.answer.create({
             data: {
-                question,
+                questionId,
                 title,
                 description,
-                isCorrect: isCorrect === 1
+                isCorrect
             },
             include: {
                 ...include

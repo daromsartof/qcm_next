@@ -9,13 +9,12 @@ import { MODES } from '../services/QuizInterface'
 
 const RenderMode = ({
   value,
-  onChange,
-  defaultValue
+  onChange
 }) => {
   return (
-    <CustomTextField select defaultValue={defaultValue} value={value} onChange={onChange} fullWidth required label='Mode'>
+    <CustomTextField select value={value} onChange={onChange} fullWidth required label='Mode'>
       {MODES.map((mode, index) => (
-        <MenuItem key={index} value={mode}>
+        <MenuItem key={index} value={mode.value}>
           {mode.label}
         </MenuItem>
       ))}

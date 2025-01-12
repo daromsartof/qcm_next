@@ -7,7 +7,8 @@ import { Button, Card, Typography } from '@mui/material'
 import { FilterProvider } from '@/contexts/FilterContext'
 import RenderTable from './components/RenderTable'
 import { getAllQuestions } from '@/services/questionService'
-import AddQuestion from './AddQuestion'
+
+import RenderAddQuestion from './components/RenderAddQuestion'
 
 
 const Question = () => {
@@ -54,7 +55,7 @@ const Question = () => {
                     />
                 </Card>
             </div>
-            <AddQuestion   
+            <RenderAddQuestion   
                 open={open}
                 toggle={toggle}
             />
