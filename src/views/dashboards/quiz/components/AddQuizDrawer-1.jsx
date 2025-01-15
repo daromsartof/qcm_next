@@ -74,9 +74,7 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
 
 
     const onSubmit = async (data) => {
-        console.log(data)
-        return
-        try {
+      /* try {
             const quizQuestionsData = []
             const quizMatieres = []
 
@@ -108,7 +106,7 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
              }
         } catch (error) {
             console.error('Error saving matiere:', error)
-        }
+        }*/
     }
 
     const handleChangeMatiere = async (matiere) => {
@@ -221,11 +219,7 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
                                     name='mode'
                                     control={control}
                                     rules={{ required: true }}
-                                    render={({ field: { value } }) => (
-                                        <RenderMode value={value} onChange={(element) => {
-                                                setValue('mode', element.target.value)
-                                            }} defaultValue={MODES.at(0)} />
-                                    )}
+                                    render={({ field: { value } }) => (<RenderMode value={value} onChange={(element) => {setValue('mode', element.target.value)}} defaultValue={MODES.at(0)} />)}
                                 />
                             </FormControl>
                         </Grid>
