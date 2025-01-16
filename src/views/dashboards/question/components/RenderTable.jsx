@@ -6,6 +6,7 @@ import RenderAction from './RenderAction'
 import RenderShow from './RenderShow'
 
 const RenderTable = ({
+  loading,
   data = [],
   setData = () => { }
 }) => {
@@ -21,6 +22,7 @@ return (
     <>
       <Table
         data={data}
+        progressPending={loading}
         options={{
           enableEditing: true,
           enablePagination: true

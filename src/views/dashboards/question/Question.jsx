@@ -14,7 +14,7 @@ import RenderAddQuestion from './components/RenderAddQuestion'
 const Question = () => {
     const router = useRouter()
     const [questions, setQuestions] = useState([])
-
+    const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
    
 
@@ -23,9 +23,11 @@ const Question = () => {
     }
 
     const handleFetchQuestion = async () => {
+        setLoading(true)
         const questions = await getAllQuestions()
 
         setQuestions(questions)
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -50,6 +52,7 @@ const Question = () => {
 
                 <Card>
                     <RenderTable
+                        loading={loading}
                         data={questions}
                         setData={setQuestions}
                     />
