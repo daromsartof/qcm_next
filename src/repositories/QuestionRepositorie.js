@@ -45,18 +45,11 @@ class QuestionRepositorie {
 
     async getAllQuestions(filters = {}) {
         const { categoryId, sourceId, matiereId } = filters
+        const answer = await prisma.answer.findMany()
+        console.log("answer ", answer)
         
         const where = {
-            isDeleted: false,
-            category: {
-                isDeleted: false
-            },
-            source: {
-                isDeleted: false
-            },
-            matiere: {
-                isDeleted: false
-            }
+            isDeleted: false
         }
 
         if (categoryId) where.categoryId = parseInt(categoryId)

@@ -1,42 +1,11 @@
-datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
-}
-
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-3.0.x", "linux-arm64-openssl-1.1.x", "rhel-openssl-3.0.x"]
 }
 
-model user {
-  id        Int     @id @default(autoincrement())
-  name      String
-  email     String  @unique
-  firstname String
-  codeStep  String?
-  roles     String  @default("user")
-  password  String
-
-  verificationCodes verificationCode[]
-}
-
-model question {
-  id            Int            @id @default(autoincrement())
-  title         String         @db.LongText
-  description   String?        @db.LongText
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime?      @updatedAt
-  matiereId     Int?
-  categoryId    Int?
-  isDeleted     Boolean        @default(false)
-  isMultiChoice Boolean        @default(false)
-  fileUrl       String?
-  sourceId      Int?
-  answers       answer[]
-  matiere       matiere?       @relation(fields: [matiereId], references: [id])
-  source        source?        @relation(fields: [sourceId], references: [id])
-  category      category?      @relation(fields: [categoryId], references: [id])
-  quizQuestions quizQuestion[]
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model answer {
@@ -46,76 +15,124 @@ model answer {
   answerFileUrl String?
   description   String?   @db.LongText
   createdAt     DateTime  @default(now())
-  updatedAt     DateTime? @updatedAt
+  updatedAt     DateTime?
   isCorrect     Boolean   @default(false)
   isDeleted     Boolean   @default(false)
+  
   question      question  @relation(fields: [questionId], references: [id])
-}
-
-model matiere {
-  id        Int           @id @default(autoincrement())
-  title     String
-  createdAt DateTime      @default(now())
-  isDeleted Boolean       @default(false)
-  questions question[]
-  quizzes   quizMatiere[]
-}
-
-model source {
-  id        Int        @id @default(autoincrement())
-  title     String
-  createdAt DateTime   @default(now())
-  isDeleted Boolean    @default(false)
-  questions question[]
+  @@index([questionId], map: "answer_questionId_fkey")
 }
 
 model category {
-  id        Int        @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   title     String
-  createdAt DateTime   @default(now())
-  isDeleted Boolean    @default(false)
+  createdAt DateTime @default(now())
+  isDeleted Boolean  @default(false)
+  
   questions question[]
   quizzes   quiz[]
 }
 
+model matiere {
+  id        Int      @id @default(autoincrement())
+  title     String
+  createdAt DateTime @default(now())
+  isDeleted Boolean  @default(false)
+
+  questions question[]
+  quizzes   quizmatiere[]
+}
+
+model question {
+  id            Int       @id @default(autoincrement())
+  title         String    @db.LongText
+  description   String?   @db.LongText
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime?
+  matiereId     Int?
+  categoryId    Int?
+  isDeleted     Boolean   @default(false)
+  isMultiChoice Boolean   @default(false)
+  fileUrl       String?
+  sourceId      Int?
+
+  answers       answer[]
+  matiere       matiere?       @relation(fields: [matiereId], references: [id])
+  source        source?        @relation(fields: [sourceId], references: [id])
+  category      category?      @relation(fields: [categoryId], references: [id])
+  quizQuestions quizquestion[]
+
+  @@index([categoryId], map: "question_categoryId_fkey")
+  @@index([matiereId], map: "question_matiereId_fkey")
+  @@index([sourceId], map: "question_sourceId_fkey")
+}
+
 model quiz {
-  id            Int            @id @default(autoincrement())
-  title         String
-  createdAt     DateTime       @default(now())
-  mode          Int            @default(1) @db.SmallInt
-  categoryId    Int
+  id         Int      @id @default(autoincrement())
+  title      String
+  createdAt  DateTime @default(now())
+  mode       Int      @default(1) @db.SmallInt
+  categoryId Int
+
   category      category       @relation(fields: [categoryId], references: [id])
-  quizQuestions quizQuestion[]
-  quizMatieres  quizMatiere[]
+  quizQuestions quizquestion[]
+  quizMatieres  quizmatiere[]
+  @@index([categoryId], map: "quiz_categoryId_fkey")
 }
 
-model quizQuestion {
-  id            Int      @id @default(autoincrement())
-  quizId        Int
-  questionId    Int
-  questionOrder Int? // Specifies the order of the question in the quiz
-  quiz          quiz     @relation(fields: [quizId], references: [id])
-  question      question @relation(fields: [questionId], references: [id])
-
-  @@unique([quizId, questionId]) // Ensures no duplicate questions in a quiz
-}
-
-model quizMatiere {
-  id           Int     @id @default(autoincrement())
+model quizmatiere {
+  id           Int  @id @default(autoincrement())
   quizId       Int
   matiereId    Int
   matiereOrder Int?
-  quiz         quiz    @relation(fields: [quizId], references: [id])
-  matiere      matiere @relation(fields: [matiereId], references: [id])
 
-  @@unique([quizId, matiereId]) // Ensures no duplicate matieres in a quiz
+  quiz      quiz    @relation(fields: [quizId], references: [id])
+  matiere   matiere @relation(fields: [matiereId], references: [id])
+
+  @@unique([quizId, matiereId])
+  @@index([matiereId], map: "quizMatiere_matiereId_fkey")
 }
 
-model verificationCode {
+model quizquestion {
+  id            Int  @id @default(autoincrement())
+  quizId        Int
+  questionId    Int
+  questionOrder Int?
+
+  quiz          quiz     @relation(fields: [quizId], references: [id])
+  question      question @relation(fields: [questionId], references: [id])
+  @@unique([quizId, questionId], map: "quizQuestion_quizId_questionId_key")
+  @@index([questionId], map: "quizQuestion_questionId_fkey")
+}
+
+model source {
+  id        Int      @id @default(autoincrement())
+  title     String
+  createdAt DateTime @default(now())
+  isDeleted Boolean  @default(false)
+
+  questions question[]
+}
+
+model user {
+  id        Int     @id @default(autoincrement())
+  name      String
+  email     String  @unique(map: "User_email_key")
+  firstname String
+  codeStep  String?
+  roles     String  @default("user")
+  password  String
+
+  verification_codes verificationcode[]
+}
+
+model verificationcode {
   id        Int      @id @default(autoincrement())
   userId    Int
   code      String
   expiresAt DateTime
   isUsed    Boolean  @default(false)
+
   user      user     @relation(fields: [userId], references: [id])
+  @@index([userId], map: "verificationCode_userId_fkey")
 }

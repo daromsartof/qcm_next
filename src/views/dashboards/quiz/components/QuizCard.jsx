@@ -18,7 +18,7 @@ return (
                 <div className='mb-4'>
                     <p>
                         <strong>Categorie : </strong>
-                        <span>{quiz.Category.title}</span>
+                        <span>{quiz.category.title}</span>
                     </p>
                     <p>
                         <strong>Date de creation : </strong>
@@ -26,11 +26,11 @@ return (
                     </p>
                     <p>
                         <strong>Nombre de questions : </strong>
-                        <span>{quiz.QuizQuestions.length}</span>
+                        <span>{quiz.quizQuestions.length}</span>
                     </p>
                     <p>
                         <strong>Nombre de matieres : </strong>
-                        <span>{quiz.QuizMatieres.length}</span>
+                        <span>{quiz.quizMatieres.length}</span>
                     </p>
                 </div>
                 <Divider />

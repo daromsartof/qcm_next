@@ -10,19 +10,19 @@ const COLUMN = [
         size: 120,
         Cell: ({ cell }) => <span className="whitespace-normal">{cell.getValue()}</span>
     }),
-    columHelper.accessor('Category.title', {
+    columHelper.accessor('category.title', {
         header: "Categorie",
         id: "categorie",
         size: 80,
         Cell: ({ cell }) => <span className="whitespace-normal">{cell.getValue()}</span>
     }),
-    columHelper.accessor('Source.title', {
+    columHelper.accessor('source.title', {
         header: "Source",
         id: "source",
         size: 80,
         Cell: ({ cell }) => <span className="whitespace-normal">{cell.getValue()}</span>
     }),
-    columHelper.accessor('Matiere.title', {
+    columHelper.accessor('matiere.title', {
         header: "Matière",
         id: "matiere",
         size: 100

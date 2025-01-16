@@ -14,7 +14,7 @@ const RenderResponse = ({
           <ListItem disablePadding key={i}>
             <Grid container>
               <Grid item xs={11}>
-                <span>{answer.title}</span>
+                <span className='whitespace-normal'>{answer.title}</span>
               </Grid>
               <Grid item xs={1}>
                   <Checkbox

@@ -33,13 +33,22 @@ const verticalMenuData = dictionary => [
     ]
   },
 
- /* {
+  {
     label: "Utilisateur",
     isSection: true,
     children: [
-    
+      {
+        label: "Liste des utilisateurs",
+        icon: 'tabler-users',
+        href: '/dashboards/users'
+      },
+      {
+        label: "Quiz des utilisateurs",
+        icon: 'tabler-pencil-pause',
+        href: '/dashboards/quiz-users'
+      },
     ]
-  },*/
+  },
   {
     label: "Utilité",
     isSection: true,

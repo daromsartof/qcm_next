@@ -19,8 +19,10 @@ const RenderShow = ({
     return (
         <div className="quiz-question">
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>{questionTitle}</DialogTitle>
-                <DialogContent>
+                <DialogTitle><strong>Question : </strong> {questionTitle}</DialogTitle>
+                <DialogContent style={{
+                minWidth: '600px'
+            }} >
                     <RenderResponse data={responses} />
                 </DialogContent>
                 <DialogActions>
