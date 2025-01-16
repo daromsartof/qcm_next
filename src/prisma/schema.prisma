@@ -8,7 +8,7 @@ generator client {
   binaryTargets = ["native", "debian-openssl-3.0.x", "linux-arm64-openssl-1.1.x", "rhel-openssl-3.0.x"]
 }
 
-model User {
+model user {
   id        Int     @id @default(autoincrement())
   name      String
   email     String  @unique
@@ -17,10 +17,10 @@ model User {
   roles     String  @default("user")
   password  String
 
-  VerificationCode VerificationCode[]
+  verificationCodes verificationCode[]
 }
 
-model Question {
+model question {
   id            Int            @id @default(autoincrement())
   title         String         @db.LongText
   description   String?        @db.LongText
@@ -32,14 +32,14 @@ model Question {
   isMultiChoice Boolean        @default(false)
   fileUrl       String?
   sourceId      Int?
-  answers       Answer[]
-  Matiere       Matiere?       @relation(fields: [matiereId], references: [id])
-  Source        Source?        @relation(fields: [sourceId], references: [id])
-  Category      Category?      @relation(fields: [categoryId], references: [id])
-  QuizQuestions QuizQuestion[]
+  answers       answer[]
+  matiere       matiere?       @relation(fields: [matiereId], references: [id])
+  source        source?        @relation(fields: [sourceId], references: [id])
+  category      category?      @relation(fields: [categoryId], references: [id])
+  quizQuestions quizQuestion[]
 }
 
-model Answer {
+model answer {
   id            Int       @id @default(autoincrement())
   questionId    Int
   title         String    @db.LongText
@@ -49,73 +49,73 @@ model Answer {
   updatedAt     DateTime? @updatedAt
   isCorrect     Boolean   @default(false)
   isDeleted     Boolean   @default(false)
-  Question      Question  @relation(fields: [questionId], references: [id])
+  question      question  @relation(fields: [questionId], references: [id])
 }
 
-model Matiere {
+model matiere {
   id        Int           @id @default(autoincrement())
   title     String
   createdAt DateTime      @default(now())
   isDeleted Boolean       @default(false)
-  questions Question[]
-  quizzes   QuizMatiere[]
+  questions question[]
+  quizzes   quizMatiere[]
 }
 
-model Source {
+model source {
   id        Int        @id @default(autoincrement())
   title     String
   createdAt DateTime   @default(now())
   isDeleted Boolean    @default(false)
-  questions Question[]
+  questions question[]
 }
 
-model Category {
+model category {
   id        Int        @id @default(autoincrement())
   title     String
   createdAt DateTime   @default(now())
   isDeleted Boolean    @default(false)
-  questions Question[]
-  quizzes   Quiz[]
+  questions question[]
+  quizzes   quiz[]
 }
 
-model Quiz {
+model quiz {
   id            Int            @id @default(autoincrement())
   title         String
   createdAt     DateTime       @default(now())
   mode          Int            @default(1) @db.SmallInt
   categoryId    Int
-  Category      Category       @relation(fields: [categoryId], references: [id])
-  QuizQuestions QuizQuestion[]
-  QuizMatieres  QuizMatiere[]
+  category      category       @relation(fields: [categoryId], references: [id])
+  quizQuestions quizQuestion[]
+  quizMatieres  quizMatiere[]
 }
 
-model QuizQuestion {
+model quizQuestion {
   id            Int      @id @default(autoincrement())
   quizId        Int
   questionId    Int
   questionOrder Int? // Specifies the order of the question in the quiz
-  Quiz          Quiz     @relation(fields: [quizId], references: [id])
-  Question      Question @relation(fields: [questionId], references: [id])
+  quiz          quiz     @relation(fields: [quizId], references: [id])
+  question      question @relation(fields: [questionId], references: [id])
 
   @@unique([quizId, questionId]) // Ensures no duplicate questions in a quiz
 }
 
-model QuizMatiere {
+model quizMatiere {
   id           Int     @id @default(autoincrement())
   quizId       Int
   matiereId    Int
   matiereOrder Int?
-  Quiz         Quiz    @relation(fields: [quizId], references: [id])
-  Matiere      Matiere @relation(fields: [matiereId], references: [id])
+  quiz         quiz    @relation(fields: [quizId], references: [id])
+  matiere      matiere @relation(fields: [matiereId], references: [id])
 
   @@unique([quizId, matiereId]) // Ensures no duplicate matieres in a quiz
 }
 
-model VerificationCode {
+model verificationCode {
   id        Int      @id @default(autoincrement())
   userId    Int
   code      String
   expiresAt DateTime
   isUsed    Boolean  @default(false)
-  User      User     @relation(fields: [userId], references: [id])
+  user      user     @relation(fields: [userId], references: [id])
 }

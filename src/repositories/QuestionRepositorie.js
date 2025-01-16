@@ -22,9 +22,9 @@ class QuestionRepositorie {
                 isMultiChoice: isMultichoise === 1
             },
             include: {
-                Category: true,
-                Source: true,
-                Matiere: true
+                category: true,
+                source: true,
+                matiere: true
             }
         })
 
@@ -48,13 +48,13 @@ class QuestionRepositorie {
         
         const where = {
             isDeleted: false,
-            Category: {
+            category: {
                 isDeleted: false
             },
-            Source: {
+            source: {
                 isDeleted: false
             },
-            Matiere: {
+            matiere: {
                 isDeleted: false
             }
         }
@@ -66,10 +66,10 @@ class QuestionRepositorie {
         return prisma.question.findMany({
             where,
             include: {
-                Category: true,
-                Source: true,
+                category: true,
+                source: true,
                 answers: true,
-                Matiere: true
+                matiere: true
             },
             orderBy: {
                 createdAt: 'desc'

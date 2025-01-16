@@ -36,7 +36,7 @@ class VerificationCodeRepositorie {
     }) {
         return prisma.verificationCode.findFirst({
             where: {
-                User:{
+                user:{
                     email
                 }
             },

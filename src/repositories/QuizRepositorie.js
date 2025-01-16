@@ -5,15 +5,15 @@ class QuizRepositorie {
     async getAllQuizzes() {
         return prisma.quiz.findMany({
             include: {
-                Category: true,
-                QuizQuestions: {
+                category: true,
+                quizQuestions: {
                     include: {
-                        Question: true
+                        question: true
                     }
                 },
-                QuizMatieres: {
+                quizMatieres: {
                     include: {
-                        Matiere: true
+                        matiere: true
                     }
                 }
             }
@@ -25,7 +25,7 @@ class QuizRepositorie {
             data: {
                 title,
                 categoryId,
-                QuizMatieres: {
+                quizMatieres: {
                     createMany: {
                         data: matieresIds.map((matiereId) => ({
                             matiereOrder: matiereId.order,
@@ -33,7 +33,7 @@ class QuizRepositorie {
                         }))
                     }
                 },
-                QuizQuestions: {
+                quizQuestions: {
                     createMany: {
                         data: questionIds.map((questionId) => ({
                             questionOrder: questionId.order,
