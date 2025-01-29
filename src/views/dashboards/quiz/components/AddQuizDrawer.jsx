@@ -73,7 +73,7 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
   const [categorie, setCategorie] = useState(null)
   const [questions, setQuestions] = useState([])
   const [quizQuestions, setQuizQuestions] = useState([])
-  const [matiere, setMatiere] = useState({})
+  const [matiere, setMatiere] = useState("")
 
   const handleOpenModalQuestion = () => {
     setOpenModalQuestion(true)
@@ -84,23 +84,58 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
   }
 
   const onSubmit = async data => {
-    console.log(data)
+    const questions = []
+    const matieres = []
+
+    quizQuestions.forEach((matiere, i) => {
+      matieres.push({
+        "order": i,
+        "matierId": matiere.id
+      })
+      matiere.questions.forEach((question, i) => {
+        questions.push({
+          "order": i,
+          "questionId": question.id
+        })
+      })
+    })
+  
+    const dataForm = {
+      title: data.name,
+      categoryId: categorie,
+      quizMatieres: matieres,
+      quizQuestions: questions
+    }
+
+    await createQuiz(dataForm)
+    onSuccess()
+    toggle()
+    reset()
+    resetForm()
+  }
+
+  const resetForm = () => {
+    setCategorie(null)
+    setMatiere("")
+    setQuestions([])
+    setQuizQuestions([])
   }
 
   const handleChangeMatiere = async matiere => {
     // console.log(value, categorie)
+    handleOpenModalQuestion()
+    
     const questions = await getAllQuestions({
       categoryId: categorie,
-      matiereId: matiere
+      matiereId: matiere.id
     })
 
     // console.log(questions)
     setQuestions(questions)
-    console.log(matiere)
     
     setValue('subject', matiere)
     setMatiere(matiere)
-    handleOpenModalQuestion()
+
   }
 
   const handleSaveQuestion = async (questions, matiere) => {
@@ -183,6 +218,7 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
                 <RenderMatiere
                   control={control}
                   withAdd={false}
+                  required={false}
                   field='subject'
                   handleChangeMatiere={element => handleChangeMatiere(element.target.value)}
                 />

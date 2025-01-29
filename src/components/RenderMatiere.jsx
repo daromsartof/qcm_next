@@ -55,7 +55,6 @@ const RenderMatiere = ({ control, handleChangeMatiere, required, withAdd = true 
       setMatiers([])
     }
   }, [])
-  console.log(matiers)
   
   return (
     <>
@@ -63,18 +62,18 @@ const RenderMatiere = ({ control, handleChangeMatiere, required, withAdd = true 
         <Controller
           name={field}
           control={control}
-          rules={{ required: true }}
+          rules={{ required: required }}
           render={({ field: { value } }) => (
             <CustomTextField
               select
               fullWidth
               required
               label='Matières'
-              value={value.id || ''}
+              value={value || ''}
               onChange={handleChangeMatiere || onChange}
             >
               {matiers.map((matiere, index) => (
-                <MenuItem key={index} value={matiere.id}>
+                <MenuItem key={index} value={matiere}>
                   {matiere.title}
                 </MenuItem>
               ))}

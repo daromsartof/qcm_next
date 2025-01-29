@@ -9,6 +9,7 @@ import RenderTable from './components/RenderTable'
 import { getAllQuestions } from '@/services/questionService'
 
 import RenderAddQuestion from './components/RenderAddQuestion'
+import QuizFilter from '../quiz/components/QuizFilter'
 
 
 const Question = () => {
@@ -48,8 +49,9 @@ const Question = () => {
                     <Typography variant='h3'>Questions</Typography>
                     <Button variant="contained" onClick={toggle}>Ajouter</Button>
                 </div>
-                
-
+                <div className='mb-1'>
+                <QuizFilter />
+                </div>
                 <Card>
                     <RenderTable
                         loading={loading}

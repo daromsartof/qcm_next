@@ -4,7 +4,7 @@ import React from 'react'
 import moment from 'moment'
 import { Button, Card, CardContent, CardHeader, Divider } from '@mui/material'
 
-const QuizCard = ({ quiz }) => {
+const QuizCard = ({ quiz, onClickPreview }) => {
 
     const handleClickSetting = () => {
         console.log("handleClickSetting")
@@ -35,7 +35,7 @@ return (
                 </div>
                 <Divider />
                 <div className='my-2'>
-                    <Button variant='contained' className='mr-2' endIcon={<i className='tabler-send' />}>
+                    <Button variant='contained' className='mr-2' endIcon={<i className='tabler-send' />} onClick={onClickPreview}>
                         Prévisualiser
                     </Button>
                     <Button variant='contained' color='secondary' endIcon={<i className='tabler-settings' />} onClick={handleClickSetting}>
