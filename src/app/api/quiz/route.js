@@ -5,7 +5,11 @@ import QuizRepositorie from "@/repositories/QuizRepositorie";
 
 export async function GET(req) {
     try {
-        const quizzes = await QuizRepositorie.getAllQuizzes()
+        const { searchParams } = new URL(req.url)
+        const categoryId = searchParams.get('categoryId')
+        const quizzes = await QuizRepositorie.getAllQuizzes({
+            categoryId
+        })
 
 
         return NextResponse.json(quizzes)

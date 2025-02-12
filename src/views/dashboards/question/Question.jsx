@@ -1,6 +1,5 @@
+"use client"
 import React, { useEffect, useState } from 'react'
-
-import { useRouter } from 'next/navigation'
 
 import { Button, Card, Typography } from '@mui/material'
 
@@ -13,7 +12,6 @@ import QuizFilter from '../quiz/components/QuizFilter'
 
 
 const Question = () => {
-    const router = useRouter()
     const [questions, setQuestions] = useState([])
     const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
@@ -30,6 +28,19 @@ const Question = () => {
         setQuestions(questions)
         setLoading(false)
     }
+
+    const onChangeFilter = async (key, value) => { 
+        if (!value) return 
+        setLoading(true)
+
+        const questions = await getAllQuestions({
+             [key] : value
+        })
+
+        setQuestions(questions)
+        setLoading(false)
+    }
+    
 
     useEffect(() => {
         handleFetchQuestion()
@@ -50,7 +61,17 @@ const Question = () => {
                     <Button variant="contained" onClick={toggle}>Ajouter</Button>
                 </div>
                 <div className='mb-1'>
-                <QuizFilter />
+                <QuizFilter 
+                    onChangeCategory={(categorie) => {
+                        onChangeFilter('categoryId', categorie)
+                    }}
+                    onChangeSubject={(matiereId) => {
+                        onChangeFilter('matiereId', matiereId)
+                    }}
+                    onChangeSource={(sourceId) => {
+                        onChangeFilter('sourceId', sourceId)
+                    }}
+                />
                 </div>
                 <Card>
                     <RenderTable

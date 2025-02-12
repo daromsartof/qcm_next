@@ -52,7 +52,13 @@ const Quiz = () => {
                     Ajouter
                 </Button>
             </div>
-            <QuizFilter />
+            <QuizFilter 
+                showFilter={{
+                    category: true,
+                    source: false,
+                    subject: false
+                }}
+            />
             <CardContent className='px-0'>
                 <Grid container spacing={6}>
                     {
