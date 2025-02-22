@@ -42,7 +42,6 @@ LOCK TABLES `_prisma_migrations` WRITE;
 
 INSERT INTO `_prisma_migrations` (`id`, `checksum`, `finished_at`, `migration_name`, `logs`, `rolled_back_at`, `started_at`, `applied_steps_count`)
 VALUES
-	('3dd56476-7021-490d-b418-1fdde79f7ff5','d686aea12965eae17b894ccbc15ec39a747fd814cbc4babebb976376c495b2ce','2025-01-16 10:27:20.097','20250116102719_',NULL,NULL,'2025-01-16 10:27:19.915',1),
 	('565ebccc-f8f8-4f02-afd3-bb8b6b1708fb','e2b31ecbc77d0c7664b7349acd75cdd535c0519519a6e85de2580ea88940704a','2025-01-16 10:33:20.636','20250116103320_',NULL,NULL,'2025-01-16 10:33:20.528',1);
 
 /*!40000 ALTER TABLE `_prisma_migrations` ENABLE KEYS */;
