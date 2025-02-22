@@ -12,7 +12,9 @@ class VerificationCodeRepositorie {
     async createVerificationCode({
         userId
     }){
-        return prisma.verificationCode.create({
+        await this.deleteVerificationCodeByUserId(userId)
+
+        return prisma.verificationcode.create({
             data: {
                 code: this.generateVerificationCode(),
                 userId,
@@ -23,7 +25,7 @@ class VerificationCodeRepositorie {
     }
 
     async getVerificationCodeByUserId(userId) {
-        return prisma.verificationCode.findFirst({
+        return prisma.verificationcode.findFirst({
             where: {
                 userId,
                 isUsed: false
@@ -34,14 +36,14 @@ class VerificationCodeRepositorie {
     async getVerificationCodeByUserEmail({
         email
     }) {
-        return prisma.verificationCode.findFirst({
+        return prisma.verificationcode.findFirst({
             where: {
                 user:{
                     email
                 }
             },
             include: {
-                User: true
+                user: true
             },
             orderBy: {
                 expiresAt: 'desc'
@@ -50,8 +52,13 @@ class VerificationCodeRepositorie {
     }
 
     async deleteVerificationCodeById(id) {
-        return prisma.verificationCode.delete({
+        return prisma.verificationcode.delete({
             where: { id }
+        })
+    }
+    async deleteVerificationCodeByUserId(userId) {
+        return prisma.verificationcode.deleteMany({
+            where: { userId }
         })
     }
 }

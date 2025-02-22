@@ -16,6 +16,9 @@ class CategorieRepositorie {
             where: {
                 isDeleted: false
             },
+            include: {
+               _count: true
+            },
             orderBy: {
                 title: 'asc'
             }

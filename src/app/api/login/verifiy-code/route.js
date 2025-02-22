@@ -32,7 +32,7 @@ export async function POST(req) {
             return NextResponse.json({ error: 'Invalid verification code' }, { status: 400, statusText: "Bad Request" })
         }
 
-        const user = verificationCode.User
+        const user = verificationCode.user
 
         const token = jwt.sign(
             { userId: user.id },

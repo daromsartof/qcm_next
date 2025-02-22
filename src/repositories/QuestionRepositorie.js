@@ -47,12 +47,13 @@ class QuestionRepositorie {
         const { categoryId, sourceId, matiereId } = filters
                 
         const where = {
-            isDeleted: false
+            isDeleted: false,
+            OR: []
         }
 
-        if (categoryId) where.categoryId = parseInt(categoryId)
-        if (sourceId) where.sourceId = parseInt(sourceId)
-        if (matiereId) where.matiereId = parseInt(matiereId)
+        if (categoryId) where.OR.push({ categoryId : parseInt(categoryId) })
+        if (sourceId) where.OR.push({ sourceId : parseInt(sourceId) })
+        if (matiereId) where.OR.push({ matiereId : parseInt(matiereId) })
 
         return prisma.question.findMany({
             where,

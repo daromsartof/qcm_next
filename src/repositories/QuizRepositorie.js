@@ -2,13 +2,24 @@ import prisma from "@/services/Utils/prisma"
 
 
 class QuizRepositorie {
-    async getAllQuizzes() {
+    async getAllQuizzes({
+        categoryId
+    }) {
         return prisma.quiz.findMany({
+            where: {
+                ...(categoryId && {
+                    categoryId: parseInt(categoryId)
+                })
+            },
             include: {
                 category: true,
                 quizQuestions: {
                     include: {
-                        question: true
+                        question: {
+                            include: {
+                                answers: true
+                            }
+                        }
                     }
                 },
                 quizMatieres: {
@@ -16,6 +27,9 @@ class QuizRepositorie {
                         matiere: true
                     }
                 }
+            }, 
+            orderBy: {
+                createdAt: 'desc'
             }
         })
     }
