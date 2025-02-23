@@ -9,52 +9,59 @@ class QuestionRepositorie {
         categoryId,
         sourceId,
         matiereId,
+        fieReponse,
         isMultichoise,
-        reponses = []
-    }){
+        fileUrl, // Nouvelle colonne pour l'image
+        reponses = [],
+    }) {
         const question = await prisma.question.create({
-            data:{
+            data: {
                 title,
                 description: content,
-                categoryId: parseInt(categoryId),
-                sourceId: parseInt(sourceId),
-                matiereId: parseInt(matiereId),
-                isMultiChoice: isMultichoise === 1
+                categoryId,
+                sourceId,
+                response_file_url: fieReponse,
+                matiereId,
+                isMultiChoice: isMultichoise,
+                fileUrl, // Stocker l'image
             },
             include: {
                 category: true,
                 source: true,
-                matiere: true
-            }
-        })
+                matiere: true,
+            },
+        });
 
-        const reponseData = await Promise.all(reponses.map(async reponse => {
-            return await ReponseRepositorie.createReponse({
-                questionId: question.id,
-                title: reponse.title,
-                description: reponse.explaination,
-                isCorrect: reponse.isCorrect === 1
+        const reponseData = await Promise.all(
+            reponses.map(async (reponse) => {
+                return await ReponseRepositorie.createReponse({
+                    questionId: question.id,
+                    title: reponse.title,
+                    description: reponse.explaination,
+                    isCorrect: reponse.isCorrect === 1,
+                });
             })
-        }))
+        );
 
         return {
             ...question,
-            answers: reponseData
-        }
+            answers: reponseData,
+        };
     }
+
 
     async getAllQuestions(filters = {}) {
         const { categoryId, sourceId, matiereId } = filters
-                
+
         const where = {
             isDeleted: false,
             OR: []
         }
 
-        if (categoryId) where.OR.push({ categoryId : parseInt(categoryId) })
-        if (sourceId) where.OR.push({ sourceId : parseInt(sourceId) })
-        if (matiereId) where.OR.push({ matiereId : parseInt(matiereId) })
-
+        if (categoryId) where.OR.push({ categoryId: parseInt(categoryId) })
+        if (sourceId) where.OR.push({ sourceId: parseInt(sourceId) })
+        if (matiereId) where.OR.push({ matiereId: parseInt(matiereId) })
+        if (where.OR.length === 0) delete where.OR
         return prisma.question.findMany({
             where,
             include: {

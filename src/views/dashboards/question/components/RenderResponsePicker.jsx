@@ -9,7 +9,9 @@ import Typography from '@mui/material/Typography'
 // Third-party Imports
 import { useDropzone } from 'react-dropzone'
 
-const RenderResponsePicker = () => {
+const RenderResponsePicker = ({
+    onChange = () => {}
+}) => {
     // States
     const [files, setFiles] = useState([])
 
@@ -20,6 +22,7 @@ const RenderResponsePicker = () => {
             'image/*': ['.png', '.jpg', '.jpeg', '.gif']
         },
         onDrop: acceptedFiles => {
+            onChange(acceptedFiles.map(file => Object.assign(file)))
             setFiles(acceptedFiles.map(file => Object.assign(file)))
         }
     })

@@ -6,7 +6,8 @@ import { Controller } from 'react-hook-form'
 
 const RenderImageInput = ({
     control,
-    errors
+    errors,
+    onChange = () => {}
 }) => {
 
     const [files, setFiles] = useState([])
@@ -18,7 +19,9 @@ const RenderImageInput = ({
         'image/*': ['.png', '.jpg', '.jpeg', '.gif']
       },
       onDrop: (acceptedFiles) => {
-        setFiles(acceptedFiles.map((file) => Object.assign(file)))
+        const images = acceptedFiles.map((file) => Object.assign(file))
+        onChange(images)
+        setFiles(images)
       }
     })
 
