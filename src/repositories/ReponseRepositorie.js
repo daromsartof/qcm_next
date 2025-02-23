@@ -19,6 +19,26 @@ class ReponseRepositorie {
             }
         })
     }
+
+    async getAnswers({
+        questionId
+    }) {
+        return await prisma.answer.findMany({
+            where: {
+                ...(questionId && {
+                    questionId: Number(questionId)
+                }),
+                isDeleted: false
+            }
+        })
+    }
+
+    async updateAnswer(id, data) {
+        return await prisma.answer.update({
+            where: { id: Number(id) },
+            data
+        })
+    }
 }
 
 const response =  new ReponseRepositorie()

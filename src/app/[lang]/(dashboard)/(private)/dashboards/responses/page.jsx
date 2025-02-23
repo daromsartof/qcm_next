@@ -1,8 +1,9 @@
+import AnswerList from "@/views/dashboards/answers"
+
 const AnswerPage = async () => {
 
     return <div>
-        <h1>Answer Page</h1>
-        <p>This is a Answer page.</p>
+        <AnswerList />
     </div>
 }
 
