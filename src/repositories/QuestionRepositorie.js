@@ -61,7 +61,7 @@ class QuestionRepositorie {
         if (categoryId) where.OR.push({ categoryId: parseInt(categoryId) })
         if (sourceId) where.OR.push({ sourceId: parseInt(sourceId) })
         if (matiereId) where.OR.push({ matiereId: parseInt(matiereId) })
-
+        if (where.OR.length === 0) delete where.OR
         return prisma.question.findMany({
             where,
             include: {
