@@ -38,7 +38,7 @@ const RenderResponseForm = ({ defaultChecked, responses, setResponses }) => {
       {Object.keys(responses).map(key => (
         <div key={key} className='mb-5'>
           <Grid container spacing={3}>
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <CustomTextField
                 fullWidth
                 required
@@ -46,12 +46,6 @@ const RenderResponseForm = ({ defaultChecked, responses, setResponses }) => {
                 value={responses[key].title}
                 placeholder='Réponse ... '
                 onChange={e => handleChange(key, 'title', e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={6} className='items-end flex'>
-              <RenderResponsePicker
-                value={responses[key].explaination}
-                onChange={value => handleChange(key, 'explaination', value)}
               />
             </Grid>
           </Grid>

@@ -45,7 +45,8 @@ const REPONSE_DEFAULT_CHECKED = false
 const RenderAddQuestion = ({ open, toggle }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
-
+  const [image, setImage] = useState(null)
+  const [reponseImage, setReponseImage] = useState(null)
   const [reponses, setReponses] = useState({
     0: {
       title: '',
@@ -84,6 +85,8 @@ const RenderAddQuestion = ({ open, toggle }) => {
         sourceId: data.sourceId,
         matiereId: data.matiereId,
         content: data.explaination,
+        image,
+        reponseImage,
         reponses: Object.values(reponses).map(res => ({
             title: res.title,
             explaination: res.explaination,
@@ -183,7 +186,7 @@ const RenderAddQuestion = ({ open, toggle }) => {
                   <RenderCategorie control={control} errors={errors} />
                 </Grid>
                 <Grid xs={12}>
-                  <RenderImageInput control={control} errors={errors} />
+                  <RenderImageInput control={control} onChange={setImage} errors={errors} />
                 </Grid>
                 <Grid item xs={12}>
                   <Divider />
@@ -195,7 +198,11 @@ const RenderAddQuestion = ({ open, toggle }) => {
                     </Typography>
                   </div>
                 </Grid>
+                <Grid xs={12}>
+                  <RenderImageInput control={control} onChange={setReponseImage} errors={errors} />
+                </Grid>
                 <Grid item xs={12} sm={12}>
+                  
                   <RenderResponseForm
                     responses={reponses}
                     defaultChecked={REPONSE_DEFAULT_CHECKED}
