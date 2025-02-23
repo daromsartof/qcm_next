@@ -64,7 +64,8 @@ export async function GET(req) {
     const filters = {
       categoryId: searchParams.get('categoryId'),
       sourceId: searchParams.get('sourceId'),
-      matiereId: searchParams.get('matiereId')
+      matiereId: searchParams.get('matiereId'),
+      strict: searchParams.get('strict')
     }
 
     const questions = await QuestionRepositorie.getAllQuestions(filters)

@@ -2,13 +2,14 @@ import axios from 'axios'
 
 export const getAllQuestions = async (filters = {}) => {
   try {
-    const { categoryId, sourceId, matiereId } = filters
+    const { categoryId, sourceId, matiereId, strict } = filters
     let url = '/api/question'
     const params = new URLSearchParams()
 
     if (categoryId) params.append('categoryId', categoryId)
     if (sourceId) params.append('sourceId', sourceId)
     if (matiereId) params.append('matiereId', matiereId)
+    if (strict) params.append('strict', strict)
 
     const queryString = params.toString()
 

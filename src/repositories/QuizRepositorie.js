@@ -17,7 +17,11 @@ class QuizRepositorie {
                     include: {
                         question: {
                             include: {
-                                answers: true
+                                answers: {
+                                    where: {
+                                        isDeleted: false
+                                    }
+                                }
                             }
                         }
                     }
@@ -43,7 +47,8 @@ class QuizRepositorie {
                     createMany: {
                         data: matieresIds.map((matiereId) => ({
                             matiereOrder: matiereId.order,
-                            matiereId: matiereId.matierId
+                            matiereId: matiereId.matierId,
+                            time: matiereId.minute ? parseInt(matiereId.minute) : null
                         }))
                     }
                 },

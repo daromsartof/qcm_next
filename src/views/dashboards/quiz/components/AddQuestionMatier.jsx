@@ -13,6 +13,7 @@ import { CSS } from '@dnd-kit/utilities'
 
 import RenderSource from '@/components/RenderSource'
 import CustomTextField from '@/@core/components/mui/TextField'
+import { getAllQuestions } from '@/services/questionService'
 
 const SortableItem = ({ question, id, index, onDelete }) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id })
@@ -50,24 +51,25 @@ const SortableItem = ({ question, id, index, onDelete }) => {
   )
 }
 
-const AddQuestionMatier = ({ open, matiere, toggle, questions, handleSaveQuestion }) => {
+const AddQuestionMatier = ({ open, matiere,categorie, toggle, handleSaveQuestion }) => {
   const [data, setData] = useState([])
   const [source, setSources] = useState("")
   const [filtredQuestions, setFiltredQuestions] = useState([])
+  const [minute, setMinute] = useState(0)
   const [question, setQuestion] = useState("")
 
 
   //  const [items] = useState([1, 2, 3])
-  const handleChangeSource = value => {
+  const handleChangeSource = async value => {
     setSources(value)
 
     if (value === 0) {
-      setData(questions)
+      setData(await getAllQuestions({ matiereId: matiere.id, categoryId: categorie, strict: true }))
 
       return
     }
 
-    const filtered = questions.filter(question => question.Source?.id === value)
+    const filtered = await getAllQuestions({ matiereId: matiere.id, categoryId: categorie, sourceId: value, strict: true  })
 
     //setFiltredQuestions(filtered)
     setData([...filtered])
@@ -104,7 +106,7 @@ const AddQuestionMatier = ({ open, matiere, toggle, questions, handleSaveQuestio
   }
 
   const onSave = () => {
-    handleSaveQuestion(filtredQuestions, matiere)
+    handleSaveQuestion(filtredQuestions, matiere, minute)
     setFiltredQuestions([])
 
     toggle()
@@ -116,15 +118,6 @@ const AddQuestionMatier = ({ open, matiere, toggle, questions, handleSaveQuestio
     //  setFiltredQuestions((prevItems) => prevItems.filter((item) => item.id !== id));
   }
 
-  useEffect(() => {
-    setData([...questions])
-
-    // setFiltredQuestions(questions)
-    return () => {
-      setData([])
-    }
-  }, [questions])
-
   
   return (
     <div>
@@ -133,6 +126,13 @@ const AddQuestionMatier = ({ open, matiere, toggle, questions, handleSaveQuestio
           <Grid container spacing={2} className='d-flex items-center'>
             <Grid item sm={3} className='d-flex items-center'>
               <div>{matiere.title}</div>
+              <div>
+              <CustomTextField
+                      type='number'
+                      label='Minute'
+                      onChange={(el) => setMinute(el.target.value)}
+                    />
+              </div>
             </Grid>
             <Grid item sm={9}>
               <Grid container spacing={6} className='d-flex items-end justify-end'>

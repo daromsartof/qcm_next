@@ -51,16 +51,22 @@ class QuestionRepositorie {
 
 
     async getAllQuestions(filters = {}) {
-        const { categoryId, sourceId, matiereId } = filters
+        const { categoryId, sourceId, matiereId, strict } = filters
 
         const where = {
             isDeleted: false,
             OR: []
         }
+        if (strict) {
+            if (categoryId) where.categoryId = parseInt(categoryId)
+            if (sourceId) where.sourceId = parseInt(sourceId)
+            if (matiereId) where.matiereId = parseInt(matiereId)
+        } else {
+            if (categoryId) where.OR.push({ categoryId: parseInt(categoryId) })
+            if (sourceId) where.OR.push({ sourceId: parseInt(sourceId) })
+            if (matiereId) where.OR.push({ matiereId: parseInt(matiereId) })
+        }
 
-        if (categoryId) where.OR.push({ categoryId: parseInt(categoryId) })
-        if (sourceId) where.OR.push({ sourceId: parseInt(sourceId) })
-        if (matiereId) where.OR.push({ matiereId: parseInt(matiereId) })
         if (where.OR.length === 0) delete where.OR
         return prisma.question.findMany({
             where,
