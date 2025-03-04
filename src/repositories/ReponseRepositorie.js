@@ -1,3 +1,4 @@
+
 import prisma from "@/services/Utils/prisma"
 
 class ReponseRepositorie {

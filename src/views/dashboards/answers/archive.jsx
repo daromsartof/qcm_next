@@ -1,14 +1,13 @@
+
 "use client";
 
 import AnswerForm from "./AnswerForm";
 import { useState, useEffect } from "react";
 import { Edit, Delete } from "@mui/icons-material";
-import { getAnswers, deleteAnswer } from "@/services/answerService";
 import { getQuestions } from "@/services/questionService";
-import {
-  Button, Container, Typography, Paper, Table, TableBody, TableCell,
-  TableContainer, TableHead, TableRow, IconButton, TextField, List, ListItem, ListItemText, Box,
-} from "@mui/material";
+import { getAnswers, deleteAnswer } from "@/services/answerService";
+import {  Button, Container, Typography, Paper, Table, TableBody, TableCell,
+   TableContainer,TableHead, TableRow, IconButton, TextField,} from "@mui/material";
 
 export default function AnswerList() {
   const [answers, setAnswers] = useState([]);
@@ -16,7 +15,19 @@ export default function AnswerList() {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [questionId, setQuestionId] = useState("");
   const [titleFilter, setTitleFilter] = useState("");
-  const [filteredQuestions, setFilteredQuestions] = useState([]);
+  const [questions, setQuestions] = useState([]);
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        const res = await getQuestions();
+        setQuestions(res);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des questions:", error);
+      }
+    };
+    fetchQuestions();
+  }, []);
 
   useEffect(() => {
     if (questionId) {
@@ -35,24 +46,38 @@ export default function AnswerList() {
     }
   };
 
+  // Filtrage indépendant avec API
   useEffect(() => {
-    if (titleFilter.length < 2) return;
-
+    if (titleFilter.length < 2) return; // Ne cherche pas si moins de 2 caractères
+  
     const fetchFilteredQuestions = async () => {
       try {
-        console.log("🔎 Recherche pour:", titleFilter);
+        console.log(" Recherche pour:", titleFilter);
+
         const response = await fetch(`/api/title?title=${encodeURIComponent(titleFilter)}`);
-        if (!response.ok) throw new Error(`Erreur API ${response.status}: ${await response.text()}`);
-        const questions = await response.json();
-        console.log(" Questions filtrées:", questions);
-        setFilteredQuestions(questions);
+        
+        if (!response.ok) {
+          throw new Error(`Erreur API ${response.status}: ${await response.text()}`);
+        }
+  
+        const filteredQuestions = await response.json();
+        console.log(" Questions filtrées:", filteredQuestions);
+  
+        if (filteredQuestions.length > 0) {
+          setQuestionId(filteredQuestions[0].id);
+          handleFetchReponse({ questionId: filteredQuestions[0].id });
+        } else {
+          setQuestionId("");
+          setAnswers([]);
+        }
       } catch (error) {
         console.error(" Erreur lors de la récupération des questions filtrées:", error);
       }
     };
-
+  
     fetchFilteredQuestions();
   }, [titleFilter]);
+//  
 
   const handleSubmit = async (data) => {
     try {
@@ -94,50 +119,31 @@ export default function AnswerList() {
 
   return (
     <Container>
-      <div className='flex justify-between'>
-        <Typography variant="h3" gutterBottom>
-          Réponses
-        </Typography>
-
-        <Button variant="contained" onClick={() => setOpenForm(true)} sx={{ mb: 2 }}>
-          Create New Answer
-        </Button>
-      </div>
-
-      <Typography variant="h5" gutterBottom>
-        Filtrer les réponses:
+      <Typography variant="h4" gutterBottom>
+        Answers
       </Typography>
-      <div className='flex justify-between py-2'>
-        <TextField className="w-1/5"
-          label="Par numéro de question"
-          variant="outlined"
-          fullWidth
-          value={questionId}
-          onChange={(e) => setQuestionId(e.target.value)}
-          sx={{ mb: 2 }}
-        />
 
-        <TextField
-          label="Par titre de question"
-          variant="outlined"
-          fullWidth
-          value={titleFilter}
-          onChange={(e) => setTitleFilter(e.target.value)}
-          sx={{ mb: 2 }}
-        />
-      </div>
-      {/* Affichage des résultats de la recherche */}
-      {filteredQuestions.length > 0 && (
-        <Box sx={{ maxHeight: 200, overflowY: "auto", border: "1px solid #ccc", borderRadius: 1, mb: 2 }}>
-          <List>
-            {filteredQuestions.map((q) => (
-              <ListItem button key={q.id} onClick={() => setQuestionId(q.id)}>
-                <ListItemText primary={q.title} secondary={`ID: ${q.id}`} />
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      )}
+      <TextField
+        label="Filter par numéro de question"
+        variant="outlined"
+        fullWidth
+        value={questionId}
+        onChange={(e) => setQuestionId(e.target.value)}
+        sx={{ mb: 2 }}
+      />
+
+      <TextField
+        label="Filter par titre de question"
+        variant="outlined"
+        fullWidth
+        value={titleFilter}
+        onChange={(e) => setTitleFilter(e.target.value)}
+        sx={{ mb: 2 }}
+      />
+
+      <Button variant="contained" onClick={() => setOpenForm(true)} sx={{ mb: 2 }}>
+        Create New Answer
+      </Button>
 
       <TableContainer component={Paper}>
         <Table>

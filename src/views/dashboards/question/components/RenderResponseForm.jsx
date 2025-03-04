@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { Button, Checkbox, Divider, FormControlLabel, Grid } from '@mui/material'
 

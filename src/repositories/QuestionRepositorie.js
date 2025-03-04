@@ -1,8 +1,31 @@
-import prisma from "@/services/Utils/prisma"
 
+// QuestionRepositorie.js:
+
+import prisma from "@/services/Utils/prisma"
 import ReponseRepositorie from "./ReponseRepositorie"
 
 class QuestionRepositorie {
+
+// independant pour le filtre par titre
+async getQuestionsByTitle(title) {
+    return await prisma.question.findMany({
+        where: {
+          title: {
+            contains: title, 
+          },
+          isDeleted: false,
+        },
+        select: {
+          id: true,
+          title: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+}
+//
+
     async createQuestion({
         title,
         content,
@@ -11,7 +34,7 @@ class QuestionRepositorie {
         matiereId,
         fieReponse,
         isMultichoise,
-        fileUrl, // Nouvelle colonne pour l'image
+        fileUrl,
         reponses = [],
     }) {
         const question = await prisma.question.create({
@@ -23,7 +46,7 @@ class QuestionRepositorie {
                 response_file_url: fieReponse,
                 matiereId,
                 isMultiChoice: isMultichoise,
-                fileUrl, // Stocker l'image
+                fileUrl,
             },
             include: {
                 category: true,
@@ -49,19 +72,18 @@ class QuestionRepositorie {
         };
     }
 
-
     async getAllQuestions(filters = {}) {
-        const { categoryId, sourceId, matiereId } = filters
+        const { categoryId, sourceId, matiereId } = filters;
 
         const where = {
             isDeleted: false,
             OR: []
-        }
+        };
 
-        if (categoryId) where.OR.push({ categoryId: parseInt(categoryId) })
-        if (sourceId) where.OR.push({ sourceId: parseInt(sourceId) })
-        if (matiereId) where.OR.push({ matiereId: parseInt(matiereId) })
-        if (where.OR.length === 0) delete where.OR
+        if (categoryId) where.OR.push({ categoryId: parseInt(categoryId) });
+        if (sourceId) where.OR.push({ sourceId: parseInt(sourceId) });
+        if (matiereId) where.OR.push({ matiereId: parseInt(matiereId) });
+        if (where.OR.length === 0) delete where.OR;
         return prisma.question.findMany({
             where,
             include: {
@@ -73,7 +95,18 @@ class QuestionRepositorie {
             orderBy: {
                 createdAt: 'desc'
             }
-        })
+        });
+    }
+
+    async getAllQuestionIds() {
+        return prisma.question.findMany({
+            select: {
+                id: true
+            },
+            orderBy: {
+                createdAt: 'desc'
+            }
+        });
     }
 
     async updateQuestion({
@@ -93,17 +126,17 @@ class QuestionRepositorie {
                 sourceId,
                 matiereId
             }
-        })
+        });
     }
 
     async deleteQuestion(id) {
         return prisma.question.update({
             where: { id },
             data: { isDeleted: true }
-        })
+        });
     }
 }
 
-const question = new QuestionRepositorie()
+const question = new QuestionRepositorie();
 
-export default question
+export default question;
