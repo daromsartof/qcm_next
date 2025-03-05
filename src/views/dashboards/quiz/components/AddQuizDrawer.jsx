@@ -90,6 +90,7 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
     quizQuestions.forEach((matiere, i) => {
       matieres.push({
         "order": i,
+        "minute": matiere.minute,
         "matierId": matiere.id
       })
       matiere.questions.forEach((question, i) => {
@@ -123,26 +124,19 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
 
   const handleChangeMatiere = async matiere => {
     // console.log(value, categorie)
-    handleOpenModalQuestion()
-    
-    const questions = await getAllQuestions({
-      categoryId: categorie,
-      matiereId: matiere.id
-    })
-
-    // console.log(questions)
-    setQuestions(questions)
     
     setValue('subject', matiere)
     setMatiere(matiere)
+    handleOpenModalQuestion()
 
   }
 
-  const handleSaveQuestion = async (questions, matiere) => {
+  const handleSaveQuestion = async (questions, matiere, minute) => {
     setQuizQuestions(quizQuestions => [
       ...quizQuestions,
       {
         ...matiere,
+        minute,
         questions
       }
     ])
@@ -262,6 +256,7 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
           <AddQuestionMatier
             questions={questions}
             open={openModalQuestion}
+            categorie={categorie}
             matiere={matiere}
             toggle={handleCloseModalQuestion}
             handleSaveQuestion={handleSaveQuestion}

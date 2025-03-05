@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 
-import { Avatar, Box, Typography } from '@mui/material'
+import { Avatar, Box, Button, Typography } from '@mui/material'
 import { useDropzone } from 'react-dropzone'
 import { Controller } from 'react-hook-form'
+import { Trash } from 'react-feather'
+import CustomIconButton from '@/@core/components/mui/IconButton'
 
 const RenderImageInput = ({
     control,
     errors,
+    image,
     onChange = () => {}
 }) => {
 
@@ -32,7 +35,9 @@ const RenderImageInput = ({
 
     
 return (
-        <div className='m-2 flex justify-center border-2 border-inherit border-dotted m-7 p-3 max-h-60 overflow-hidden'>
+        <div className='m-2 flex justify-center border-2 border-inherit border-dotted m-7 p-3 max-h-60 overflow-hidden' style={{
+            position: 'relative'
+        }}>
             <Box {...getRootProps({ className: 'dropzone' })} {...(files.length && { sx: { height: 450 } })}>
                  <Controller
                     name="image"
@@ -44,7 +49,7 @@ return (
                
                 {files.length ? (
                     img
-                ) : (
+                ) : image ?  <img className='single-file-image max-h-60' src={image} /> : (
                     <div className='flex items-center flex-col'>
                         <Avatar variant='rounded' className='bs-12 is-12 mbe-9'>
                             <i className='tabler-upload' />
@@ -62,6 +67,17 @@ return (
                     </div>
                 )}
             </Box>
+            {
+                files.length > 0 && (
+                    <CustomIconButton style={{ position: 'absolute', top: '10px', right: '10px' }} aria-label='capture screenshot' color='error' variant='contained' onClick={() => {
+                        onChange(null)
+                        setFiles([])
+                    }}>
+                        <Trash size={12} />
+                    </CustomIconButton>
+                )
+            }
+          
         </div>
     )
 }

@@ -4,9 +4,8 @@ import { writeFile } from 'fs/promises';
 export async function uploadImage(file) {
   try {
     const uploadDir = path.join(process.cwd(), 'public/uploads');
-
     // Générer un nom de fichier unique
-    const fileName = `${Date.now()}_${file.name}`;
+    const fileName = `${Date.now()}_${file.name.trim().replace(/ /g,'')}`;
     const filePath = path.join(uploadDir, fileName);
 
     // Écrire le fichier sur le serveur

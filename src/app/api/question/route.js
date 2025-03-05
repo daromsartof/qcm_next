@@ -61,11 +61,16 @@ export async function GET(req) {
     console.log("API /api/question appelée");
     const { searchParams } = new URL(req.url);
 
-    const questions = await QuestionRepositorie.getAllQuestionIds();
-    
-    console.log("  Les question IDs sont récupérée:");
-    
-    return NextResponse.json(questions);
+    const filters = {
+      categoryId: searchParams.get('categoryId'),
+      sourceId: searchParams.get('sourceId'),
+      matiereId: searchParams.get('matiereId'),
+      strict: searchParams.get('strict')
+    }
+
+    const questions = await QuestionRepositorie.getAllQuestions(filters)
+
+    return NextResponse.json(questions)
   } catch (error) {
     console.error(" Erreur dans GET /api/question:", error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

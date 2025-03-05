@@ -10,13 +10,14 @@ import axios from 'axios';
  */
 export const getAllQuestions = async (filters = {}) => {
   try {
-    const { categoryId, sourceId, matiereId } = filters;
-    let url = '/api/question';
-    const params = new URLSearchParams();
+    const { categoryId, sourceId, matiereId, strict } = filters
+    let url = '/api/question'
+    const params = new URLSearchParams()
 
-    if (categoryId) params.append('categoryId', categoryId);
-    if (sourceId) params.append('sourceId', sourceId);
-    if (matiereId) params.append('matiereId', matiereId);
+    if (categoryId) params.append('categoryId', categoryId)
+    if (sourceId) params.append('sourceId', sourceId)
+    if (matiereId) params.append('matiereId', matiereId)
+    if (strict) params.append('strict', strict)
 
     const queryString = params.toString();
     if (queryString) url += `?${queryString}`;
@@ -85,10 +86,37 @@ export const createQuestion = async ({ title, matiereId, sourceId, categoryId, r
  * @param {Object} data - Données mises à jour
  * @returns {Promise<Object>} La question mise à jour
  */
-export const updateQuestion = async (data) => {
+export const updateQuestion = async (id, data) => {
   try {
-    const response = await axios.put('/api/question', data);
-    return response.data;
+    console.log(" data ", data)
+    
+    const formData = new FormData();
+
+    formData.append('title', data.title);
+    formData.append('matiereId', data.matiereId);
+    formData.append('sourceId', data.sourceId);
+    formData.append('categoryId', data.categoryId);
+    formData.append('isMultichoise', data.isMultichoise);
+    formData.append('content', data.content);
+    
+    if (data.image) {
+      const img = data.image[0]
+      formData.append('image', img);
+    }
+
+    if(data.reponseImage) formData.append('reponseImage', data.reponseImage[0]);
+
+    data.reponses.forEach((reponse, index) => {
+      formData.append(`reponses[${index}]`, JSON.stringify(reponse));
+    });
+
+
+    const response = await axios.put(`/api/question/${id}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    })
+    return response.data
   } catch (error) {
     console.error('Erreur lors de la mise à jour de la question:', error);
     throw new Error('Impossible de mettre à jour la question');

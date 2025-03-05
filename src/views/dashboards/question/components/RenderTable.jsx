@@ -8,6 +8,7 @@ import RenderShow from './RenderShow'
 const RenderTable = ({
   loading,
   data = [],
+  onEdit, 
   setData = () => { }
 }) => {
   const [openModalShow, setOpenModalShow] = useState(false)
@@ -36,6 +37,9 @@ return (
             onClickShow={() => {
               setDataShow(row.original)
               toggleModalShow()
+            }}
+            onClickEdit={(id) => {
+              onEdit(data.find((item) => item.id === id))
             }}
           />
         )}
