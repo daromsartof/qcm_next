@@ -9,16 +9,24 @@ import { getAllQuestions } from '@/services/questionService'
 
 import RenderAddQuestion from './components/RenderAddQuestion'
 import QuizFilter from '../quiz/components/QuizFilter'
+import RenderEditQuestion from './components/RenderEditQuestion'
 
 
 const Question = () => {
     const [questions, setQuestions] = useState([])
     const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
+    const [openEdit, setOpenEdit] = useState(false)
+    const [selectedQuestion, setSelectedQuestion] = useState(null)
    
 
     const toggle = () => {
         setOpen(!open)
+    }
+
+    const toggleEdit = (question = null) => {
+        setSelectedQuestion(question)
+        setOpenEdit(!openEdit)
     }
 
     const handleFetchQuestion = async () => {
@@ -78,12 +86,18 @@ const Question = () => {
                         loading={loading}
                         data={questions}
                         setData={setQuestions}
+                        onEdit={toggleEdit}
                     />
                 </Card>
             </div>
             <RenderAddQuestion   
                 open={open}
                 toggle={toggle}
+            />
+            <RenderEditQuestion
+                open={openEdit}
+                toggle={toggleEdit}
+                questionData={selectedQuestion}
             />
             
         </FilterProvider>

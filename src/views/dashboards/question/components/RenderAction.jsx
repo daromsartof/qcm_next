@@ -10,7 +10,8 @@ import CustomIconButton from '@/@core/components/mui/IconButton'
 const RenderAction = ({
     data,
     onClickDelete = () => {},
-    onClickShow = () => {}
+    onClickShow = () => {},
+    onClickEdit= () => {}
 }) => {
     const handleDelete = async () => {
         try {
@@ -27,7 +28,7 @@ const RenderAction = ({
     
 return (
         <div>
-            <CustomIconButton aria-label='capture screenshot' color='success' variant='contained' className='mr-2'>
+            <CustomIconButton aria-label='capture screenshot' color='success' variant='contained' className='mr-2' onClick={() => onClickEdit(data.id)}>
                 <Edit size={12} />
             </CustomIconButton>
             <CustomIconButton aria-label='capture screenshot' color='primary' variant='contained' className='mr-2' onClick={onClickShow}>

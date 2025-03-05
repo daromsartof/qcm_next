@@ -55,7 +55,7 @@ const RenderResponseForm = ({ defaultChecked, responses, setResponses }) => {
               label='Réponse correct'
               control={
                 <Checkbox
-                  defaultChecked={defaultChecked}
+                  defaultChecked={responses[key].isCorrect}
                   name='basic-checked'
                   onChange={() => handleChange(key, 'isCorrect', !responses[key].isCorrect)}
                 />

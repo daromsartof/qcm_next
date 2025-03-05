@@ -9,6 +9,7 @@ import CustomIconButton from '@/@core/components/mui/IconButton'
 const RenderImageInput = ({
     control,
     errors,
+    image,
     onChange = () => {}
 }) => {
 
@@ -48,7 +49,7 @@ return (
                
                 {files.length ? (
                     img
-                ) : (
+                ) : image ?  <img className='single-file-image max-h-60' src={image} /> : (
                     <div className='flex items-center flex-col'>
                         <Avatar variant='rounded' className='bs-12 is-12 mbe-9'>
                             <i className='tabler-upload' />

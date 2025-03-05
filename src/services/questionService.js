@@ -71,11 +71,36 @@ export const createQuestion = async ({
 };
 
 
-export const updateQuestion = async (data) => {
+export const updateQuestion = async (id, data) => {
   try {
-    const response = await axios.put('/api/question', data)
+    console.log(" data ", data)
+    
+    const formData = new FormData();
+
+    formData.append('title', data.title);
+    formData.append('matiereId', data.matiereId);
+    formData.append('sourceId', data.sourceId);
+    formData.append('categoryId', data.categoryId);
+    formData.append('isMultichoise', data.isMultichoise);
+    formData.append('content', data.content);
+    
+    if (data.image) {
+      const img = data.image[0]
+      formData.append('image', img);
+    }
+
+    if(data.reponseImage) formData.append('reponseImage', data.reponseImage[0]);
+
+    data.reponses.forEach((reponse, index) => {
+      formData.append(`reponses[${index}]`, JSON.stringify(reponse));
+    });
 
 
+    const response = await axios.put(`/api/question/${id}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    })
     return response.data
   } catch (error) {
     throw error

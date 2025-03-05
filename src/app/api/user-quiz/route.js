@@ -16,3 +16,15 @@ export async function POST(req) {
         return NextResponse.json({ error: "unexpected error" }, { status: 500 })
     }
 }
+
+export async function GET(req) {
+    try {
+        const { searchParams } = new URL(req.url)
+        const userId = searchParams.get('userId')
+        const quizUserAnswer = await quizUserAnswerRepositorie.getUserStats(userId)        
+        return NextResponse.json(quizUserAnswer)
+    } catch (error) {
+        console.error(error)
+        return NextResponse.json({ error: "unexpected error" }, { status: 500 })
+    }
+}

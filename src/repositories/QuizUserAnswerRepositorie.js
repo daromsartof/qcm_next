@@ -63,6 +63,89 @@ class QuizUserAnswerRepositorie {
         
         return results
     }
+
+    async getUserStats(userId) {
+        // Get all quizzes
+        const allQuizzes = await prisma.quiz.findMany({
+            include: {
+                quizQuestions: {
+                    include: {
+                        question: {
+                            include: {
+                                answers: true
+                            }
+                        }
+                    }
+                }
+            }
+        });
+      //  const totalQuizzes = allQuizzes.length;
+        const quizQuestions = allQuizzes.flatMap(quiz => quiz.quizQuestions);
+        const totalQuestionsQuiz = allQuizzes.reduce((sum, quiz) => sum + quiz.quizQuestions.length, 0);
+        // Get all user answers
+        const userAnswers = await prisma.quizuseranswer.findMany({
+            where: { userId: parseInt(userId) },
+            include: {
+                quiz: true,
+                question: {
+                    include: {
+                        answers: true
+                    }
+                },
+                answer: true
+            }
+        });
+
+        // Get unique completed quizzes
+        const completedQuizIds = [...new Set(userAnswers.map(answer => answer.quizId))];
+        const completedQuizzes = completedQuizIds.length;
+
+        // Calculate total questions answered
+        let correctAnswers = 0;
+        const totalQuestionsAnswered = quizQuestions.reduce((sum, quizQuestion) => {
+            const { question } = quizQuestion
+            if (question.answers.some(answer => userAnswers.some(userAnswer => userAnswer.questionId === question.id && userAnswer.answerId === answer.id))) {
+                if (question.answers.some(answer => userAnswers.some(userAnswer => userAnswer.questionId === question.id && userAnswer.answerId === answer.id) && answer.isCorrect)) {
+                    correctAnswers++;
+                }
+                sum++;
+            }
+            return sum
+        }, 0);
+
+        // Calculate overall success rate
+        const successRate = totalQuestionsAnswered > 0 
+            ? Math.round((correctAnswers / totalQuestionsAnswered) * 100) 
+            : 0;
+
+        // Calculate failed quizzes (success rate < 50%)
+        const quizResults = completedQuizIds.map(quizId => {
+            const quizAnswers = userAnswers.filter(answer => answer.quizId === quizId);
+            const correctQuizAnswers = quizAnswers.filter(answer => answer.answer.isCorrect).length;
+            return {
+                quizId,
+                successRate: Math.round((correctQuizAnswers / quizAnswers.length) * 100)
+            };
+        });
+
+        const failedQuizzes = quizResults.filter(quiz => quiz.successRate < 50).length;
+
+        // Calculate overall progression
+        const progressionPercentage = Math.round((totalQuestionsAnswered / totalQuestionsQuiz) * 100);
+
+        return {
+            progression: {
+                percentage: progressionPercentage,
+                questionsAnswered: totalQuestionsAnswered,
+                totalPossibleQuestions: totalQuestionsQuiz
+            },
+            quizStats: {
+                completed: completedQuizzes,
+                failed: failedQuizzes,
+                successRate: successRate
+            }
+        };
+    }
 }
 
 

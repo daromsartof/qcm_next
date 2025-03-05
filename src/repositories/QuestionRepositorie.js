@@ -88,18 +88,48 @@ class QuestionRepositorie {
         content,
         categoryId,
         sourceId,
-        matiereId
+        matiereId,
+        fieReponse,
+        isMultichoise,
+        fileUrl, // Nouvelle colonne pour l'image
+        reponses = [],
     }) {
-        return prisma.question.update({
-            where: { id },
+        const question = await prisma.question.update({
+            where: {
+                id : parseInt(id)
+            },
             data: {
                 title,
-                content,
+                description: content,
                 categoryId,
                 sourceId,
-                matiereId
-            }
-        })
+                updatedAt: new Date(),
+                response_file_url: fieReponse,
+                matiereId,
+                isMultiChoice: isMultichoise,
+                fileUrl, // Stocker l'image
+            },
+            include: {
+                category: true,
+                source: true,
+                matiere: true,
+            },
+        });
+
+        const reponseData = await Promise.all(
+            reponses.map(async (reponse) => {
+                return await ReponseRepositorie.updateAnswer(reponse.id, {
+                    title: reponse.title,
+                    description: reponse.explaination,
+                    isCorrect: reponse.isCorrect === 1,
+                });
+            })
+        );
+
+        return {
+            ...question,
+            answers: reponseData,
+        };
     }
 
     async deleteQuestion(id) {
