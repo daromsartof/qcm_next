@@ -24,6 +24,7 @@ async getQuestionsByTitle(title) {
         },
       });
 }
+
 //
 
     async createQuestion({
@@ -79,6 +80,7 @@ async getQuestionsByTitle(title) {
             isDeleted: false,
             OR: []
         }
+
         if (strict) {
             if (categoryId) where.categoryId = parseInt(categoryId)
             if (sourceId) where.sourceId = parseInt(sourceId)
@@ -90,7 +92,8 @@ async getQuestionsByTitle(title) {
         }
 
         if (where.OR.length === 0) delete where.OR
-        return prisma.question.findMany({
+        
+return prisma.question.findMany({
             where,
             include: {
                 category: true,

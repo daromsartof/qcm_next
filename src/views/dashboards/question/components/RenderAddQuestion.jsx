@@ -47,6 +47,7 @@ const RenderAddQuestion = ({ open, toggle }) => {
   const [isSuccess, setIsSuccess] = useState(false)
   const [image, setImage] = useState(null)
   const [reponseImage, setReponseImage] = useState(null)
+
   const [reponses, setReponses] = useState({
     0: {
       title: '',

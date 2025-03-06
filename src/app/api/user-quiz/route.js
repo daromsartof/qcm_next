@@ -1,5 +1,6 @@
-import quizUserAnswerRepositorie from "@/repositories/QuizUserAnswerRepositorie";
 import { NextResponse } from "next/server";
+
+import quizUserAnswerRepositorie from "@/repositories/QuizUserAnswerRepositorie";
 
 export async function POST(req) {
     try {
@@ -9,11 +10,14 @@ export async function POST(req) {
           quizId,
           userId,
           datas: data
-        })        
-        return NextResponse.json(quizUserAnswer)
+        })
+        
+        
+return NextResponse.json(quizUserAnswer)
     } catch (error) {
         console.error(error)
-        return NextResponse.json({ error: "unexpected error" }, { status: 500 })
+        
+return NextResponse.json({ error: "unexpected error" }, { status: 500 })
     }
 }
 
@@ -21,10 +25,13 @@ export async function GET(req) {
     try {
         const { searchParams } = new URL(req.url)
         const userId = searchParams.get('userId')
-        const quizUserAnswer = await quizUserAnswerRepositorie.getUserStats(userId)        
-        return NextResponse.json(quizUserAnswer)
+        const quizUserAnswer = await quizUserAnswerRepositorie.getUserStats(userId)
+        
+        
+return NextResponse.json(quizUserAnswer)
     } catch (error) {
         console.error(error)
-        return NextResponse.json({ error: "unexpected error" }, { status: 500 })
+        
+return NextResponse.json({ error: "unexpected error" }, { status: 500 })
     }
 }

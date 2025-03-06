@@ -4,6 +4,7 @@ import { Avatar, Box, Button, Typography } from '@mui/material'
 import { useDropzone } from 'react-dropzone'
 import { Controller } from 'react-hook-form'
 import { Trash } from 'react-feather'
+
 import CustomIconButton from '@/@core/components/mui/IconButton'
 
 const RenderImageInput = ({
@@ -23,6 +24,7 @@ const RenderImageInput = ({
       },
       onDrop: (acceptedFiles) => {
         const images = acceptedFiles.map((file) => Object.assign(file))
+
         onChange(images)
         setFiles(images)
       }

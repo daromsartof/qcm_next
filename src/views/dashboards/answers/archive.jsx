@@ -1,13 +1,18 @@
 
 "use client";
 
-import AnswerForm from "./AnswerForm";
 import { useState, useEffect } from "react";
+
 import { Edit, Delete } from "@mui/icons-material";
-import { getQuestions } from "@/services/questionService";
-import { getAnswers, deleteAnswer } from "@/services/answerService";
+
 import {  Button, Container, Typography, Paper, Table, TableBody, TableCell,
    TableContainer,TableHead, TableRow, IconButton, TextField,} from "@mui/material";
+
+import AnswerForm from "./AnswerForm";
+
+import { getQuestions } from "@/services/questionService";
+import { getAnswers, deleteAnswer } from "@/services/answerService";
+
 
 export default function AnswerList() {
   const [answers, setAnswers] = useState([]);
@@ -21,11 +26,13 @@ export default function AnswerList() {
     const fetchQuestions = async () => {
       try {
         const res = await getQuestions();
+
         setQuestions(res);
       } catch (error) {
         console.error("Erreur lors de la récupération des questions:", error);
       }
     };
+
     fetchQuestions();
   }, []);
 
@@ -39,6 +46,7 @@ export default function AnswerList() {
     try {
       console.log("Récupération des réponses pour la question ID :", questionId);
       const res = await getAnswers({ questionId });
+
       console.log("Réponses récupérées :", res);
       setAnswers(res);
     } catch (error) {
@@ -61,6 +69,7 @@ export default function AnswerList() {
         }
   
         const filteredQuestions = await response.json();
+
         console.log(" Questions filtrées:", filteredQuestions);
   
         if (filteredQuestions.length > 0) {
@@ -77,6 +86,7 @@ export default function AnswerList() {
   
     fetchFilteredQuestions();
   }, [titleFilter]);
+
 //  
 
   const handleSubmit = async (data) => {
@@ -84,6 +94,7 @@ export default function AnswerList() {
       const url = selectedAnswer
         ? `/api/answers/${selectedAnswer.id}`
         : "/api/answers";
+
       const method = selectedAnswer ? "PUT" : "POST";
 
       const response = await fetch(url, {

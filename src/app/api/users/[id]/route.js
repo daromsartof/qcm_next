@@ -5,7 +5,9 @@ export async function GET(request, { params }) {
     const user = await prisma.user.findUnique({ 
       where: { id: Number(params.id) }
     });
-    return new Response(JSON.stringify(user), {
+
+    
+return new Response(JSON.stringify(user), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -20,11 +22,14 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
   try {
     const body = await request.json();
+
     const user = await prisma.user.update({
       where: { id: Number(params.id) },
       data: body,
     });
-    return new Response(JSON.stringify(user), {
+
+    
+return new Response(JSON.stringify(user), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -39,7 +44,8 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   try {
     await prisma.user.delete({ where: { id: Number(params.id) } });
-    return new Response(null, { status: 204 });
+    
+return new Response(null, { status: 204 });
   } catch (error) {
     return new Response(JSON.stringify({ error: 'Error deleting user' }), {
       status: 400,

@@ -10,6 +10,7 @@ class QuizUserAnswerRepositorie {
         const quiz = await prisma.quiz.findUnique({
             where: { id: quizId }
         })
+
         const quizQuestions = await prisma.quizquestion.findMany({
             where: { quizId },
             include: {
@@ -20,17 +21,22 @@ class QuizUserAnswerRepositorie {
                 }
             }
         })
+
         let correctAnswers = 0;
         let totalQuestions = quizQuestions.length;
+
         quizQuestions.forEach((q) => {
             q.question.answers.forEach((a) => {
                 if(a.isCorrect && datas.find(d => d.questionId === q.questionId && d.answerId === a.id)) correctAnswers++
             })
         })
+
         const questions = quizQuestions.flatMap((q) => {
             const userAnswerId= datas.find((d) => d.questionId === q.questionId)?.answerId || 0
             const isCorrect = q.question.answers.find(a => a.id === userAnswerId)?.isCorrect || false
-            return {
+
+            
+return {
                 text: q.question.title,
                 isCorrect,
                 answerImage: q.question.response_file_url,
@@ -40,11 +46,14 @@ class QuizUserAnswerRepositorie {
                 hasImage: !!q.question.fileUrl
             }
         })
+
         console.log(questions);
+
         const results = {
             scorePercentage: Math.round((correctAnswers / totalQuestions) * 100),
             correctAnswers,
             totalQuestions,
+
             //timeTaken: quiz_data!.time * 60 - timeLeft,
             questions,
             categorie: quiz.categoryId
@@ -79,9 +88,13 @@ class QuizUserAnswerRepositorie {
                 }
             }
         });
+
+
       //  const totalQuizzes = allQuizzes.length;
         const quizQuestions = allQuizzes.flatMap(quiz => quiz.quizQuestions);
         const totalQuestionsQuiz = allQuizzes.reduce((sum, quiz) => sum + quiz.quizQuestions.length, 0);
+
+
         // Get all user answers
         const userAnswers = await prisma.quizuseranswer.findMany({
             where: { userId: parseInt(userId) },
@@ -102,15 +115,20 @@ class QuizUserAnswerRepositorie {
 
         // Calculate total questions answered
         let correctAnswers = 0;
+
         const totalQuestionsAnswered = quizQuestions.reduce((sum, quizQuestion) => {
             const { question } = quizQuestion
+
             if (question.answers.some(answer => userAnswers.some(userAnswer => userAnswer.questionId === question.id && userAnswer.answerId === answer.id))) {
                 if (question.answers.some(answer => userAnswers.some(userAnswer => userAnswer.questionId === question.id && userAnswer.answerId === answer.id) && answer.isCorrect)) {
                     correctAnswers++;
                 }
+
                 sum++;
             }
-            return sum
+
+            
+return sum
         }, 0);
 
         // Calculate overall success rate
@@ -122,7 +140,9 @@ class QuizUserAnswerRepositorie {
         const quizResults = completedQuizIds.map(quizId => {
             const quizAnswers = userAnswers.filter(answer => answer.quizId === quizId);
             const correctQuizAnswers = quizAnswers.filter(answer => answer.answer.isCorrect).length;
-            return {
+
+            
+return {
                 quizId,
                 successRate: Math.round((correctQuizAnswers / quizAnswers.length) * 100)
             };
@@ -150,4 +170,5 @@ class QuizUserAnswerRepositorie {
 
 
 const quizUserAnswerRepositorie = new QuizUserAnswerRepositorie()
+
 export default quizUserAnswerRepositorie

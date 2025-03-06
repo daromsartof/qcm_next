@@ -7,6 +7,7 @@ export async function GET(req) {
     try {
         const { searchParams } = new URL(req.url)
         const categoryId = searchParams.get('categoryId')
+
         const quizzes = await QuizRepositorie.getAllQuizzes({
             categoryId
         })

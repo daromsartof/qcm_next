@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+
 import {
   Container,
   Typography,
@@ -38,6 +39,7 @@ export default function UsersPage() {
     try {
       const response = await fetch('/api/users');
       const data = await response.json();
+
       setUsers(data);
       setLoading(false);
     } catch (error) {

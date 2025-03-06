@@ -1,6 +1,7 @@
 
 //route de answer
 import { NextResponse } from "next/server";
+
 import ReponseRepositorie from "@/repositories/ReponseRepositorie";
 
 export async function GET(req) {
@@ -19,7 +20,8 @@ export async function GET(req) {
         return NextResponse.json(answers);
     } catch (error) {
         console.error("API Error:", error);
-        return NextResponse.json({ error: "unexpected error" }, { status: 500 });
+        
+return NextResponse.json({ error: "unexpected error" }, { status: 500 });
     }
 }
 

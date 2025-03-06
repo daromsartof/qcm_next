@@ -1,14 +1,19 @@
 "use client";
 
-import AnswerForm from "./AnswerForm";
 import { useState, useEffect } from "react";
+
 import { Edit, Delete } from "@mui/icons-material";
-import { getAnswers, deleteAnswer } from "@/services/answerService";
-import { getQuestions } from "@/services/questionService";
+
 import {
   Button, Container, Typography, Paper, Table, TableBody, TableCell,
   TableContainer, TableHead, TableRow, IconButton, TextField, List, ListItem, ListItemText, Box,
 } from "@mui/material";
+
+import AnswerForm from "./AnswerForm";
+
+import { getAnswers, deleteAnswer } from "@/services/answerService";
+import { getQuestions } from "@/services/questionService";
+
 
 export default function AnswerList() {
   const [answers, setAnswers] = useState([]);
@@ -28,6 +33,7 @@ export default function AnswerList() {
     try {
       console.log("Récupération des réponses pour la question ID :", questionId);
       const res = await getAnswers({ questionId });
+
       console.log("Réponses récupérées :", res);
       setAnswers(res);
     } catch (error) {
@@ -42,8 +48,10 @@ export default function AnswerList() {
       try {
         console.log("🔎 Recherche pour:", titleFilter);
         const response = await fetch(`/api/title?title=${encodeURIComponent(titleFilter)}`);
+
         if (!response.ok) throw new Error(`Erreur API ${response.status}: ${await response.text()}`);
         const questions = await response.json();
+
         console.log(" Questions filtrées:", questions);
         setFilteredQuestions(questions);
       } catch (error) {
@@ -59,6 +67,7 @@ export default function AnswerList() {
       const url = selectedAnswer
         ? `/api/answers/${selectedAnswer.id}`
         : "/api/answers";
+
       const method = selectedAnswer ? "PUT" : "POST";
 
       const response = await fetch(url, {

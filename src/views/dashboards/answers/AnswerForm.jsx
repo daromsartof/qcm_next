@@ -1,9 +1,11 @@
 // components/AnswerForm.jsx :
 import { useState, useEffect } from 'react';
-import { getQuestions } from '@/services/questionService';
-import { createAnswer, updateAnswer } from '@/services/answerService';
+
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle,
    Checkbox, FormControlLabel, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+
+import { getQuestions } from '@/services/questionService';
+import { createAnswer, updateAnswer } from '@/services/answerService';
 
 export default function AnswerForm({ open, answer, questionId, onClose, onSubmit }) {
   const [formData, setFormData] = useState({
@@ -20,11 +22,13 @@ export default function AnswerForm({ open, answer, questionId, onClose, onSubmit
     const fetchQuestions = async () => {
       try {
         const res = await getQuestions();
+
         setQuestions(res);
       } catch (error) {
         console.error("Erreur lors de la récupération des questions:", error);
       }
     };
+
     fetchQuestions();
   }, []);
 
@@ -46,11 +50,13 @@ export default function AnswerForm({ open, answer, questionId, onClose, onSubmit
 
     if (!formData.questionId) {
         alert("Veuillez sélectionner une question avant de soumettre.");
-        return;
+        
+return;
     }
 
     try {
         let response;
+
         if (answer) {
             // Si une réponse existe déjà, dia mis à jour
             response = await updateAnswer(answer.id, formData);

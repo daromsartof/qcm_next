@@ -1,5 +1,6 @@
 
 import { NextResponse } from 'next/server'
+
 import QuestionRepositorie from '@/repositories/QuestionRepositorie'
 import { uploadImage } from '@/services/api/uploadService';
 
@@ -17,18 +18,22 @@ export async function POST(req) {
     const reponseImage = formData.get('reponseImage');
 
     let fileUrl = null;
+
     if (image) {
       fileUrl = await uploadImage(image);
     }
 
     let fieReponse = null;
+
     if (reponseImage) {
       fieReponse = await uploadImage(reponseImage);
     }
 
     const reponses = [];
+
     for (const entry of formData.entries()) {
       const [key, value] = entry;
+
       if (key.startsWith('reponses[')) {
         reponses.push(JSON.parse(value));
       }
@@ -49,7 +54,8 @@ export async function POST(req) {
     return NextResponse.json(question);
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    
+return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
 
@@ -73,7 +79,8 @@ export async function GET(req) {
     return NextResponse.json(questions)
   } catch (error) {
     console.error(" Erreur dans GET /api/question:", error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    
+return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
 
@@ -85,7 +92,8 @@ export async function PUT(req) {
     return NextResponse.json(question);
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    
+return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
 
@@ -103,6 +111,7 @@ export async function DELETE(req) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    
+return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

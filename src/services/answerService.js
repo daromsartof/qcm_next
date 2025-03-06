@@ -20,7 +20,8 @@ const getAnswers = async ({ questionId = null, answerId = null } = {}) => {
         });
 
         console.log(" Réponse reçue:", response.data);
-        return response.data;
+        
+return response.data;
     } catch (error) {
         console.error(" Erreur Axios:", error.response?.data || error.message);
         throw new Error(error.response?.data?.error || "Erreur inattendue");
@@ -34,7 +35,8 @@ const createAnswer = async (answerData) => {
         const response = await axios.post('/api/answers', answerData);
         
         console.log(" Réponse de l'API:", response.data);
-        return response.data;
+        
+return response.data;
     } catch (error) {
         console.error(" Erreur Axios:", error.response?.data || error.message);
         throw new Error(error.response?.data?.error || "Erreur inattendue");
@@ -49,7 +51,8 @@ const updateAnswer = async (id, answerData) => {
         const response = await axios.put('/api/answers', { id, ...answerData });
 
         console.log("Réponse de l'API:", response.data);
-        return response.data;
+        
+return response.data;
     } catch (error) {
         console.error("Erreur Axios:", error.response?.data || error.message);
         throw new Error(error.response?.data?.error || "Erreur inattendue");
@@ -66,7 +69,8 @@ const deleteAnswer = async (id) => {
         });
 
         console.log("Réponse de l'API:", response.data);
-        return response.data;
+        
+return response.data;
     } catch (error) {
         console.error("Erreur Axios:", error.response?.data || error.message);
         throw new Error(error.response?.data?.error || "Erreur inattendue");

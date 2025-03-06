@@ -21,19 +21,23 @@ export async function PUT(req, { params }) {
   
       // Upload de l'image si présente
       let fileUrl = null;
+
       if (image) {
         fileUrl = await uploadImage(image);
       }
   
       let fieReponse = null
+
       if (reponseImage) {
         fieReponse = await uploadImage(reponseImage);
       }
   
       // Extraction des réponses depuis FormData
       const reponses = [];
+
       for (const entry of formData.entries()) {
         const [key, value] = entry;
+
         if (key.startsWith('reponses[')) {
           reponses.push(JSON.parse(value)); // Supposant que les réponses sont envoyées sous forme JSON
         }
@@ -56,7 +60,8 @@ export async function PUT(req, { params }) {
       return NextResponse.json(question);
     } catch (error) {
       console.error(error);
-      return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+      
+return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
   }
   
