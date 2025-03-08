@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+
 import {
   Card,
   CardContent,
@@ -23,8 +24,10 @@ import SearchIcon from '@mui/icons-material/Search'
 import AssessmentIcon from '@mui/icons-material/Assessment'
 import PersonIcon from '@mui/icons-material/Person'
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium'
-import UserQuizStats from './UserQuizStats'
+
 import { ArrowLeft } from '@mui/icons-material'
+
+import UserQuizStats from './UserQuizStats'
 
 const UsersList = () => {
   const [users, setUsers] = useState([])
@@ -41,9 +44,11 @@ const UsersList = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true)
+
       // Appel API pour récupérer la liste des utilisateurs
       const response = await fetch('/api/users')
       const data = await response.json()
+
       setUsers(data)
     } catch (error) {
       console.error('Error fetching users:', error)
@@ -102,6 +107,7 @@ const UsersList = () => {
       field: 'lastActive',
       headerName: 'Dernière Activité',
       width: 180,
+
       //valueGetter: (params) => new Date(params.row.lastActive).toLocaleString()
     },
     {
@@ -166,7 +172,7 @@ const UsersList = () => {
                     }}
                   />
                   <FormControl sx={{ minWidth: 200 }}>
-                    <InputLabel>Type d'utilisateur</InputLabel>
+                    <InputLabel>Type d&apos;utilisateur</InputLabel>
                     <Select
                       value={filterType}
                       label="Type d'utilisateur"

@@ -1,5 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
+
 import {
   Grid,
   Card,
@@ -28,6 +29,7 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp'
 import PersonIcon from '@mui/icons-material/Person'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
+
 import StatsOverviewCard from './components/StatsOverviewCard'
 import QuizActivityChart from './components/QuizActivityChart'
 import UserPerformanceRadar from './components/UserPerformanceRadar'
@@ -46,6 +48,7 @@ const UserQuizStats = ({ userId }) => {
     try {
       // Appel API pour récupérer les statistiques de l'utilisateur
       const data = await getUserStats(userId)
+
       setUserData(data)
     } catch (error) {
       console.error('Error fetching user stats:', error)

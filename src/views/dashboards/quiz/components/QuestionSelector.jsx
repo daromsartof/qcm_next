@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+
 import {
   Box,
   Card,
@@ -12,6 +13,7 @@ import {
   InputAdornment
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
+
 import { getAllQuestions } from '@/services/questionService'
 
 const QuestionSelector = ({ matiereId, categoryId, onSave }) => {
@@ -28,6 +30,7 @@ const QuestionSelector = ({ matiereId, categoryId, onSave }) => {
     try {
       setLoading(true)
       const data = await getAllQuestions({ matiereId, categoryId })
+
       setQuestions(data)
     } catch (error) {
       console.error('Error fetching questions:', error)
@@ -41,7 +44,9 @@ const QuestionSelector = ({ matiereId, categoryId, onSave }) => {
       if (prev.includes(questionId)) {
         return prev.filter(id => id !== questionId)
       }
-      return [...prev, questionId]
+
+      
+return [...prev, questionId]
     })
   }
 

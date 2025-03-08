@@ -60,6 +60,8 @@ const AddQuestionMatier = ({ open, matiere, categorie, toggle, handleSaveQuestio
   const [question, setQuestion] = useState("")
   const [error, setError] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
+
+
   // Ajout de la fonction pour réinitialiser les champs
   const resetFields = () => {
     setSources("")
@@ -105,6 +107,7 @@ const AddQuestionMatier = ({ open, matiere, categorie, toggle, handleSaveQuestio
   const handleRandomQuestion = () => {
     const randomIndex = Math.floor(Math.random() * data.length)
     const randomQuestion = data[randomIndex]
+
     setFiltredQuestions(prevItems => [...prevItems, randomQuestion])
   }
 
@@ -126,12 +129,16 @@ const AddQuestionMatier = ({ open, matiere, categorie, toggle, handleSaveQuestio
   const onSave = () => {
     if (filtredQuestions.length === 0) {
       setError('Veuillez sélectionner au moins une question')
-      return
+      
+return
     }
+
     if (minute === 0) {
       setError('Veuillez entrer le temps')
-      return
+      
+return
     }
+
     handleSaveQuestion(filtredQuestions, matiere, minute)
     resetFields()
     toggle()
@@ -147,6 +154,7 @@ const AddQuestionMatier = ({ open, matiere, categorie, toggle, handleSaveQuestio
     resetFields()
     toggle()
   }
+
   const filteredQuestions = data.filter(question =>
     question.title.toLowerCase().includes(searchTerm.toLowerCase())
   )

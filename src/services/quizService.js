@@ -25,7 +25,9 @@ export const createQuiz = async (data) => {
 export const updateQuiz = async (id, data) => {
     try {
         const response = await axios.put(`/api/quiz/${id}`, data)
-        return response.data
+
+        
+return response.data
 
 
     } catch (error) {
@@ -37,7 +39,9 @@ export const updateQuiz = async (id, data) => {
 export const deleteQuiz = async (id) => {
     try {
         const response = await axios.delete(`/api/quiz/${id}`)
-        return response.data
+
+        
+return response.data
     } catch (error) {
         throw error
     }
@@ -46,7 +50,9 @@ export const deleteQuiz = async (id) => {
 export const getUserStats = async (userId) => {
     try {
         const response = await axios.get(`/api/user-quiz?userId=${userId}`)
-        return response.data
+
+        
+return response.data
     } catch (error) {
         throw error
     }

@@ -25,8 +25,10 @@ export async function GET(req) {
     try {
         const { searchParams } = new URL(req.url)
         const userId = searchParams.get('userId')
+
         console.log(userId)
         const quizUserAnswer = await quizUserAnswerRepositorie.getUserStats(userId)
+
         console.log(quizUserAnswer)
         
 

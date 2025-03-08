@@ -36,6 +36,7 @@ export async function POST(req) {
         return NextResponse.json(quiz)
     } catch (error) {
         console.log(error)
-        return NextResponse.json({ error: "unexpected error" }, { status: 500 })
+        
+return NextResponse.json({ error: "unexpected error" }, { status: 500 })
     }
 }

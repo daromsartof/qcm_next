@@ -100,6 +100,7 @@ class QuizUserAnswerRepositorie {
                 )
 
                 let matiereCorrectAnswers = 0
+
                 matiereQuestions.forEach((q) => {
                     q.question.answers.forEach((a) => {
                         if (a.isCorrect && datas.find(d =>
@@ -220,6 +221,7 @@ class QuizUserAnswerRepositorie {
     
             // Calculer les tendances (30 derniers jours)
             const thirtyDaysAgo = new Date()
+
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
     
             const activityData = await prisma.userquizstatistics.groupBy({
@@ -255,9 +257,11 @@ class QuizUserAnswerRepositorie {
     
             // Calculer la tendance du score (comparaison avec la période précédente)
             const currentPeriodAvg = quizStats._avg.score || 0
+
             const previousPeriodAvg = activityData.length > 0 
                 ? activityData.slice(0, Math.floor(activityData.length / 2)).reduce((acc, curr) => acc + (curr._avg.score || 0), 0) / Math.floor(activityData.length / 2)
                 : 0
+
             const scoreTrend = previousPeriodAvg ? ((currentPeriodAvg - previousPeriodAvg) / previousPeriodAvg) * 100 : 0
     
             return {

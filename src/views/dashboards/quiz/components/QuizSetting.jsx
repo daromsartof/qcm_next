@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import {
   Button,
   Dialog,
@@ -20,6 +21,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import AddIcon from '@mui/icons-material/Add'
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium'
 import PublicIcon from '@mui/icons-material/Public'
+
 import AddQuestion from './AddQuestion'
 
 const QuizSetting = ({ open, toggle, quiz, onUpdateQuiz, onDeleteQuiz }) => {
@@ -104,7 +106,7 @@ const QuizSetting = ({ open, toggle, quiz, onUpdateQuiz, onDeleteQuiz }) => {
                 <CardContent>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Typography variant="h6">Type d'accès</Typography>
+                      <Typography variant="h6">Type d&apos;accès</Typography>
                       {quiz?.isPremium ? (
                         <WorkspacePremiumIcon color="warning" />
                       ) : (
@@ -180,6 +182,7 @@ const QuizSetting = ({ open, toggle, quiz, onUpdateQuiz, onDeleteQuiz }) => {
         categorie={quiz.category}
         onSuccess={() => {
           setOpenAddQuestion(false)
+
           // Rafraîchir les données du quiz
           if (onUpdateQuiz) onUpdateQuiz(quiz.id)
         }}

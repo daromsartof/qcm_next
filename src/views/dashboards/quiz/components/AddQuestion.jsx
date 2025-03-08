@@ -1,5 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
+
 import {
   Button,
   Dialog,
@@ -21,6 +22,7 @@ import {
   Step,
   StepLabel
 } from '@mui/material'
+
 import QuestionSelector from './QuestionSelector' // Vous devrez créer ce composant
 
 const steps = ['Sélection de la matière', 'Sélection des questions']
@@ -45,11 +47,13 @@ const AddQuestion = ({ open, toggle, quiz, onSuccess }) => {
     if (activeStep === 0) {
       if (!selectedMatiere) {
         setError('Veuillez sélectionner une matière')
-        return
+        
+return
       }
 
       setError('')
     }
+
     setActiveStep((prevStep) => prevStep + 1)
   }
 
