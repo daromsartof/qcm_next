@@ -47,13 +47,14 @@ export default function AnswerList() {
     const fetchFilteredQuestions = async () => {
       try {
         console.log("🔎 Recherche pour:", titleFilter);
-        const response = await fetch(`/api/title?title=${encodeURIComponent(titleFilter)}`);
 
-        if (!response.ok) throw new Error(`Erreur API ${response.status}: ${await response.text()}`);
-        const questions = await response.json();
+       // const response = await fetch(`/api/titre?title=${encodeURIComponent(titleFilter)}`);
 
-        console.log(" Questions filtrées:", questions);
-        setFilteredQuestions(questions);
+        //if (!response.ok) throw new Error(`Erreur API ${response.status}: ${await response.text()}`);
+       // const questions = await response.json();
+
+        //console.log(" Questions filtrées:", questions);
+       // setFilteredQuestions(questions);
       } catch (error) {
         console.error(" Erreur lors de la récupération des questions filtrées:", error);
       }

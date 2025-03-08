@@ -30,9 +30,6 @@ export async function POST(req) {
             questionIds: body.quizQuestions
         })
         
-        console.log(quiz)
-
-        
         return NextResponse.json(quiz)
     } catch (error) {
         console.log(error)
