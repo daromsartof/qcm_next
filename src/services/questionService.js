@@ -25,8 +25,8 @@ export const getAllQuestions = async (filters = {}) => {
 
     const response = await axios.get(url);
 
-    
-return response.data;
+
+    return response.data;
   } catch (error) {
     console.error('Erreur lors de la récupération des questions:', error);
     throw new Error('Impossible de récupérer les questions');
@@ -42,8 +42,8 @@ export const getQuestions = async () => {
     const response = await axios.get('/api/question');
 
     console.log(" Données reçues de l'API question:", response.data);
-    
-return response.data;
+
+    return response.data;
   } catch (error) {
     console.error("Erreur lors de la récupération des questions:", error);
     throw new Error("Erreur lors du chargement des questions");
@@ -95,7 +95,7 @@ export const createQuestion = async ({ title, matiereId, sourceId, categoryId, r
 export const updateQuestion = async (id, data) => {
   try {
     console.log(" data ", data)
-    
+
     const formData = new FormData();
 
     formData.append('title', data.title);
@@ -104,14 +104,14 @@ export const updateQuestion = async (id, data) => {
     formData.append('categoryId', data.categoryId);
     formData.append('isMultichoise', data.isMultichoise);
     formData.append('content', data.content);
-    
+
     if (data.image) {
       const img = data.image[0]
 
       formData.append('image', img);
     }
 
-    if(data.reponseImage) formData.append('reponseImage', data.reponseImage[0]);
+    if (data.reponseImage) formData.append('reponseImage', data.reponseImage[0]);
 
     data.reponses.forEach((reponse, index) => {
       formData.append(`reponses[${index}]`, JSON.stringify(reponse));
@@ -124,8 +124,8 @@ export const updateQuestion = async (id, data) => {
       }
     })
 
-    
-return response.data
+
+    return response.data
   } catch (error) {
     console.error('Erreur lors de la mise à jour de la question:', error);
     throw new Error('Impossible de mettre à jour la question');
@@ -141,8 +141,8 @@ export const deleteQuestion = async (id) => {
   try {
     const response = await axios.delete(`/api/question?id=${id}`);
 
-    
-return response.data;
+
+    return response.data;
   } catch (error) {
     console.error('Erreur lors de la suppression de la question:', error);
     throw new Error('Impossible de supprimer la question');
@@ -154,8 +154,8 @@ export const getQuestionsByTitle = async (title) => {
   try {
     const response = await axios.get(`/api/question/title?title=${encodeURIComponent(title)}`);
 
-    
-return response.data;
+
+    return response.data;
   } catch (error) {
     console.error(" Erreur lors de la récupération des questions par titre:", error);
     throw new Error("Impossible de récupérer les questions par titre");

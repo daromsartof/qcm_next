@@ -48,7 +48,7 @@ class QuizRepositorie {
                         data: matieresIds.map((matiereId) => ({
                             matiereOrder: matiereId.order,
                             matiereId: matiereId.matierId,
-                            time: matiereId.minute ? parseInt(matiereId.minute) : null
+                            time: matiereId.time ? parseInt(matiereId.time) : 12
                         }))
                     }
                 },

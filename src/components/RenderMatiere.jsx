@@ -19,7 +19,7 @@ import { Controller } from 'react-hook-form'
 import CustomTextField from '@/@core/components/mui/TextField'
 import { createMatiere, getAllMatieres } from '@/services/matiereService'
 
-const RenderMatiere = ({ control, handleChangeMatiere, required, withAdd = true , field = 'subject' }) => {
+const RenderMatiere = ({ control, handleChangeMatiere, required, withAdd = true , disabled, field = 'subject' }) => {
   const [open, setOpen] = useState(false)
   const [matiers, setMatiers] = useState([])
   const [name, setName] = useState('')
@@ -69,6 +69,7 @@ const RenderMatiere = ({ control, handleChangeMatiere, required, withAdd = true 
               fullWidth
               required
               label='Matières'
+              disabled={disabled}
               value={value || ''}
               onChange={handleChangeMatiere || onChange}
             >

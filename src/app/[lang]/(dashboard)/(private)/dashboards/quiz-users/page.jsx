@@ -3,8 +3,7 @@
 import Grid from '@mui/material/Grid'
 
 import prisma from "@/services/Utils/prisma"
-
-import Question from '@/views/dashboards/question/Question'
+import UsersList from '@/views/dashboards/statistics/UsersList'
 
 const QuestionsPage = async () => {
  const utilisateur = await prisma.user.findMany()
@@ -14,6 +13,7 @@ const QuestionsPage = async () => {
 return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
+        <UsersList />
       </Grid>
     </Grid>
   )

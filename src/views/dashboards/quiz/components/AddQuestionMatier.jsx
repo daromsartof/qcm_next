@@ -1,12 +1,13 @@
 'use client'
 import { useEffect, useState } from 'react'
 
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, MenuItem } from '@mui/material'
+import { Button, Card, CardContent, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Divider, FormControlLabel, Grid, MenuItem, Typography, Alert } from '@mui/material'
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep'
 import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import IconButton from '@mui/material/IconButton'
-import ListItemText from '@mui/material/ListItemText'
+import InputAdornment from '@mui/material/InputAdornment'
+
+import SearchIcon from '@mui/icons-material/Search'
+import TextField from '@mui/material/TextField'
 import { DndContext, closestCenter } from '@dnd-kit/core'
 import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
@@ -51,15 +52,28 @@ const SortableItem = ({ question, id, index, onDelete }) => {
   )
 }
 
-const AddQuestionMatier = ({ open, matiere,categorie, toggle, handleSaveQuestion }) => {
+const AddQuestionMatier = ({ open, matiere, categorie, toggle, handleSaveQuestion }) => {
   const [data, setData] = useState([])
   const [source, setSources] = useState("")
   const [filtredQuestions, setFiltredQuestions] = useState([])
   const [minute, setMinute] = useState(0)
   const [question, setQuestion] = useState("")
+  const [error, setError] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
+  // Ajout de la fonction pour réinitialiser les champs
+  const resetFields = () => {
+    setSources("")
+    setQuestion("")
+    setError('')
+    setMinute(0)
+    setFiltredQuestions([])
+    setData([])
+  }
 
+  useEffect(() => {
+    handleChangeSource(0)
+  }, [matiere.id, categorie])
 
-  //  const [items] = useState([1, 2, 3])
   const handleChangeSource = async value => {
     setSources(value)
 
@@ -69,13 +83,11 @@ const AddQuestionMatier = ({ open, matiere,categorie, toggle, handleSaveQuestion
       return
     }
 
-    const filtered = await getAllQuestions({ matiereId: matiere.id, categoryId: categorie, sourceId: value, strict: true  })
+    const filtered = await getAllQuestions({ matiereId: matiere.id, categoryId: categorie, sourceId: value, strict: true })
 
     //setFiltredQuestions(filtered)
     setData([...filtered])
   }
-
-  // const [items, setItems] = useState(["Item 1", "Item 2", "Item 3", "Item 4"]);
 
   const handleDragEnd = event => {
     const { active, over } = event
@@ -88,6 +100,12 @@ const AddQuestionMatier = ({ open, matiere,categorie, toggle, handleSaveQuestion
         return arrayMove(prevItems, oldIndex, newIndex)
       })
     }
+  }
+
+  const handleRandomQuestion = () => {
+    const randomIndex = Math.floor(Math.random() * data.length)
+    const randomQuestion = data[randomIndex]
+    setFiltredQuestions(prevItems => [...prevItems, randomQuestion])
   }
 
   const onChangeQuestion = event => {
@@ -106,40 +124,67 @@ const AddQuestionMatier = ({ open, matiere,categorie, toggle, handleSaveQuestion
   }
 
   const onSave = () => {
+    if (filtredQuestions.length === 0) {
+      setError('Veuillez sélectionner au moins une question')
+      return
+    }
+    if (minute === 0) {
+      setError('Veuillez entrer le temps')
+      return
+    }
     handleSaveQuestion(filtredQuestions, matiere, minute)
-    setFiltredQuestions([])
-
+    resetFields()
     toggle()
   }
 
   const handleDelete = id => {
     console.log('here ', id)
-
-    //  setFiltredQuestions((prevItems) => prevItems.filter((item) => item.id !== id));
+    setFiltredQuestions(prevItems => prevItems.filter(item => item.id !== id))
   }
 
-  
+  // Modification du toggle dans le Dialog
+  const handleClose = () => {
+    resetFields()
+    toggle()
+  }
+  const filteredQuestions = data.filter(question =>
+    question.title.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
   return (
     <div>
-      <Dialog open={open} maxWidth={'lg'} fullWidth={true} onClose={toggle} aria-labelledby='form-dialog-title'>
+      <Dialog
+        open={open}
+        maxWidth={'lg'}
+        fullWidth={true}
+        onClose={handleClose}
+        aria-labelledby='form-dialog-title'
+      >
         <DialogTitle id='form-dialog-title'>
           <Grid container spacing={2} className='d-flex items-center'>
-            <Grid item sm={3} className='d-flex items-center'>
-              <div>{matiere.title}</div>
-              <div>
-              <CustomTextField
-                      type='number'
-                      label='Minute'
-                      onChange={(el) => setMinute(el.target.value)}
-                    />
-              </div>
+            <Grid item sm={12}>
+              <Grid item xs={2}>
+                <div>{matiere?.title}</div>
+              </Grid>
+              {error && (
+                  <Grid item xs={10}>
+                    <Alert severity="error">{error}</Alert>
+                  </Grid>
+                )}
             </Grid>
-            <Grid item sm={9}>
+            <Grid item sm={12}>
               <Grid container spacing={6} className='d-flex items-end justify-end'>
-                <Grid item sm={4}>
+                <Grid item sm={3}>
+                  <CustomTextField
+                    type='number'
+                    label='Minute'
+                    onChange={(el) => setMinute(el.target.value)}
+                  />
+                </Grid>
+                <Grid item sm={3}>
                   <RenderSource value={source} onChange={element => handleChangeSource(element.target.value)} />
                 </Grid>
-                <Grid item sm={5}>
+                <Grid item sm={3}>
                   <CustomTextField value={question} select fullWidth label='Questions' onChange={onChangeQuestion}>
                     <MenuItem value={0}>Tous</MenuItem>
                     {data.map((question, index) => (
@@ -150,9 +195,53 @@ const AddQuestionMatier = ({ open, matiere,categorie, toggle, handleSaveQuestion
                   </CustomTextField>
                 </Grid>
                 <Grid item sm={3} className='d-flex items-center'>
-                  <Button>Random Question</Button>
+                  <Button onClick={handleRandomQuestion}>Random Question</Button>
                 </Grid>
               </Grid>
+            </Grid>
+            <Grid item sm={12}>
+              <TextField
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                placeholder="Rechercher une question..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  )
+                }}
+              />
+            </Grid>
+            <Grid container spacing={2} sx={{ mt: 2, maxHeight: '100px', overflow: 'auto' }}>
+              {filteredQuestions.map((question) => (
+                <Grid item xs={12} key={question.id}>
+                  <Card variant="outlined">
+                    <CardContent>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={filtredQuestions.find(item => item.id === question.id)}
+                            onChange={() => onChangeQuestion({
+                              target: {
+                                value: question.id
+                              }
+                            })}
+                          />
+                        }
+                        label={
+                          <Typography variant="body1">
+                            {question.title}
+                          </Typography>
+                        }
+                      />
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
             </Grid>
           </Grid>
         </DialogTitle>
@@ -175,7 +264,7 @@ const AddQuestionMatier = ({ open, matiere,categorie, toggle, handleSaveQuestion
           </List>
         </DialogContent>
         <DialogActions className='dialog-actions-dense'>
-          <Button onClick={toggle}>Annuler</Button>
+          <Button onClick={handleClose}>Annuler</Button>
           <Button onClick={onSave}>Enregistrer</Button>
         </DialogActions>
       </Dialog>

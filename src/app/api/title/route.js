@@ -6,7 +6,7 @@ import QuestionRepositorie from "@/repositories/QuestionRepositorie";
 
 export async function GET(req) {
   try {
-    const { searchParams } = new URL(req.url, "http://localhost");
+    const { searchParams } = new URL(req.url);
     const title = searchParams.get("title");
 
     if (!title) {

@@ -34,12 +34,13 @@ model category {
 }
 
 model matiere {
-  id        Int           @id @default(autoincrement())
-  title     String
-  createdAt DateTime      @default(now())
-  isDeleted Boolean       @default(false)
-  questions question[]
-  quizzes   quizmatiere[]
+  id                       Int                        @id @default(autoincrement())
+  title                    String
+  createdAt                DateTime                   @default(now())
+  isDeleted                Boolean                    @default(false)
+  questions                question[]
+  quizzes                  quizmatiere[]
+  userperformancebymatiere userperformancebymatiere[]
 }
 
 model question {
@@ -55,6 +56,7 @@ model question {
   fileUrl           String?
   sourceId          Int?
   response_file_url String?          @db.Text
+  point             Int              @default(0)
   answers           answer[]
   category          category?        @relation(fields: [categoryId], references: [id])
   matiere           matiere?         @relation(fields: [matiereId], references: [id])
@@ -68,18 +70,20 @@ model question {
 }
 
 model quiz {
-  id             Int              @id @default(autoincrement())
-  title          String
-  createdAt      DateTime         @default(now())
-  mode           Int              @default(1) @db.SmallInt
-  categoryId     Int
-  description    String?          @db.Text
-  level          Int?             @default(1)
-  time           Int?
-  category       category         @relation(fields: [categoryId], references: [id])
-  quizMatieres   quizmatiere[]
-  quizQuestions  quizquestion[]
-  quizuseranswer quizuseranswer[]
+  id                 Int                  @id @default(autoincrement())
+  title              String
+  createdAt          DateTime             @default(now())
+  mode               Int                  @default(1) @db.SmallInt
+  categoryId         Int
+  description        String?              @db.Text
+  level              Int?                 @default(1)
+  time               Int?
+  is_prenium         Int                  @default(0) @db.SmallInt
+  category           category             @relation(fields: [categoryId], references: [id])
+  quizMatieres       quizmatiere[]
+  quizQuestions      quizquestion[]
+  quizuseranswer     quizuseranswer[]
+  userquizstatistics userquizstatistics[]
 
   @@index([categoryId], map: "quiz_categoryId_fkey")
 }
@@ -118,15 +122,19 @@ model source {
 }
 
 model user {
-  id                 Int                @id @default(autoincrement())
-  name               String
-  email              String             @unique(map: "User_email_key")
-  firstname          String
-  codeStep           String?
-  roles              String             @default("user")
-  password           String
-  quizuseranswer     quizuseranswer[]
-  verification_codes verificationcode[]
+  id                       Int                        @id @default(autoincrement())
+  name                     String
+  email                    String                     @unique(map: "User_email_key")
+  firstname                String
+  codeStep                 String?
+  roles                    String                     @default("user")
+  password                 String
+  createdAt                DateTime                   @default(now()) @db.DateTime(0)
+  quizuseranswer           quizuseranswer[]
+  useractivitylog          useractivitylog[]
+  userperformancebymatiere userperformancebymatiere[]
+  userquizstatistics       userquizstatistics[]
+  verification_codes       verificationcode[]
 }
 
 model verificationcode {
@@ -155,4 +163,48 @@ model quizuseranswer {
   @@index([questionId], map: "questionId")
   @@index([quizId], map: "quizId")
   @@index([userId], map: "userId")
+}
+
+model useractivitylog {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  action    String    @db.Text
+  details   String?   @db.Text
+  createdAt DateTime? @default(now()) @db.DateTime(0)
+  user      user      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "useractivitylog_ibfk_1")
+
+  @@index([createdAt], map: "idx_created")
+  @@index([userId], map: "idx_user")
+  @@index([userId, createdAt], map: "idx_user_activity")
+}
+
+model userperformancebymatiere {
+  id         Int       @id @default(autoincrement())
+  userId     Int
+  matiereId  Int
+  totalScore Int?      @default(0)
+  quizCount  Int?      @default(0)
+  updatedAt  DateTime? @default(now()) @db.DateTime(0)
+  user       user      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "userperformancebymatiere_ibfk_1")
+  matiere    matiere   @relation(fields: [matiereId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "userperformancebymatiere_ibfk_2")
+
+  @@unique([userId, matiereId], map: "unique_user_matiere")
+  @@index([matiereId], map: "idx_matiere")
+  @@index([userId], map: "idx_user")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model userquizstatistics {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  quizId      Int
+  score       Int?      @default(0)
+  timeSpent   Int?      @default(0)
+  completedAt DateTime? @default(now()) @db.DateTime(0)
+  user        user      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "userquizstatistics_ibfk_1")
+  quiz        quiz      @relation(fields: [quizId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "userquizstatistics_ibfk_2")
+
+  @@index([quizId], map: "idx_quiz")
+  @@index([userId, completedAt], map: "idx_quiz_completion")
+  @@index([userId], map: "idx_user")
 }

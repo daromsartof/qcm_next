@@ -90,7 +90,7 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
     quizQuestions.forEach((matiere, i) => {
       matieres.push({
         "order": i,
-        "minute": matiere.minute,
+        "time": matiere.minute,
         "matierId": matiere.id
       })
       matiere.questions.forEach((question, i) => {
@@ -212,6 +212,7 @@ const AddQuizDrawer = ({ open, toggle, onSuccess }) => {
                 <RenderMatiere
                   control={control}
                   withAdd={false}
+                  disabled={!categorie}
                   required={false}
                   field='subject'
                   handleChangeMatiere={element => handleChangeMatiere(element.target.value)}

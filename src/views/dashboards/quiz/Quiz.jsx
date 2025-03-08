@@ -8,14 +8,16 @@ import { Button, Card, CardContent, CardHeader, Grid, Typography } from '@mui/ma
 import QuizCard from './components/QuizCard'
 import QuizFilter from './components/QuizFilter'
 import AddQuizDrawer from './components/AddQuizDrawer'
-import { getAllQuizzes } from '@/services/quizService'
+import { deleteQuiz, getAllQuizzes, updateQuiz } from '@/services/quizService'
 import RenderPreviewQuiz from './components/RenderPreviewQuiz'
+import QuizSetting from './components/QuizSetting'
 
 const Quiz = () => {
     const [open, setOpen] = useState(false)
     const [quizzes, setQuizzes] = useState([])
     const [openModalPrev, setOpenModalPrev] = useState(false)
     const [selectedQuiz, setSelectedQuiz] = useState({})
+    const [openSetting, setOpenSetting] = useState(false)
 
     const toggleModalPrev = () => setOpenModalPrev(!openModalPrev)
 
@@ -36,6 +38,31 @@ const Quiz = () => {
 
     const onSuccessAddQuiz = (quiz) => {
          handleFetchQuizzes()
+    }
+
+    const handleUpdateQuiz = async (updatedQuiz) => {
+        try {
+            // Appel à votre API pour mettre à jour le quiz
+            await updateQuiz(updatedQuiz.id, updatedQuiz)
+            handleFetchQuizzes() // Rafraîchir la liste
+        } catch (error) {
+            console.error('Error updating quiz:', error)
+        }
+    }
+
+    const handleClickSetting = (quiz) => {
+        setSelectedQuiz(quiz)
+        setOpenSetting(true)
+    }
+
+    const handleDeleteQuiz = async (quizId) => {
+        try {
+            // Appel à votre API pour supprimer le quiz
+            await deleteQuiz(quizId)
+            handleFetchQuizzes() // Rafraîchir la liste
+        } catch (error) {
+            console.error('Error deleting quiz:', error)
+        }
     }
 
     useEffect(() => {
@@ -64,7 +91,12 @@ const Quiz = () => {
                     {
                         quizzes.map((quiz) => (
                             <Grid item sm={4} key={quiz.id}>
-                                <QuizCard quiz={quiz} onClickPreview={() => handleClickPreview(quiz)} />
+                                <QuizCard 
+                                    quiz={quiz} 
+                                    onClickPreview={() => handleClickPreview(quiz)} 
+                                    onCLickSetting={() => handleClickSetting(quiz)} 
+                                    onDeleteQuiz={() => handleDeleteQuiz(quiz.id)} 
+                                />
                             </Grid>
                         ))
                     }
@@ -79,6 +111,13 @@ const Quiz = () => {
                 open={open}
                 onSuccess={onSuccessAddQuiz}
                 toggle={() => setOpen(!open)}
+            />
+            <QuizSetting 
+                open={openSetting}
+                toggle={() => setOpenSetting(!openSetting)}
+                quiz={selectedQuiz}
+                onUpdateQuiz={handleUpdateQuiz}
+                onDeleteQuiz={handleDeleteQuiz}
             />
         </div>
     )
