@@ -79,6 +79,7 @@ model quiz {
   level              Int?                 @default(1)
   time               Int?
   is_prenium         Int                  @default(0) @db.SmallInt
+  is_active          Boolean?
   category           category             @relation(fields: [categoryId], references: [id])
   quizMatieres       quizmatiere[]
   quizQuestions      quizquestion[]

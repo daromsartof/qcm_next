@@ -2,14 +2,35 @@
 import React from 'react'
 
 import moment from 'moment'
-import { Button, Card, CardContent, CardHeader, Divider } from '@mui/material'
+import { Button, Card, CardContent, CardHeader, Divider, Chip, Box } from '@mui/material'
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium'
+import PublicIcon from '@mui/icons-material/Public'
+import CircleIcon from '@mui/icons-material/Circle'
 
 const QuizCard = ({ quiz, onClickPreview, onCLickSetting }) => {
-
-    
-return (
+    return (
         <Card>
-            <CardHeader title={quiz.title} />
+            <CardHeader 
+                title={quiz.title}
+                action={
+                    <Box sx={{ display: 'flex', gap: 1 }}>
+                        <Chip
+                            size="small"
+                            icon={<CircleIcon sx={{ fontSize: '0.8rem' }} />}
+                            label={quiz.is_active ? 'Actif' : 'Inactif'}
+                            color={quiz.is_active ? 'success' : 'default'}
+                            variant="outlined"
+                        />
+                        <Chip
+                            size="small"
+                            icon={quiz.is_prenium ? <WorkspacePremiumIcon /> : <PublicIcon />}
+                            label={quiz.is_prenium ? 'Premium' : 'Gratuit'}
+                            color={quiz.is_prenium ? 'warning' : 'info'}
+                            variant="outlined"
+                        />
+                    </Box>
+                }
+            />
             <CardContent>
                 <div className='mb-4'>
                     <p>
@@ -39,7 +60,6 @@ return (
                     </Button>
                 </div>
             </CardContent>
-
         </Card>
     )
 }

@@ -32,8 +32,8 @@ const QuizSetting = ({ open, toggle, quiz, onUpdateQuiz, onDeleteQuiz }) => {
     try {
       setLoading(true)
       await onUpdateQuiz({
-        ...quiz,
-        isActive: !quiz.isActive
+        id: quiz.id,
+        is_active: !quiz.is_active
       })
     } catch (error) {
       console.error('Error updating quiz status:', error)
@@ -46,8 +46,8 @@ const QuizSetting = ({ open, toggle, quiz, onUpdateQuiz, onDeleteQuiz }) => {
     try {
       setLoading(true)
       await onUpdateQuiz({
-        ...quiz,
-        isPremium: !quiz.isPremium
+        id: quiz.id,
+        is_prenium: quiz.is_prenium === 0 ? 1 : 0
       })
     } catch (error) {
       console.error('Error updating quiz premium status:', error)
@@ -88,7 +88,7 @@ const QuizSetting = ({ open, toggle, quiz, onUpdateQuiz, onDeleteQuiz }) => {
                     <FormControlLabel
                       control={
                         <Switch
-                          checked={quiz?.isActive}
+                          defaultChecked={quiz?.is_active}
                           onChange={handleToggleStatus}
                           disabled={loading}
                         />
@@ -107,7 +107,7 @@ const QuizSetting = ({ open, toggle, quiz, onUpdateQuiz, onDeleteQuiz }) => {
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <Typography variant="h6">Type d&apos;accès</Typography>
-                      {quiz?.isPremium ? (
+                      {quiz?.is_prenium ? (
                         <WorkspacePremiumIcon color="warning" />
                       ) : (
                         <PublicIcon color="primary" />
@@ -116,12 +116,14 @@ const QuizSetting = ({ open, toggle, quiz, onUpdateQuiz, onDeleteQuiz }) => {
                     <FormControlLabel
                       control={
                         <Switch
-                          checked={quiz?.isPremium}
+                          defaultChecked={quiz?.is_prenium === 1}
+
+                         // checked={quiz?.is_prenium}
                           onChange={handleTogglePremium}
                           disabled={loading}
                         />
                       }
-                      label={quiz?.isPremium ? 'Premium' : 'Gratuit'}
+                      label={quiz?.is_prenium ? 'Premium' : 'Gratuit'}
                     />
                   </Box>
                 </CardContent>
