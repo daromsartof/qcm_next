@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 
 import { useRouter } from 'next/navigation'
 
-import { Button, Card, CardContent, CardHeader, Grid, Typography, Pagination, Box } from '@mui/material'
+import { Button, Card, CardContent, CardHeader, Grid, Typography, Pagination, Box, CircularProgress, Skeleton } from '@mui/material'
 
 import QuizCard from './components/QuizCard'
 import QuizFilter from './components/QuizFilter'
@@ -19,8 +19,12 @@ const Quiz = () => {
     const [selectedQuiz, setSelectedQuiz] = useState({})
     const [openSetting, setOpenSetting] = useState(false)
     const [page, setPage] = useState(1)
+    const [categoryId, setCategoryId] = useState(null)
     const [totalPages, setTotalPages] = useState(1)
+    const [status, setStatus] = useState(null)
+    const [premium, setPremium] = useState(null)
     const itemsPerPage = 6
+    const [loading, setLoading] = useState(true)
 
     const toggleModalPrev = () => setOpenModalPrev(!openModalPrev)
 
@@ -29,14 +33,17 @@ const Quiz = () => {
         toggleModalPrev()
     }
 
-    const handleFetchQuizzes = async () => {
+    const handleFetchQuizzes = async (categoryId, status, premium) => {
         try {
-            const quizzes = await getAllQuizzes()
+            setLoading(true)
+            const quizzes = await getAllQuizzes(categoryId, status, premium)
 
             setQuizzes(quizzes)
             setTotalPages(Math.ceil(quizzes.length / itemsPerPage))
         } catch (error) {
-            console.error('Error fetching matieres:', error)
+            console.error('Error fetching quizzes:', error)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -49,12 +56,12 @@ const Quiz = () => {
         const startIndex = (page - 1) * itemsPerPage
         const endIndex = startIndex + itemsPerPage
 
-        
-return quizzes.slice(startIndex, endIndex)
+
+        return quizzes.slice(startIndex, endIndex)
     }
 
     const onSuccessAddQuiz = (quiz) => {
-         handleFetchQuizzes()
+        handleFetchQuizzes()
     }
 
     const handleUpdateQuiz = async (updatedQuiz) => {
@@ -90,7 +97,22 @@ return quizzes.slice(startIndex, endIndex)
     useEffect(() => {
         handleFetchQuizzes()
     }, [])
-    
+
+    const handleChangeCategory = (categorie) => {
+        setCategoryId(categorie)
+        handleFetchQuizzes(categorie, status, premium)
+    }
+
+    const handleChangeStatus = (status) => {
+        setStatus(status)
+        handleFetchQuizzes(categoryId, status, premium)
+    }
+
+    const handleChangePremium = (premium) => {
+        setPremium(premium)
+        handleFetchQuizzes(categoryId, status, premium)
+    }
+
     return (
         <div>
             <div className='mb-2 flex justify-between'>
@@ -101,40 +123,75 @@ return quizzes.slice(startIndex, endIndex)
                     Ajouter
                 </Button>
             </div>
-            <QuizFilter 
+            <QuizFilter
+                onChangeCategory={handleChangeCategory}
+                onChangeStatus={handleChangeStatus}
+                onChangePremium={handleChangePremium}
                 showFilter={{
                     category: true,
                     source: false,
+                    status: true,
+                    premium: true,
                     subject: false
                 }}
             />
             <CardContent className='px-0'>
-                <Grid container spacing={6}>
-                    {
-                        getCurrentPageQuizzes().map((quiz) => (
-                            <Grid item sm={4} key={quiz.id}>
-                                <QuizCard 
-                                    quiz={quiz} 
-                                    onClickPreview={() => handleClickPreview(quiz)} 
-                                    onCLickSetting={() => handleClickSetting(quiz)} 
-                                    onDeleteQuiz={() => handleDeleteQuiz(quiz.id)} 
-                                />
+                {loading ? (
+                    <Grid container spacing={6}>
+                        {[...Array(6)].map((_, index) => (
+                            <Grid item sm={4} key={index}>
+                                <Card>
+                                    <CardHeader
+                                        title={<Skeleton variant="text" width={200} />}
+                                        action={
+                                            <Box sx={{ display: 'flex', gap: 1 }}>
+                                                <Skeleton variant="rounded" width={80} height={24} />
+                                                <Skeleton variant="rounded" width={80} height={24} />
+                                            </Box>
+                                        }
+                                    />
+                                    <CardContent>
+                                        <Skeleton variant="text" width="60%" />
+                                        <Skeleton variant="text" width="40%" />
+                                        <Skeleton variant="text" width="50%" />
+                                        <Skeleton variant="text" width="45%" />
+                                        <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
+                                            <Skeleton variant="rounded" width={120} height={36} />
+                                            <Skeleton variant="rounded" width={120} height={36} />
+                                        </Box>
+                                    </CardContent>
+                                </Card>
                             </Grid>
-                        ))
-                    }
-                </Grid>
-                {totalPages > 1 && (
-                    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-                        <Pagination 
-                            count={totalPages}
-                            page={page}
-                            onChange={handlePageChange}
-                            color="primary"
-                            size="large"
-                            showFirstButton
-                            showLastButton
-                        />
-                    </Box>
+                        ))}
+                    </Grid>
+                ) : (
+                    <>
+                        <Grid container spacing={6}>
+                            {getCurrentPageQuizzes().map((quiz) => (
+                                <Grid item sm={4} key={quiz.id}>
+                                    <QuizCard
+                                        quiz={quiz}
+                                        onClickPreview={() => handleClickPreview(quiz)}
+                                        onCLickSetting={() => handleClickSetting(quiz)}
+                                        onDeleteQuiz={() => handleDeleteQuiz(quiz.id)}
+                                    />
+                                </Grid>
+                            ))}
+                        </Grid>
+                        {totalPages > 1 && (
+                            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+                                <Pagination
+                                    count={totalPages}
+                                    page={page}
+                                    onChange={handlePageChange}
+                                    color="primary"
+                                    size="large"
+                                    showFirstButton
+                                    showLastButton
+                                />
+                            </Box>
+                        )}
+                    </>
                 )}
             </CardContent>
             <RenderPreviewQuiz
@@ -142,12 +199,12 @@ return quizzes.slice(startIndex, endIndex)
                 open={openModalPrev}
                 handleClose={toggleModalPrev}
             />
-            <AddQuizDrawer 
+            <AddQuizDrawer
                 open={open}
                 onSuccess={onSuccessAddQuiz}
                 toggle={() => setOpen(!open)}
             />
-            <QuizSetting 
+            <QuizSetting
                 open={openSetting}
                 toggle={() => setOpenSetting(!openSetting)}
                 quiz={selectedQuiz}

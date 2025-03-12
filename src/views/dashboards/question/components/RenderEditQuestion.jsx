@@ -42,7 +42,7 @@ const validationSchema = yup.object().shape({
 const DEFAULT_CHECK = false
 const REPONSE_DEFAULT_CHECKED = false
 
-const RenderEditQuestion = ({ open, toggle, questionData }) => {
+const RenderEditQuestion = ({ open, toggle, questionData, onSuccess }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [image, setImage] = useState(null)
@@ -100,6 +100,7 @@ const RenderEditQuestion = ({ open, toggle, questionData }) => {
       })
       setIsSuccess(true)
       handleClose()
+      onSuccess()
     } catch (error) {
       console.log(error)
     } finally {

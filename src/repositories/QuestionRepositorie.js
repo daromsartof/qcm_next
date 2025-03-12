@@ -154,7 +154,9 @@ return prisma.question.findMany({
 
         const reponseData = await Promise.all(
             reponses.map(async (reponse) => {
-                return await ReponseRepositorie.updateAnswer(reponse.id, {
+                console.log(reponse);
+                
+return await ReponseRepositorie.updateAnswer(reponse.id, {
                     title: reponse.title,
                     description: reponse.explaination,
                     isCorrect: reponse.isCorrect === 1,

@@ -3,12 +3,20 @@ import prisma from "@/services/Utils/prisma"
 
 class QuizRepositorie {
     async getAllQuizzes({
-        categoryId
+        categoryId,
+        status,
+        premium
     }) {
         return prisma.quiz.findMany({
             where: {
                 ...(categoryId && {
                     categoryId: parseInt(categoryId)
+                }),
+                ...(status && {
+                    is_active: status === 'active'
+                }),
+                ...(premium && {
+                    is_prenium: premium === 'premium' ? 1 : 0
                 })
             },
             include: {

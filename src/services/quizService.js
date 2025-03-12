@@ -1,9 +1,15 @@
 import axios from 'axios'
 
 
-export const getAllQuizzes = async () => {
+export const getAllQuizzes = async (categoryId, status, premium) => {
     try {
-        const response = await axios.get('/api/quiz')
+        const response = await axios.get('/api/quiz', {
+            params: {
+                categoryId : categoryId || undefined,
+                status : status || undefined,
+                premium : premium || undefined
+            }
+        })
 
 
         return response.data

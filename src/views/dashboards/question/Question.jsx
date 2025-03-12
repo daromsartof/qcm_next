@@ -1,12 +1,13 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 
-import { Button, Card, Typography } from '@mui/material'
+import { Button, Card, CardContent, InputAdornment, TextField, Typography } from '@mui/material'
+
+import SearchIcon from '@mui/icons-material/Search'
 
 import { FilterProvider } from '@/contexts/FilterContext'
 import RenderTable from './components/RenderTable'
 import { getAllQuestions } from '@/services/questionService'
-
 import RenderAddQuestion from './components/RenderAddQuestion'
 import QuizFilter from '../quiz/components/QuizFilter'
 import RenderEditQuestion from './components/RenderEditQuestion'
@@ -18,7 +19,7 @@ const Question = () => {
     const [open, setOpen] = useState(false)
     const [openEdit, setOpenEdit] = useState(false)
     const [selectedQuestion, setSelectedQuestion] = useState(null)
-   
+    const [searchTerm, setSearchTerm] = useState('')
 
     const toggle = () => {
         setOpen(!open)
@@ -49,6 +50,9 @@ const Question = () => {
         setLoading(false)
     }
     
+    const filteredQuestions = questions.filter(question =>
+        question.title?.toLowerCase().includes(searchTerm.toLowerCase())
+    )
 
     useEffect(() => {
         handleFetchQuestion()
@@ -69,22 +73,43 @@ const Question = () => {
                     <Button variant="contained" onClick={toggle}>Ajouter</Button>
                 </div>
                 <div className='mb-1'>
-                <QuizFilter 
-                    onChangeCategory={(categorie) => {
-                        onChangeFilter('categoryId', categorie)
-                    }}
-                    onChangeSubject={(matiereId) => {
-                        onChangeFilter('matiereId', matiereId)
-                    }}
-                    onChangeSource={(sourceId) => {
-                        onChangeFilter('sourceId', sourceId)
-                    }}
-                />
+                    <QuizFilter 
+                        onChangeCategory={(categorie) => {
+                            onChangeFilter('categoryId', categorie)
+                            setSearchTerm('')
+                        }}
+                        onChangeSubject={(matiereId) => {
+                            onChangeFilter('matiereId', matiereId)
+                            setSearchTerm('')
+                        }}
+                        onChangeSource={(sourceId) => {
+                            onChangeFilter('sourceId', sourceId)
+                            setSearchTerm('')
+                        }}
+                    />
                 </div>
+                <Card sx={{ mb: 4 }}>
+                    <CardContent>
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            placeholder="Rechercher une question..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <SearchIcon />
+                                    </InputAdornment>
+                                )
+                            }}
+                        />
+                    </CardContent>
+                </Card>
                 <Card>
                     <RenderTable
                         loading={loading}
-                        data={questions}
+                        data={filteredQuestions}
                         setData={setQuestions}
                         onEdit={toggleEdit}
                     />
@@ -92,12 +117,14 @@ const Question = () => {
             </div>
             <RenderAddQuestion   
                 open={open}
+                onSuccess={handleFetchQuestion}
                 toggle={toggle}
             />
             <RenderEditQuestion
                 open={openEdit}
                 toggle={toggleEdit}
                 questionData={selectedQuestion}
+                onSuccess={handleFetchQuestion}
             />
             
         </FilterProvider>

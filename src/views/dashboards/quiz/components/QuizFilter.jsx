@@ -8,14 +8,18 @@ import { getAllSources } from '@/services/sourceService'
 import { getAllMatieres } from '@/services/matiereService'
 
 const QuizFilter = ({
-    onChangeSubject = () => {},
-    onChangeCategory = () => {},
-    onChangeSource = () => {},
-    showFilter = {
-        subject: true,
-        category: true,
-        source: true
-    }
+  onChangeSubject = () => { },
+  onChangeCategory = () => { },
+  onChangeSource = () => { },
+  onChangeStatus = () => { },
+  onChangePremium = () => { },
+  showFilter = {
+    subject: true,
+    category: true,
+    source: true,
+    status: false,
+    premium: false
+  }
 }) => {
   const [categories, setCategories] = useState([])
   const [sources, setSources] = useState([])
@@ -27,7 +31,7 @@ const QuizFilter = ({
       const categorys = await getAllCategories()
 
       setCategories(categorys)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const handleGetSource = async () => {
@@ -35,7 +39,7 @@ const QuizFilter = ({
       const source = await getAllSources()
 
       setSources(source)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   const handleGetSubject = async () => {
@@ -43,7 +47,7 @@ const QuizFilter = ({
       const matiers = await getAllMatieres()
 
       setSubjects(matiers)
-    } catch (error) {}
+    } catch (error) { }
   }
 
   useEffect(() => {
@@ -57,58 +61,84 @@ const QuizFilter = ({
   }, [])
 
   return (
-    <Card> 
+    <Card>
       <CardContent>
         <Grid container spacing={6}>
           {
             showFilter.category && (
-                 <Grid item xs={12} sm={3}>
-                    <CustomTextField select fullWidth onChange={(e) => onChangeCategory(e.target.value)} defaultValue={0} label='Catégorie' id='select-category'>
-                    <MenuItem value={0} selected>
-                        <em>Tous</em>
+              <Grid item xs={12} sm={3}>
+                <CustomTextField select fullWidth onChange={(e) => onChangeCategory(e.target.value)} defaultValue={0} label='Catégorie' id='select-category'>
+                  <MenuItem value={0} selected>
+                    <em>Tous</em>
+                  </MenuItem>
+                  {categories.map((category, index) => (
+                    <MenuItem key={index} value={category.id}>
+                      {category.title}
                     </MenuItem>
-                    {categories.map((category, index) => (
-                        <MenuItem key={index} value={category.id}>
-                        {category.title}
-                        </MenuItem>
-                    ))}
-                    </CustomTextField>
-                 </Grid>
+                  ))}
+                </CustomTextField>
+              </Grid>
             )
           }
           {
             showFilter.source && (
- <Grid item xs={12} sm={3}>
-            <CustomTextField select fullWidth onChange={(e) => onChangeSource(e.target.value)} defaultValue={0} label='Source' id='select-source'>
-              <MenuItem value={0} selected>
-                <em>Tous</em>
-              </MenuItem>
-              {sources.map((source, index) => (
-                <MenuItem key={index} value={source.id}>
-                  {source.title}
-                </MenuItem>
-              ))}
-            </CustomTextField>
-          </Grid>
+              <Grid item xs={12} sm={3}>
+                <CustomTextField select fullWidth onChange={(e) => onChangeSource(e.target.value)} defaultValue={0} label='Source' id='select-source'>
+                  <MenuItem value={0} selected>
+                    <em>Tous</em>
+                  </MenuItem>
+                  {sources.map((source, index) => (
+                    <MenuItem key={index} value={source.id}>
+                      {source.title}
+                    </MenuItem>
+                  ))}
+                </CustomTextField>
+              </Grid>
             )
           }
           {
             showFilter.subject && (
-<Grid item xs={12} sm={3}>
-            <CustomTextField select fullWidth onChange={(e) => onChangeSubject(e.target.value)} defaultValue={0} label='Matière' id='select-matière'>
-              <MenuItem value={0} selected>
-                <em>Tous</em>
-              </MenuItem>
-              {subjects.map((subject, index) => (
-                <MenuItem key={index} value={subject.id}>
-                  {subject.title}
-                </MenuItem>
-              ))}
-            </CustomTextField>
-          </Grid>
+              <Grid item xs={12} sm={3}>
+                <CustomTextField select fullWidth onChange={(e) => onChangeSubject(e.target.value)} defaultValue={0} label='Matière' id='select-matière'>
+                  <MenuItem value={0} selected>
+                    <em>Tous</em>
+                  </MenuItem>
+                  {subjects.map((subject, index) => (
+                    <MenuItem key={index} value={subject.id}>
+                      {subject.title}
+                    </MenuItem>
+                  ))}
+                </CustomTextField>
+              </Grid>
             )
           }
-          
+          {
+            showFilter.status && (
+              <Grid item xs={12} sm={3}>
+                <CustomTextField select fullWidth onChange={(e) => onChangeStatus(e.target.value)} defaultValue="all" label='Statut' id='select-status'>
+                  <MenuItem value="all" selected>
+                    <em>Tous</em>
+                  </MenuItem>
+                  <MenuItem value="active">Actif</MenuItem>
+                  <MenuItem value="inactive">Inactif</MenuItem>
+                </CustomTextField>
+              </Grid>
+            )
+          }
+          {
+            showFilter.premium && (
+              <Grid item xs={12} sm={3}>
+                <CustomTextField select fullWidth onChange={(e) => onChangePremium(e.target.value)} defaultValue="all" label='Type' id='select-premium'>
+                  <MenuItem value="all" selected>
+                    <em>Tous</em>
+                  </MenuItem>
+                  <MenuItem value="premium">Premium</MenuItem>
+                  <MenuItem value="free">Gratuit</MenuItem>
+                </CustomTextField>
+              </Grid>
+            )
+          }
+
         </Grid>
       </CardContent>
     </Card>

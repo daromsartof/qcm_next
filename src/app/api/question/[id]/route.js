@@ -39,7 +39,38 @@ export async function PUT(req, { params }) {
         const [key, value] = entry;
 
         if (key.startsWith('reponses[')) {
-          reponses.push(JSON.parse(value)); // Supposant que les réponses sont envoyées sous forme JSON
+          //reponses.push(JSON.parse(value)); // Supposant que les réponses sont envoyées sous forme JSON
+          // Extract the index from the key (e.g., "reponses[0]" -> "0")
+          const match = key.match(/\[(\d+)\]/);
+
+          if (match) {
+            const index = parseInt(match[1]);
+
+
+            // If this is an ID field, parse it separately
+            if (key.endsWith('[id]')) {
+              reponses[index] = {
+                ...reponses[index],
+                id: parseInt(value)
+              }
+            }
+
+            // If this is a title field, parse it separately  
+            else if (key.endsWith('[title]')) {
+              reponses[index] = {
+                ...reponses[index],
+                title: value
+              }
+            }
+
+            // If this is an isCorrect field, parse it separately
+            else if (key.endsWith('[isCorrect]')) {
+              reponses[index] = {
+                ...reponses[index],
+                isCorrect: parseInt(value)
+              }
+            }
+          }
         }
       }
   

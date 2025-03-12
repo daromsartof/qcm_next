@@ -42,14 +42,14 @@ const validationSchema = yup.object().shape({
 const DEFAULT_CHECK = false
 const REPONSE_DEFAULT_CHECKED = false
 
-const RenderAddQuestion = ({ open, toggle }) => {
+const RenderAddQuestion = ({ open, toggle, onSuccess }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [image, setImage] = useState(null)
   const [reponseImage, setReponseImage] = useState(null)
 
   const [reponses, setReponses] = useState({
-    0: {
+    1: {
       title: '',
       isCorrect: REPONSE_DEFAULT_CHECKED,
       explaination: ''
@@ -97,6 +97,7 @@ const RenderAddQuestion = ({ open, toggle }) => {
       })
       setIsSuccess(true)
       handleClose()
+      onSuccess()
     } catch (error) {
       console.log(error)
     } finally {

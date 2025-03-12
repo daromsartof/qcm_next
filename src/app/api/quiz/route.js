@@ -7,9 +7,13 @@ export async function GET(req) {
     try {
         const { searchParams } = new URL(req.url)
         const categoryId = searchParams.get('categoryId')
+        const status = searchParams.get('status')   
+        const premium = searchParams.get('premium')
 
         const quizzes = await QuizRepositorie.getAllQuizzes({
-            categoryId
+            categoryId,
+            status,
+            premium
         })
 
 
@@ -29,11 +33,11 @@ export async function POST(req) {
             matieresIds: body.quizMatieres,
             questionIds: body.quizQuestions
         })
-        
+
         return NextResponse.json(quiz)
     } catch (error) {
         console.log(error)
-        
+
         return NextResponse.json({ error: "unexpected error" }, { status: 500 })
     }
 }
@@ -48,12 +52,12 @@ export async function DELETE(req) {
         }
 
         await QuizRepositorie.deleteQuiz(id)
-        
+
         return NextResponse.json({ message: "Quiz deleted successfully" })
     } catch (error) {
         console.log(error)
-        
-return NextResponse.json({ error: "unexpected error" }, { status: 500 })
+
+        return NextResponse.json({ error: "unexpected error" }, { status: 500 })
     }
 }
 
@@ -75,11 +79,11 @@ export async function PUT(req) {
             is_active: body.is_active,
             is_prenium: body.is_prenium
         })
-        
+
         return NextResponse.json(updatedQuiz)
     } catch (error) {
         console.log(error)
-        
-return NextResponse.json({ error: "unexpected error" }, { status: 500 })
+
+        return NextResponse.json({ error: "unexpected error" }, { status: 500 })
     }
 }
