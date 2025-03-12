@@ -15,8 +15,7 @@ export async function GET(req) {
             status,
             premium
         })
-
-
+        
         return NextResponse.json(quizzes)
     } catch (error) {
         return NextResponse.json({ error: "unexpected error" }, { status: 500 })
