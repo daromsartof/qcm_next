@@ -158,7 +158,7 @@ return (
     >
       <div>
         <Card>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)} onReset={handleClose}>
             <CardContent>
               <Grid container spacing={6}>
                 <Grid item xs={12}>
@@ -265,6 +265,15 @@ return (
                 ) : (
                   'Sauvegarder'
                 )}
+              </Button>
+               <Button
+                disabled={isLoading}
+                type='reset'
+                variant='outline'
+                color={!isLoading && isSuccess ? 'success' : 'primary'}
+                className='mie-2'
+              >
+                Annuler
               </Button>
             </CardActions>
           </form>
