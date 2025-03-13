@@ -93,7 +93,7 @@ const RenderEditQuestion = ({ open, toggle, questionData, onSuccess }) => {
         reponses: Object.values(reponses).map(rep => ({
           id: rep.id,
           title: rep.title,
-          isCorrect: rep.isCorrect,
+          isCorrect: rep.isCorrect ? 1 : 0,
           explaination: rep.explaination
   
         }))
