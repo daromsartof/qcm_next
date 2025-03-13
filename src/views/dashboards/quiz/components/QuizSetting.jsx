@@ -24,7 +24,7 @@ import PublicIcon from '@mui/icons-material/Public'
 
 import AddQuestion from './AddQuestion'
 
-const QuizSetting = ({ open, toggle, quiz, onUpdateQuiz, onDeleteQuiz }) => {
+const QuizSetting = ({ open, toggle, quiz, onUpdateQuiz, onDeleteQuiz, onSuccess }) => {
   const [openAddQuestion, setOpenAddQuestion] = useState(false)
   const [loading, setLoading] = useState(false)
   
@@ -184,9 +184,7 @@ const QuizSetting = ({ open, toggle, quiz, onUpdateQuiz, onDeleteQuiz }) => {
         categorie={quiz.category}
         onSuccess={() => {
           setOpenAddQuestion(false)
-
-          // Rafraîchir les données du quiz
-          if (onUpdateQuiz) onUpdateQuiz(quiz.id)
+          if (onSuccess) onSuccess()
         }}
       />
     </>

@@ -96,6 +96,7 @@ class QuizRepositorie {
                 }),
                 ...(questionIds && {
                     quizQuestions: {
+                        deleteMany: {},
                         createMany: {
                             data: questionIds.map((questionId) => ({
                                 questionOrder: questionId.order,

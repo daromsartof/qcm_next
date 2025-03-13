@@ -208,6 +208,7 @@ const Quiz = () => {
                 open={openSetting}
                 toggle={() => setOpenSetting(!openSetting)}
                 quiz={selectedQuiz}
+                onSuccess={handleFetchQuizzes}
                 onUpdateQuiz={handleUpdateQuiz}
                 onDeleteQuiz={handleDeleteQuiz}
             />

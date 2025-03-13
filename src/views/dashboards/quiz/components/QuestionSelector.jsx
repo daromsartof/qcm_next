@@ -10,21 +10,48 @@ import {
   Typography,
   Button,
   TextField,
-  InputAdornment
+  InputAdornment,
+  Tabs,
+  Tab,
+  Divider,
+  IconButton,
+  Chip,
+  CircularProgress,
+  Alert
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
+import DeleteIcon from '@mui/icons-material/Delete'
+import AddIcon from '@mui/icons-material/Add'
 
 import { getAllQuestions } from '@/services/questionService'
 
-const QuestionSelector = ({ matiereId, categoryId, onSave }) => {
+const QuestionSelector = ({ matiereId, categoryId, onSave, quizQuestions, loading: savingLoading }) => {
   const [questions, setQuestions] = useState([])
-  const [selectedQuestions, setSelectedQuestions] = useState([])
+  const [existingQuestions, setExistingQuestions] = useState([])
+  const [newQuestions, setNewQuestions] = useState([])
+  const [removedQuestions, setRemovedQuestions] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [loading, setLoading] = useState(false)
+  const [tabValue, setTabValue] = useState(0)
 
   useEffect(() => {
-    fetchQuestions()
+    if (matiereId && categoryId) {
+      fetchQuestions()
+    }
   }, [matiereId, categoryId])
+
+  useEffect(() => {
+    if (quizQuestions && quizQuestions.length > 0) {
+      // Trouver les questions existantes pour cette matière
+      const existingQs = quizQuestions
+        .filter(q => q.question && q.question.matiereId === matiereId)
+        .map(q => q.questionId)
+      
+      setExistingQuestions(existingQs)
+    } else {
+      setExistingQuestions([])
+    }
+  }, [quizQuestions, matiereId])
 
   const fetchQuestions = async () => {
     try {
@@ -39,27 +66,72 @@ const QuestionSelector = ({ matiereId, categoryId, onSave }) => {
     }
   }
 
-  const handleToggleQuestion = (questionId) => {
-    setSelectedQuestions(prev => {
-      if (prev.includes(questionId)) {
-        return prev.filter(id => id !== questionId)
-      }
+  const handleTabChange = (event, newValue) => {
+    setTabValue(newValue)
+  }
 
-      
-return [...prev, questionId]
-    })
+  const handleAddQuestion = (questionId) => {
+    if (!newQuestions.includes(questionId)) {
+      setNewQuestions([...newQuestions, questionId])
+    }
+    
+    // Si cette question était dans la liste des supprimées, la retirer
+    if (removedQuestions.includes(questionId)) {
+      setRemovedQuestions(removedQuestions.filter(id => id !== questionId))
+    }
+  }
+
+  const handleRemoveQuestion = (questionId) => {
+    // Si c'est une question existante, l'ajouter à la liste des supprimées
+    if (existingQuestions.includes(questionId)) {
+      setRemovedQuestions([...removedQuestions, questionId])
+    }
+    
+    // Si c'est une nouvelle question, la retirer de la liste des ajoutées
+    if (newQuestions.includes(questionId)) {
+      setNewQuestions(newQuestions.filter(id => id !== questionId))
+    }
   }
 
   const handleSave = () => {
-    onSave(selectedQuestions)
+    onSave(newQuestions, removedQuestions)
+  }
+
+  const getQuestionStatus = (questionId) => {
+    if (existingQuestions.includes(questionId) && !removedQuestions.includes(questionId)) {
+      return 'existing'
+    }
+
+    if (newQuestions.includes(questionId)) {
+      return 'new'
+    }
+
+    if (removedQuestions.includes(questionId)) {
+      return 'removed'
+    }
+
+    
+return 'available'
   }
 
   const filteredQuestions = questions.filter(question =>
     question.title.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
+  const isQuestionSelected = (questionId) => {
+    const status = getQuestionStatus(questionId)
+
+    
+return status === 'existing' || status === 'new'
+  }
+
   return (
     <Box>
+      <Tabs value={tabValue} onChange={handleTabChange} sx={{ mb: 2 }}>
+        <Tab label="Toutes les questions" />
+        <Tab label={`Questions sélectionnées (${existingQuestions.length - removedQuestions.length + newQuestions.length})`} />
+      </Tabs>
+
       <TextField
         fullWidth
         margin="normal"
@@ -76,38 +148,106 @@ return [...prev, questionId]
         }}
       />
 
-      <Grid container spacing={2} sx={{ mt: 2, maxHeight: '400px', overflow: 'auto' }}>
-        {filteredQuestions.map((question) => (
-          <Grid item xs={12} key={question.id}>
-            <Card variant="outlined">
-              <CardContent>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={selectedQuestions.includes(question.id)}
-                      onChange={() => handleToggleQuestion(question.id)}
-                    />
-                  }
-                  label={
-                    <Typography variant="body1">
-                      {question.title}
-                    </Typography>
-                  }
-                />
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+      {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
+          <CircularProgress />
+        </Box>
+      ) : filteredQuestions.length === 0 ? (
+        <Alert severity="info" sx={{ mt: 2 }}>
+          Aucune question trouvée pour cette matière et cette catégorie.
+        </Alert>
+      ) : (
+        <Grid container spacing={2} sx={{ mt: 2, maxHeight: '400px', overflow: 'auto' }}>
+          {filteredQuestions
+            .filter(question => {
+              if (tabValue === 0) return true // Toutes les questions
+              
+return isQuestionSelected(question.id) // Seulement les questions sélectionnées
+            })
+            .map((question) => {
+              const status = getQuestionStatus(question.id)
+              
+              return (
+                <Grid item xs={12} key={question.id}>
+                  <Card 
+                    variant="outlined"
+                    sx={{ 
+                      borderColor: 
+                        status === 'new' ? 'success.main' : 
+                        status === 'removed' ? 'error.main' : 
+                        status === 'existing' ? 'primary.main' : 'divider'
+                    }}
+                  >
+                    <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Box sx={{ flex: 1 }}>
+                        <Typography variant="body1">
+                          {question.title}
+                        </Typography>
+                        <Box sx={{ mt: 1 }}>
+                          {status === 'new' && (
+                            <Chip size="small" label="Nouvelle" color="success" />
+                          )}
+                          {status === 'existing' && (
+                            <Chip size="small" label="Existante" color="primary" />
+                          )}
+                          {status === 'removed' && (
+                            <Chip size="small" label="À supprimer" color="error" />
+                          )}
+                        </Box>
+                      </Box>
+                      <Box>
+                        {status === 'available' || status === 'removed' ? (
+                          <IconButton 
+                            color="success" 
+                            onClick={() => handleAddQuestion(question.id)}
+                          >
+                            <AddIcon />
+                          </IconButton>
+                        ) : (
+                          <IconButton 
+                            color="error" 
+                            onClick={() => handleRemoveQuestion(question.id)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        )}
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              )
+            })}
+        </Grid>
+      )}
 
-      <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
+      <Divider sx={{ my: 3 }} />
+      
+      <Box sx={{ mt: 3, display: 'flex', justifyContent: 'space-between' }}>
+        <Typography>
+          {newQuestions.length > 0 && (
+            <Chip 
+              label={`${newQuestions.length} nouvelle(s) question(s)`} 
+              color="success" 
+              size="small"
+              sx={{ mr: 1 }}
+            />
+          )}
+          {removedQuestions.length > 0 && (
+            <Chip 
+              label={`${removedQuestions.length} question(s) à supprimer`} 
+              color="error" 
+              size="small"
+            />
+          )}
+        </Typography>
         <Button
           variant="contained"
           color="primary"
           onClick={handleSave}
-          disabled={selectedQuestions.length === 0}
+          disabled={newQuestions.length === 0 && removedQuestions.length === 0 || savingLoading}
+          startIcon={savingLoading ? <CircularProgress size={20} /> : null}
         >
-          Ajouter ({selectedQuestions.length}) questions
+          {savingLoading ? 'Enregistrement...' : 'Enregistrer les modifications'}
         </Button>
       </Box>
     </Box>

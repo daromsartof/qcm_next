@@ -20,28 +20,50 @@ import {
   Alert,
   Stepper,
   Step,
-  StepLabel
+  StepLabel,
+  CircularProgress
 } from '@mui/material'
 
-import QuestionSelector from './QuestionSelector' // Vous devrez créer ce composant
+import { updateQuiz } from '@/services/quizService'
+import QuestionSelector from './QuestionSelector'
 
-const steps = ['Sélection de la matière', 'Sélection des questions']
+const steps = ['Sélection de la matière', 'Gestion des questions']
 
 const AddQuestion = ({ open, toggle, quiz, onSuccess }) => {
   const [activeStep, setActiveStep] = useState(0)
   const [selectedMatiere, setSelectedMatiere] = useState('')
+  const [selectedMatiereData, setSelectedMatiereData] = useState(null)
   const [timeInMinutes, setTimeInMinutes] = useState('')
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
   // Reset states when modal closes
   useEffect(() => {
     if (!open) {
       setActiveStep(0)
       setSelectedMatiere('')
+      setSelectedMatiereData(null)
       setTimeInMinutes('')
       setError('')
     }
   }, [open])
+
+  // When matiere is selected, find its data
+  useEffect(() => {
+    if (selectedMatiere && quiz) {
+      const matiereData = quiz.quizMatieres.find(
+        (m) => m.matiereId === selectedMatiere
+      )
+
+      setSelectedMatiereData(matiereData)
+      
+      if (matiereData && matiereData.time) {
+        setTimeInMinutes(matiereData.time.toString())
+      } else {
+        setTimeInMinutes('12') // Default value
+      }
+    }
+  }, [selectedMatiere, quiz])
 
   const handleNext = () => {
     if (activeStep === 0) {
@@ -65,12 +87,60 @@ return
     toggle()
   }
 
-  const handleSave = (selectedQuestions) => {
-    console.log({
-      matiereId: selectedMatiere,
-      time: parseInt(timeInMinutes),
-      questions: selectedQuestions
-    })
+  const handleSave = async (selectedQuestionIds, removedQuestionIds) => {
+    try {
+      setLoading(true)
+      
+      // Récupérer toutes les questions actuelles du quiz
+      const currentQuestions = [...quiz.quizQuestions]
+      
+      // Créer le nouveau tableau de questions
+      let updatedQuestions = [...currentQuestions]
+      
+      // Supprimer les questions qui doivent être retirées
+      if (removedQuestionIds.length > 0) {
+        updatedQuestions = updatedQuestions.filter(
+          q => !removedQuestionIds.includes(q.questionId)
+        )
+      }
+      
+      // Formater les nouvelles questions à ajouter
+      const highestOrder = updatedQuestions.reduce(
+        (max, q) => Math.max(max, q.questionOrder || 0), 
+        0 
+      )
+      
+      const newQuestions = selectedQuestionIds.map((questionId, index) => ({
+        questionId: questionId,
+        questionOrder: highestOrder + index + 1,
+        quizId: quiz.id
+      }))
+      
+      // Ajouter les nouvelles questions qui ne sont pas déjà présentes
+      const existingQuestionIds = updatedQuestions.map(q => q.questionId)
+
+      const questionsToAdd = newQuestions.filter(
+        q => !existingQuestionIds.includes(q.questionId)
+      )
+      
+      updatedQuestions = [...updatedQuestions, ...questionsToAdd]
+      
+      // Mettre à jour le quiz
+      await updateQuiz(quiz.id, {
+        quizQuestions: updatedQuestions.map(q => ({
+          questionId: q.questionId,
+          order: q.questionOrder
+        }))
+      })
+      
+      if (onSuccess) onSuccess()
+      toggle()
+    } catch (error) {
+      console.error('Error updating questions:', error)
+      setError('Une erreur est survenue lors de la mise à jour des questions')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const renderStepContent = (quiz) => {
@@ -96,16 +166,6 @@ return
                     </Select>
                   </FormControl>
                 </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    label="Temps (en minutes)"
-                    type="number"
-                    value={timeInMinutes}
-                    onChange={(e) => setTimeInMinutes(e.target.value)}
-                    InputProps={{ inputProps: { min: 1 } }}
-                  />
-                </Grid>
                 {error && (
                   <Grid item xs={12}>
                     <Alert severity="error">{error}</Alert>
@@ -121,6 +181,8 @@ return
             matiereId={selectedMatiere}
             categoryId={quiz?.categoryId}
             onSave={handleSave}
+            quizQuestions={quiz?.quizQuestions || []}
+            loading={loading}
           />
         )
       default:
@@ -131,7 +193,7 @@ return
   return (
     <Dialog open={open} maxWidth="md" fullWidth onClose={handleClose}>
       <DialogTitle>
-        <Typography variant="h5">Ajouter des questions</Typography>
+        <Typography variant="h5">Gérer les questions</Typography>
       </DialogTitle>
       <DialogContent>
         <Box sx={{ mb: 4 }}>
