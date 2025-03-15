@@ -47,105 +47,100 @@ class QuizUserAnswerRepositorie {
             }
         })
 
-        console.log(questions);
+        // Créer les réponses de l'utilisateur
+        await prisma.quizuseranswer.createMany({
+            data: datas.map((data) => ({
+                quizId: parseInt(quizId),
+                userId: parseInt(userId),
+                questionId: parseInt(data.questionId),
+                answerId: parseInt(data.answerId)
+            }))
+        })
 
-        // Commencer une transaction pour s'assurer que toutes les opérations sont effectuées
-        const results = await prisma.$transaction(async (prisma) => {
-            // Créer les réponses de l'utilisateur
-            await prisma.quizuseranswer.createMany({
-                data: datas.map((data) => ({
-                    quizId: parseInt(quizId),
-                    userId: parseInt(userId),
-                    questionId: parseInt(data.questionId),
-                    answerId: parseInt(data.answerId)
-                }))
-            })
+        // Calculer le temps total passé (à adapter selon vos besoins)
+        const timeSpent = quiz.time ? quiz.time * 60 : 0 // Convertir en secondes
 
-            // Calculer le temps total passé (à adapter selon vos besoins)
-            const timeSpent = quiz.time ? quiz.time * 60 : 0 // Convertir en secondes
-
-            // Enregistrer les statistiques du quiz
-            await prisma.userquizstatistics.create({
-                data: {
-                    userId: parseInt(userId),
-                    quizId: parseInt(quizId),
-                    score: Math.round((correctAnswers / totalQuestions) * 100),
-                    timeSpent: timeSpent
-                }
-            })
-
-            // Enregistrer l'activité
-            await prisma.useractivitylog.create({
-                data: {
-                    userId: parseInt(userId),
-                    action: 'QUIZ_COMPLETED',
-                    details: JSON.stringify({
-                        quizTitle: quiz.title,
-                        score: Math.round((correctAnswers / totalQuestions) * 100),
-                        correctAnswers,
-                        totalQuestions
-                    })
-                }
-            })
-
-            // Mettre à jour les performances par matière
-            const quizMatieres = await prisma.quizmatiere.findMany({
-                where: { quizId: parseInt(quizId) }
-            })
-
-            for (const quizMatiere of quizMatieres) {
-                // Calculer le score pour cette matière spécifique
-                const matiereQuestions = quizQuestions.filter(qq =>
-                    qq.question.matiereId === quizMatiere.matiereId
-                )
-
-                let matiereCorrectAnswers = 0
-
-                matiereQuestions.forEach((q) => {
-                    q.question.answers.forEach((a) => {
-                        if (a.isCorrect && datas.find(d =>
-                            d.questionId === q.questionId &&
-                            d.answerId === a.id
-                        )) {
-                            matiereCorrectAnswers++
-                        }
-                    })
-                })
-
-                const matiereScore = Math.round((matiereCorrectAnswers / matiereQuestions.length) * 100)
-
-                await prisma.userperformancebymatiere.upsert({
-                    where: {
-                        userId_matiereId: {
-                            userId: parseInt(userId),
-                            matiereId: quizMatiere.matiereId
-                        }
-                    },
-                    update: {
-                        totalScore: {
-                            increment: matiereScore
-                        },
-                        quizCount: {
-                            increment: 1
-                        }
-                    },
-                    create: {
-                        userId: parseInt(userId),
-                        matiereId: quizMatiere.matiereId,
-                        totalScore: matiereScore,
-                        quizCount: 1
-                    }
-                })
-            }
-
-            return {
-                scorePercentage: Math.round((correctAnswers / totalQuestions) * 100),
-                correctAnswers,
-                totalQuestions,
-                questions,
-                categorie: quiz.categoryId
+        // Enregistrer les statistiques du quiz
+        await prisma.userquizstatistics.create({
+            data: {
+                userId: parseInt(userId),
+                quizId: parseInt(quizId),
+                score: Math.round((correctAnswers / totalQuestions) * 100),
+                timeSpent: timeSpent
             }
         })
+
+        // Enregistrer l'activité
+        await prisma.useractivitylog.create({
+            data: {
+                userId: parseInt(userId),
+                action: 'QUIZ_COMPLETED',
+                details: JSON.stringify({
+                    quizTitle: quiz.title,
+                    score: Math.round((correctAnswers / totalQuestions) * 100),
+                    correctAnswers,
+                    totalQuestions
+                })
+            }
+        })
+
+        const quizMatieres = await prisma.quizmatiere.findMany({
+            where: { quizId: parseInt(quizId) }
+        })
+
+        for (const quizMatiere of quizMatieres) {
+            // Calculer le score pour cette matière spécifique
+            const matiereQuestions = quizQuestions.filter(qq =>
+                qq.question.matiereId === quizMatiere.matiereId
+            )
+
+            let matiereCorrectAnswers = 0
+
+            matiereQuestions.forEach((q) => {
+                q.question.answers.forEach((a) => {
+                    if (a.isCorrect && datas.find(d =>
+                        d.questionId === q.questionId &&
+                        d.answerId === a.id
+                    )) {
+                        matiereCorrectAnswers++
+                    }
+                })
+            })
+
+            const matiereScore = Math.round((matiereCorrectAnswers / matiereQuestions.length) * 100)
+
+            await prisma.userperformancebymatiere.upsert({
+                where: {
+                    userId_matiereId: {
+                        userId: parseInt(userId),
+                        matiereId: quizMatiere.matiereId
+                    }
+                },
+                update: {
+                    totalScore: {
+                        increment: matiereScore
+                    },
+                    quizCount: {
+                        increment: 1
+                    }
+                },
+                create: {
+                    userId: parseInt(userId),
+                    matiereId: quizMatiere.matiereId,
+                    totalScore: matiereScore,
+                    quizCount: 1
+                }
+            })
+        }
+
+        // Commencer une transaction pour s'assurer que toutes les opérations sont effectuées
+        const results = {
+            scorePercentage: Math.round((correctAnswers / totalQuestions) * 100),
+            correctAnswers,
+            totalQuestions,
+            questions,
+            categorie: quiz.categoryId
+        }
 
         return results
     }
@@ -166,7 +161,7 @@ class QuizUserAnswerRepositorie {
                     timeSpent: true // temps total passé
                 }
             })
-    
+
             // Récupérer l'utilisateur avec ses informations de base
             const user = await prisma.user.findUnique({
                 where: { id: parseInt(userId) },
@@ -177,7 +172,7 @@ class QuizUserAnswerRepositorie {
                     roles: true
                 }
             })
-    
+
             // Récupérer les performances par matière
             const matierePerformance = await prisma.userperformancebymatiere.findMany({
                 where: { userId: parseInt(userId) },
@@ -189,7 +184,7 @@ class QuizUserAnswerRepositorie {
                     }
                 }
             })
-    
+
             // Récupérer l'historique des quiz avec détails
             const quizHistory = await prisma.userquizstatistics.findMany({
                 where: { userId: parseInt(userId) },
@@ -209,7 +204,7 @@ class QuizUserAnswerRepositorie {
                     completedAt: 'desc'
                 }
             })
-    
+
             // Récupérer l'activité récente
             const recentActivity = await prisma.useractivitylog.findMany({
                 where: { userId: parseInt(userId) },
@@ -218,12 +213,12 @@ class QuizUserAnswerRepositorie {
                 },
                 take: 10
             })
-    
+
             // Calculer les tendances (30 derniers jours)
             const thirtyDaysAgo = new Date()
 
             thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
-    
+
             const activityData = await prisma.userquizstatistics.groupBy({
                 by: ['completedAt'],
                 where: {
@@ -239,7 +234,7 @@ class QuizUserAnswerRepositorie {
                     completedAt: 'asc'
                 }
             })
-    
+
             // Formater les données pour le frontend
             const formattedQuizHistory = quizHistory.map(history => ({
                 id: history.id,
@@ -249,48 +244,48 @@ class QuizUserAnswerRepositorie {
                 duration: Math.round(history.timeSpent / 60), // Convertir en minutes
                 completedAt: history.completedAt
             }))
-    
+
             const performanceData = matierePerformance.map(perf => ({
                 subject: perf.matiere.title,
                 score: Math.round(perf.totalScore / perf.quizCount) // Score moyen par matière
             }))
-    
+
             // Calculer la tendance du score (comparaison avec la période précédente)
             const currentPeriodAvg = quizStats._avg.score || 0
 
-            const previousPeriodAvg = activityData.length > 0 
+            const previousPeriodAvg = activityData.length > 0
                 ? activityData.slice(0, Math.floor(activityData.length / 2)).reduce((acc, curr) => acc + (curr._avg.score || 0), 0) / Math.floor(activityData.length / 2)
                 : 0
 
             const scoreTrend = previousPeriodAvg ? ((currentPeriodAvg - previousPeriodAvg) / previousPeriodAvg) * 100 : 0
-    
+
             return {
                 // Informations utilisateur
                 name: user.name,
                 email: user.email,
                 createdAt: user.createdAt,
                 roles: user.roles,
-    
+
                 // Statistiques générales
                 totalQuizzes: quizStats._count.id,
                 averageScore: Math.round(quizStats._avg.score || 0),
                 totalTime: Math.round((quizStats._sum.timeSpent || 0) / 3600), // Convertir en heures
                 scoreTrend: Math.round(scoreTrend),
-    
+
                 // Données pour les graphiques
                 performanceData,
                 activityData: activityData.map(activity => ({
                     date: activity.completedAt,
                     score: Math.round(activity._avg.score || 0)
                 })),
-    
+
                 // Activité récente
                 recentActivity: recentActivity.map(activity => ({
                     date: activity.createdAt,
                     action: activity.action,
                     details: activity.details ? JSON.parse(activity.details) : null
                 })),
-    
+
                 // Historique complet
                 quizHistory: formattedQuizHistory
             }
