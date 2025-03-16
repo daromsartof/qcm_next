@@ -118,7 +118,7 @@ export const updateQuestion = async (id, data) => {
     });
 
 
-    const response = await axios.put(`/api/question/${id}`, data, {
+    const response = await axios.patch(`/api/question/${id}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       }

@@ -43,6 +43,7 @@
     "@mui/x-date-pickers": "^7.23.0",
     "@prisma/client": "5.17.0",
     "@reduxjs/toolkit": "2.2.6",
+    "@supabase/supabase-js": "^2.49.1",
     "@tanstack/match-sorter-utils": "8.15.1",
     "@tanstack/react-table": "8.19.3",
     "@tiptap/extension-color": "^2.5.6",
